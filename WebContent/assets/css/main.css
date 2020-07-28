@@ -1805,7 +1805,7 @@
 		}
 
 		section.wrapper.style1, article.wrapper.style1 {
-			background: #5385c1;
+			background: #073602;
 			color: #bacee6;
 		}
 
@@ -2660,7 +2660,7 @@
 		input[type="button"].special,
 		button.special,
 		.button.special {
-			background-color: #5385c1;
+			background-color: #073602;
 			color: #ffffff !important;
 		}
 
@@ -2669,7 +2669,7 @@
 			input[type="button"].special:hover,
 			button.special:hover,
 			.button.special:hover {
-				background-color: #6692c8;
+				background-color: #073602;
 			}
 
 			input[type="submit"].special:active,
@@ -2931,7 +2931,7 @@
 
 	#banner {
 		padding: 12em 0 10em 0;
-		background-image: url('../../images/pic03.jpg');
+		background-image: url('../../images/white.jpg');
 		background-size: cover;
 		background-position: top;
 		background-attachment: fixed;
@@ -2943,7 +2943,7 @@
 		#banner h1 {
 			font-size: 3.5em;
 			font-weight: 100;
-			color: #080808;
+			color: #012e1c;
 			line-height: 1em;
 			margin: 0 0 0.5em 0;
 			padding: 0;
@@ -2951,7 +2951,7 @@
 
 		#banner p {
 			font-size: 1em;
-			color: rgba(255, 255, 255, 0.55);
+			color: #012e1c;
 			margin-bottom: 1.75em;
 		}
 
@@ -2971,13 +2971,13 @@
 
 		}
 
-		@media screen and (max-width: 980px) {
+		/* @media screen and (max-width: 980px) {
 
 			#banner {
 				background-attachment: scroll;
 			}
 
-		}
+		} */
 
 		@media screen and (max-width: 736px) {
 
