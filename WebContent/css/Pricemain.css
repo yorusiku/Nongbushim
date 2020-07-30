@@ -17,7 +17,7 @@ tfoot, thead, tr, th, td, article, aside,
 canvas, details, embed, figure, figcaption,
 footer, header, hgroup, menu, nav, output, ruby,
 section, summary, time, mark, audio, video {
-	margin: 0;
+	margin: 0.1em;
 	padding: 0;
 	border: 0;
 	font-size: 100%;
@@ -3371,7 +3371,7 @@ input, select, textarea {
 		display: -ms-flex;
 		display: flex;
 		background-color: #FFFFFF;
-		cursor: default;
+		cursor: pointer;
 		padding: 1.75em 2em;
 	}
 
@@ -3381,6 +3381,7 @@ input, select, textarea {
 			display: rgb(172, 40, 40);
 			font-size: 1.25em;
 			font-weight: bold;
+			
 		}
 
 		#header > nav {
@@ -3398,7 +3399,7 @@ input, select, textarea {
 
 				#header > nav > ul > li {
 					display: inline-block;
-					margin-left: 1.75em;
+					margin-left: 0em;
 					padding: 0;
 					vertical-align: middle;
 				}

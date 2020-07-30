@@ -2213,6 +2213,25 @@
 					max-width: 100%;
 				}
 
+				/* Main 농부심icon */
+
+				/* .box.mainicon {
+					border: solid 1px rgba(255, 255, 255, 0.25);
+					padding: 3em 1.5em;
+				}
+		
+					.box.mainicon h3 {
+						margin: 0;
+					}
+		
+					.box.mainicon .image {
+						margin-bottom: 1em;
+					}
+		
+						.box.mainicon .image img {
+							max-width: 10%;
+						} */
+
 /* Icon */
 
 	.icon {
@@ -2930,7 +2949,7 @@
 /* Banner */
 
 	#banner {
-		padding: 12em 0 10em 0;
+		padding: 5em 0 10em 0;
 		background-image: url('../../images/white.jpg');
 		background-size: cover;
 		background-position: top;
