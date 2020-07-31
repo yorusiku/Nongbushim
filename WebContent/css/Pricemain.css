@@ -17,7 +17,7 @@ tfoot, thead, tr, th, td, article, aside,
 canvas, details, embed, figure, figcaption,
 footer, header, hgroup, menu, nav, output, ruby,
 section, summary, time, mark, audio, video {
-	margin: 0;
+	margin: 0.1em;
 	padding: 0;
 	border: 0;
 	font-size: 100%;
@@ -98,7 +98,7 @@ input, select, textarea {
 	}
 
 	body {
-		background: #018A58;
+		background: #FFFFFF;
 	}
 
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
@@ -115,7 +115,7 @@ input, select, textarea {
 /* Type */
 
 	body, input, select, textarea {
-		color: #FFFFFF;
+		color: #012e1c;
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: 16.5pt;
 		font-weight: normal;
@@ -175,7 +175,7 @@ input, select, textarea {
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #ffffff;
+		color: #012e1c;
 		font-weight: bold;
 		line-height: 1.5;
 		margin: 0 0 0.5em 0;
@@ -3371,7 +3371,7 @@ input, select, textarea {
 		display: -ms-flex;
 		display: flex;
 		background-color: #FFFFFF;
-		cursor: default;
+		cursor: pointer;
 		padding: 1.75em 2em;
 	}
 
@@ -3381,6 +3381,7 @@ input, select, textarea {
 			display: rgb(172, 40, 40);
 			font-size: 1.25em;
 			font-weight: bold;
+			
 		}
 
 		#header > nav {
@@ -3398,7 +3399,7 @@ input, select, textarea {
 
 				#header > nav > ul > li {
 					display: inline-block;
-					margin-left: 1.75em;
+					margin-left: 0em;
 					padding: 0;
 					vertical-align: middle;
 				}
@@ -3422,7 +3423,7 @@ input, select, textarea {
 						}
 
 						#header > nav > ul > li a.active {
-							color: #111111;
+							color: #012e1c;
 						}
 
 		@media screen and (max-width: 736px) {
