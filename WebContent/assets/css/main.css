@@ -1824,7 +1824,7 @@
 		@media screen and (max-width: 980px) {
 
 			section.wrapper, article.wrapper {
-				padding: 2em 0;
+				padding: 0 0;
 			}
 
 		}
@@ -2949,8 +2949,8 @@
 /* Banner */
 
 	#banner {
-		padding: 5em 0 10em 0;
-		background-image: url('../../images/white.jpg');
+		padding: 0 0 0 0;
+		/* background-image: url('../../images/white.jpg'); */
 		background-size: cover;
 		background-position: top;
 		background-attachment: fixed;
