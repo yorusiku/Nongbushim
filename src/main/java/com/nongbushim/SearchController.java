@@ -85,36 +85,25 @@ public class SearchController {
         }
 
         List<WholesaleInfoDto> wholesaleInfoList = getWholesalePrice(resultMap);
-        List<WholesaleChartInfoDto> chartInfoList;
+        WholesaleChartInfoDto chartInfoDto;
         try {
-            chartInfoList = createGraphInfo(wholesaleInfoList);
-            model.addAttribute("chartInfoList", chartInfoList);
-            model.addAttribute("labels", chartInfoList.get(0).getLabel());
+            chartInfoDto = createChartInfo(wholesaleInfoList);
+            model.addAttribute("chartInfo", chartInfoDto);
 
-            model.addAttribute("seoulData", chartInfoList.get(0).getMonthlySales());
-            model.addAttribute("seoulLabel", chartInfoList.get(0).getRegion());
-            model.addAttribute("seoulLastMonth", chartInfoList.get(0).getTableDto().getMonthAgoPrice());
-            model.addAttribute("seoulLastYear", chartInfoList.get(0).getTableDto().getYearAgoPrice());
+            model.addAttribute("seoulData", chartInfoDto.getWholesaleRegionInfoList().get(0).getMonthlySales());
+            model.addAttribute("seoulLabel", chartInfoDto.getWholesaleRegionInfoList().get(0).getRegion());
 
-            model.addAttribute("busanData", chartInfoList.get(1).getMonthlySales());
-            model.addAttribute("busanLabel", chartInfoList.get(1).getRegion());
-            model.addAttribute("busanLastMonth", chartInfoList.get(1).getTableDto().getMonthAgoPrice());
-            model.addAttribute("busanLastYear", chartInfoList.get(1).getTableDto().getYearAgoPrice());
+            model.addAttribute("busanData", chartInfoDto.getWholesaleRegionInfoList().get(1).getMonthlySales());
+            model.addAttribute("busanLabel", chartInfoDto.getWholesaleRegionInfoList().get(1).getRegion());
 
-            model.addAttribute("daeguData", chartInfoList.get(2).getMonthlySales());
-            model.addAttribute("daeguLabel", chartInfoList.get(2).getRegion());
-            model.addAttribute("daeguLastMonth", chartInfoList.get(2).getTableDto().getMonthAgoPrice());
-            model.addAttribute("daeguLastYear", chartInfoList.get(2).getTableDto().getYearAgoPrice());
+            model.addAttribute("daeguData", chartInfoDto.getWholesaleRegionInfoList().get(2).getMonthlySales());
+            model.addAttribute("daeguLabel", chartInfoDto.getWholesaleRegionInfoList().get(2).getRegion());
 
-            model.addAttribute("gwangjuData", chartInfoList.get(3).getMonthlySales());
-            model.addAttribute("gwangjuLabel", chartInfoList.get(3).getRegion());
-            model.addAttribute("gwangjuLastMonth", chartInfoList.get(3).getTableDto().getMonthAgoPrice());
-            model.addAttribute("gwangjuLastYear", chartInfoList.get(3).getTableDto().getYearAgoPrice());
+            model.addAttribute("gwangjuData", chartInfoDto.getWholesaleRegionInfoList().get(3).getMonthlySales());
+            model.addAttribute("gwangjuLabel", chartInfoDto.getWholesaleRegionInfoList().get(3).getRegion());
 
-            model.addAttribute("daejeonData", chartInfoList.get(4).getMonthlySales());
-            model.addAttribute("daejeonLabel", chartInfoList.get(4).getRegion());
-            model.addAttribute("daejeonLastMonth", chartInfoList.get(4).getTableDto().getMonthAgoPrice());
-            model.addAttribute("daejeonLastYear", chartInfoList.get(4).getTableDto().getYearAgoPrice());
+            model.addAttribute("daejeonData", chartInfoDto.getWholesaleRegionInfoList().get(4).getMonthlySales());
+            model.addAttribute("daejeonLabel", chartInfoDto.getWholesaleRegionInfoList().get(4).getRegion());
         } catch (IndexOutOfBoundsException e) {
 
         }
@@ -163,13 +152,14 @@ public class SearchController {
 
     }
 
-    private List<WholesaleChartInfoDto> createGraphInfo(List<WholesaleInfoDto> wholesaleInfoList) {
-        List<WholesaleChartInfoDto> wholesaleChartInfoDtoList = new ArrayList<>();
+    private WholesaleChartInfoDto createChartInfo(List<WholesaleInfoDto> wholesaleInfoList) {
+        WholesaleChartInfoDto chartInfoDto = new WholesaleChartInfoDto();
+        List<WholesaleRegionInfoDto> wholesaleRegionInfoDtoList = new ArrayList<>();
         int lastItemIdx;
         String[] label = new String[12];
         for (WholesaleInfoDto wholesaleInfoDto : wholesaleInfoList) {
             int[] monthlySales = new int[12];
-            WholesaleChartInfoDto wholesaleChartInfoDto = new WholesaleChartInfoDto();
+            WholesaleRegionInfoDto wholesaleRegionInfoDto = new WholesaleRegionInfoDto();
 
             lastItemIdx = wholesaleInfoDto.getPrice().getItem().size() - 1;
             int idx = 0;
@@ -186,17 +176,32 @@ public class SearchController {
                 }
                 lastItemIdx--;
             }
-            wholesaleChartInfoDto.setTableDto(createTableInfo(wholesaleInfoDto));
-            wholesaleChartInfoDto.setRegion(wholesaleInfoDto.getCountyCode().getName());
-            wholesaleChartInfoDto.setLabel(label);
-            wholesaleChartInfoDto.setMonthlySales(monthlySales);
-            wholesaleChartInfoDtoList.add(wholesaleChartInfoDto);
+            wholesaleRegionInfoDto.setTableDto(createTableInfo(wholesaleInfoDto));
+            wholesaleRegionInfoDto.setRegion(wholesaleInfoDto.getCountyCode().getName());
+            wholesaleRegionInfoDto.setMonthlySales(monthlySales);
+            wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
-        return wholesaleChartInfoDtoList;
+        chartInfoDto.setTitle(wholesaleInfoList.get(0).getPrice().getCaption());
+        chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
+        chartInfoDto.setLabel(label);
+        setAvgMaxMin(chartInfoDto);
+        return chartInfoDto;
     }
 
-    private WholesaleTableDto createTableInfo(WholesaleInfoDto wholesaleInfoDto) {
-        WholesaleTableDto wholesaleTableDto = new WholesaleTableDto();
+    private void setAvgMaxMin(WholesaleChartInfoDto chartInfoDto) {
+        List<WholesaleRegionInfoDto> list = chartInfoDto.getWholesaleRegionInfoList();
+        IntSummaryStatistics monthAgoStatistics = list.stream().mapToInt(dto -> dto.getTableDto().getMonthAgoPrice()).summaryStatistics();
+        IntSummaryStatistics yearAgoStatistics = list.stream().mapToInt(dto -> dto.getTableDto().getYearAgoPrice()).summaryStatistics();
+        chartInfoDto.setAvgMonthAgoPrice((int) monthAgoStatistics.getAverage());
+        chartInfoDto.setAvgYearAgoPrice((int) yearAgoStatistics.getAverage());
+        chartInfoDto.setMaxMonthAgoPrice(monthAgoStatistics.getMax());
+        chartInfoDto.setMaxYearAgoPrice(yearAgoStatistics.getMax());
+        chartInfoDto.setMinMonthAgoPrice(monthAgoStatistics.getMin());
+        chartInfoDto.setMinYearAgoPrice(yearAgoStatistics.getMin());
+    }
+
+    private WholesalePastSalesDto createTableInfo(WholesaleInfoDto wholesaleInfoDto) {
+        WholesalePastSalesDto wholesalePastSalesDto = new WholesalePastSalesDto();
         int lastItemIdx = wholesaleInfoDto.getPrice().getItem().size() - 1;
         Item thisYearItem = wholesaleInfoDto.getPrice().getItem().get(lastItemIdx);
         Item lastYearItem = wholesaleInfoDto.getPrice().getItem().get(lastItemIdx - 1);
@@ -205,10 +210,10 @@ public class SearchController {
         LocalDate today = LocalDate.now();
         int lastMonthIdx = today.getMonthValue() - 2;
 
-        wholesaleTableDto.setMonthAgoPrice(Integer.parseInt(thisYearMonthlySalesList.get(lastMonthIdx).replace(",", "")));
-        wholesaleTableDto.setYearAgoPrice(Integer.parseInt(lastYearMonthlySalesList.get(lastMonthIdx).replace(",", "")));
+        wholesalePastSalesDto.setMonthAgoPrice(Integer.parseInt(thisYearMonthlySalesList.get(lastMonthIdx).replace(",", "")));
+        wholesalePastSalesDto.setYearAgoPrice(Integer.parseInt(lastYearMonthlySalesList.get(lastMonthIdx).replace(",", "")));
 
-        return wholesaleTableDto;
+        return wholesalePastSalesDto;
     }
 
     private List<String> currentYearMonthlySalesList(Item current) {

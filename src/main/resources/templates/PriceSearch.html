@@ -11,8 +11,8 @@
   <head>
     <!-- Jquery , Chart JS -->
     <link
-            rel="stylesheet"
-            href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
     />
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -64,13 +64,14 @@
         });
       });
     </script>
-
-
   </head>
   <body class="is-preload" style="font-family: 'S Core DREAM', Medium;">
     <!-- 농부심 아이콘 -->
     <a href="http://www.nongbushim.com"
-      ><img th:src="@{WebContent/images/농부심icon.jpg}" width="100" height="100"
+      ><img
+        th:src="@{WebContent/images/농부심icon.jpg}"
+        width="100"
+        height="100"
     /></a>
 
     <!-- Header -->
@@ -89,6 +90,7 @@
 
     <!-- 검색창 -->
     <form action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
+
       <input
         id="searchInput"
         name="searchInput"
@@ -102,7 +104,7 @@
     <div
       class="chart-container"
       style="position: relative; height: 100vh; width: 80vw;"
-      th:if="${chartInfoList} != null"
+      th:if="${chartInfo} != null"
     >
       <canvas id="lineChart"></canvas>
     </div>
@@ -112,7 +114,7 @@
       var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: [[${labels}]],
+          labels: [[${chartInfo?.label}]],
           datasets: [{
 
             label: [[${seoulLabel}]],
@@ -147,41 +149,41 @@
           }
 
           ]
+        }, options: {
+          title: {
+            display: true,
+            text: [[${chartInfo?.title}]]
+          }
         }
       });
       /*]]>*/
     </script>
 
-    <table style="width: 100%;" th:if="${chartInfoList} != null">
+    <table style="width: 100%;" th:if="${chartInfo} != null">
       <tr>
         <th>구분</th>
         <th>1개월전</th>
         <th>1년전</th>
       </tr>
       <tr>
-        <td>서울</td>
-        <td th:text="${seoulLastMonth}"></td>
-        <td th:text="${seoulLastYear}"></td>
+        <td>평균</td>
+        <td th:text="${chartInfo.avgMonthAgoPrice}"></td>
+        <td th:text="${chartInfo.avgYearAgoPrice}"></td>
       </tr>
       <tr>
-        <td>부산</td>
-        <td th:text="${busanLastMonth}"></td>
-        <td th:text="${busanLastYear}"></td>
+        <td>최고값</td>
+        <td th:text="${chartInfo.maxMonthAgoPrice}"></td>
+        <td th:text="${chartInfo.maxYearAgoPrice}"></td>
       </tr>
       <tr>
-        <td>대구</td>
-        <td th:text="${daeguLastMonth}"></td>
-        <td th:text="${daeguLastYear}"></td>
+        <td>최저값</td>
+        <td th:text="${chartInfo.minMonthAgoPrice}"></td>
+        <td th:text="${chartInfo.minYearAgoPrice}"></td>
       </tr>
-      <tr>
-        <td>광주</td>
-        <td th:text="${gwangjuLastMonth}"></td>
-        <td th:text="${gwangjuLastYear}"></td>
-      </tr>
-      <tr>
-        <td>대전</td>
-        <td th:text="${daejeonLastMonth}"></td>
-        <td th:text="${daejeonLastYear}"></td>
+      <tr th:each="region: ${chartInfo.wholesaleRegionInfoList}">
+        <td th:text="${region.region}"></td>
+        <td th:text="${region.tableDto.monthAgoPrice}"></td>
+        <td th:text="${region.tableDto.yearAgoPrice}"></td>
       </tr>
     </table>
   </body>
