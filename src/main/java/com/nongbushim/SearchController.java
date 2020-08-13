@@ -39,10 +39,20 @@ public class SearchController {
         this.service = service;
     }
 
-    @GetMapping(value = {"/priceSearch", "/PriceSearch.html"})
+    @GetMapping(value = {"/pricesearch", "/PriceSearch.html"})
     public String priceSearch(Model model) {
         model.addAttribute("form", new FormDto());
         return "PriceSearch";
+    }
+
+    @GetMapping(value = {"/warehouse", "/Warehouse.html"})
+    public String warehouse() {
+        return "Warehouse";
+    }
+
+    @GetMapping(value = {"/whoarewe", "/WhoAreWe.html"})
+    public String whoAreWe() {
+        return "WhoAreWe";
     }
 
     @RequestMapping("/autoComplete")
@@ -56,7 +66,7 @@ public class SearchController {
         return suggestions;
     }
 
-    @PostMapping(value = {"/priceSearch", "/PriceSearch.html"})
+    @PostMapping(value = {"/pricesearch", "/PriceSearch.html"})
     public String search(@ModelAttribute("form") FormDto form, Model model) throws IOException {
         String input = form.getText();
         List<String> parameters;

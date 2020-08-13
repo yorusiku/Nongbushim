@@ -78,9 +78,9 @@
       <nav>
         <ul>
           <!-- <li><a href="index.html">Home</a></li> -->
-          <li><a th:href="@{/PriceSearch.html}" class="active">가격검색</a></li>
-          <li><a th:href="@{Warehouse.html}" class="active">창고검색</a></li>
-          <li><a th:href="@{WhoAreWe.html}" class="active">회사소개</a></li>
+          <li><a th:href="@{/pricesearch}" class="active">가격검색</a></li>
+          <li><a th:href="@{/warehouse}" class="active">창고검색</a></li>
+          <li><a th:href="@{/whoarewe}" class="active">회사소개</a></li>
 
           <!-- <li><a href="elements.html">Elements</a></li> -->
         </ul>
@@ -88,7 +88,7 @@
     </header>
 
     <!-- 검색창 -->
-    <form action="#" th:action="@{/PriceSearch.html}" th:object="${form}" method="post">
+    <form action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
       <input
         id="searchInput"
         name="searchInput"
