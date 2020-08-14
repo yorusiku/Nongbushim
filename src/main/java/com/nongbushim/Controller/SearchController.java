@@ -64,6 +64,7 @@ public class SearchController {
         try {
             parameters = createParameters(input);
         } catch (ArrayIndexOutOfBoundsException e) {
+            // 어떤 키워드도 없이 검색버튼을 눌렀을 시 검색창으로 돌아감
             return "PriceSearch";
         }
 
@@ -167,7 +168,7 @@ public class SearchController {
                 }
                 lastItemIdx--;
             }
-            wholesaleRegionInfoDto.setTableDto(createTableInfo(wholesaleInfoDto));
+            wholesaleRegionInfoDto.setWholesalePastSalesDto(createTableInfo(wholesaleInfoDto));
             wholesaleRegionInfoDto.setRegion(wholesaleInfoDto.getCountyCode().getName());
             wholesaleRegionInfoDto.setMonthlySales(monthlySales);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
@@ -181,8 +182,8 @@ public class SearchController {
 
     private void setAvgMaxMin(WholesaleChartInfoDto chartInfoDto) {
         List<WholesaleRegionInfoDto> list = chartInfoDto.getWholesaleRegionInfoList();
-        IntSummaryStatistics monthAgoStatistics = list.stream().mapToInt(dto -> dto.getTableDto().getMonthAgoPrice()).summaryStatistics();
-        IntSummaryStatistics yearAgoStatistics = list.stream().mapToInt(dto -> dto.getTableDto().getYearAgoPrice()).summaryStatistics();
+        IntSummaryStatistics monthAgoStatistics = list.stream().mapToInt(dto -> dto.getWholesalePastSalesDto().getMonthAgoPrice()).summaryStatistics();
+        IntSummaryStatistics yearAgoStatistics = list.stream().mapToInt(dto -> dto.getWholesalePastSalesDto().getYearAgoPrice()).summaryStatistics();
         chartInfoDto.setAvgMonthAgoPrice((int) monthAgoStatistics.getAverage());
         chartInfoDto.setAvgYearAgoPrice((int) yearAgoStatistics.getAverage());
         chartInfoDto.setMaxMonthAgoPrice(monthAgoStatistics.getMax());
