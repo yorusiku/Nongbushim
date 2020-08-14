@@ -1,10 +1,11 @@
-package com.nongbushim;
+package com.nongbushim.Controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.nongbushim.Dto.*;
 import com.nongbushim.Dto.KamisResponse.*;
 import com.nongbushim.Enum.CountyCode;
+import com.nongbushim.SearchService;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,16 +44,6 @@ public class SearchController {
     public String priceSearch(Model model) {
         model.addAttribute("form", new FormDto());
         return "PriceSearch";
-    }
-
-    @GetMapping(value = {"/warehouse", "/Warehouse.html"})
-    public String warehouse() {
-        return "Warehouse";
-    }
-
-    @GetMapping(value = {"/whoarewe", "/WhoAreWe.html"})
-    public String whoAreWe() {
-        return "WhoAreWe";
     }
 
     @RequestMapping("/autoComplete")
