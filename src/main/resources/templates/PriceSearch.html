@@ -37,9 +37,8 @@
     <title>농부심</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" th:href="@{/WebContent/assets/css/main.css}" />
-    <link rel="stylesheet" th:href="@{/WebContent/css/Pricemain.css}" />
-
+    <link rel="stylesheet" th:href="@{/WebContent/css/navbar.css}" />
+    
     <style>
       img {
         display: block;
@@ -66,26 +65,30 @@
     </script>
   </head>
   <body class="is-preload" style="font-family: 'S Core DREAM', Medium;">
-    <!-- 농부심 아이콘 -->
-    <a href="http://www.nongbushim.com"
-      ><img
-        th:src="@{WebContent/images/농부심icon.jpg}"
-        width="100"
-        height="100"
-    /></a>
-
     <!-- Header -->
-    <header id="header">
-      <nav>
-        <ul>
-          <!-- <li><a href="index.html">Home</a></li> -->
-          <li><a th:href="@{/pricesearch}" class="active">가격검색</a></li>
-          <li><a th:href="@{/warehouse}" class="active">창고검색</a></li>
-          <li><a th:href="@{/whoarewe}" class="active">회사소개</a></li>
-
-          <!-- <li><a href="elements.html">Elements</a></li> -->
-        </ul>
-      </nav>
+    <header>
+      <div class="topnav" id="myTopnav">
+        <div class="nav">
+          <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <img th:src="@{WebContent/images/open-menu.svg}"/>
+          </a>
+          <a th:href="@{/pricesearch}">가격검색</a>
+          <a th:href="@{/warehouse}" class="active">창고검색</a>
+          <a th:href="@{/warehouse}">솔루션</a>
+          <a th:href="@{/whoarewe}">회사소개</a>
+        </div>
+        <div class="logodiv">
+          <a class="logo" href="http://www.nongbushim.com">
+            <img th:src="@{WebContent/images/logo.svg}"/>
+          </a>
+        </div>
+        <div class="snsnav">
+          <a class="sns" href="/#"><img th:src="@{WebContent/images/kakao-talk.svg}"/></a>
+          <a class="sns" href="/#"><img th:src="@{WebContent/images/icon_instagram.svg}"/></a>
+          <a class="sns" href="/#"><img th:src="@{WebContent/images/blog.svg}"/></a>
+          <a class="login" href="/#"><img th:src="@{WebContent/images/login.svg}"/></a>
+        </div>
+      </div>
     </header>
 
     <!-- 검색창 -->
@@ -186,5 +189,15 @@
         <td th:text="${region.tableDto.yearAgoPrice}"></td>
       </tr>
     </table>
+    <script>
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
+        }
+      }
+      </script>
   </body>
 </html>

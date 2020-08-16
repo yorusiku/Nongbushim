@@ -1,9 +1,167 @@
-.sub-navbar {
-  position: unset;
+/* responstive navbar */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
-.sub-navbar a {
-  color: #007a31 !important;
+
+.topnav {
+  overflow: hidden;
+  background-color: white;
+  position: relative;
 }
-.sub-navbar a:hover {
-  color: #012e1c !important;
+
+.topnav .nav {
+  position: absolute;
+}
+
+.topnav .nav a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 23.5px 20px;
+  text-decoration: none;
+}
+
+.topnav a:hover {
+  color: #073602;
+}
+
+.topnav a.active {
+  color: #073602;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.topnav .logodiv {
+  margin: 0 auto;
+  display: table;
+}
+
+.topnav .nav a:first-child {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav .nav a:not(:first-child) {
+    display: none;
+  }
+  .topnav .nav a.icon {
+    position: fixed;
+    display: block;
+    right: 0;
+  }
+  .topnav .snsnav a.sns {
+    display: none;
+  }
+  .topnav .snsnav a.login {
+    display: block;
+    left: 0;
+    position: fixed;
+    padding: 20px;
+  }
+  .topnav .nav a.icon:first-child {
+    position: fixed;
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive .nav a {
+    padding: 20px;
+  }
+  .topnav.responsive {
+    position: relative;
+  }
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive .nav a {
+    float: none;
+    display: block;
+    text-align: right;
+    padding: 20px;
+  }
+  .topnav.responsive .snsnav {
+    display: flex;
+    padding-left: 10px;
+  }
+  .topnav.responsive nav {
+    position: relative;
+  }
+}
+
+.snsnav {
+  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.snsnav a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 18px 8px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.snsnav .login img {
+  fill: #7cf9c1;
+}
+
+.snsnav .login img:hover {
+  fill: #4ad295;
+}
+
+img {
+  height: 20px;
+  fill: white;
+  cursor: pointer;
+  padding: 3px;
+}
+
+img:hover {
+  fill: #7cf9c1;
+}
+
+.logo {
+  display: flex;
+  padding: 5px !important;
+}
+
+.logo img {
+  width: 50px;
+  height: 50px;
+  fill: #7cf9c1;
+  cursor: pointer;
+  padding: 3px;
+}
+
+.logo img:hover {
+  fill: #4ad295;
+}
+
+/* power bi */
+.container-powerbi {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 56.25%;
+}
+
+.iframe-powerbi {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
