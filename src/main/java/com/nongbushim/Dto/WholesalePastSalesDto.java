@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WholesaleTableDto {
+public class WholesalePastSalesDto {
     private int monthAgoPrice;
     private int yearAgoPrice;
 }
