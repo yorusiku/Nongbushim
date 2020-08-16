@@ -1,3 +1,13 @@
+.sub-navbar {
+  position: unset;
+}
+.sub-navbar a {
+  color: #007a31 !important;
+}
+.sub-navbar a:hover {
+  color: #012e1c !important;
+}
+
 /* responstive navbar */
 body {
   margin: 0;
@@ -17,18 +27,10 @@ body {
 .topnav .nav a {
   float: left;
   display: block;
-  color: black;
+  color: #073602;
   text-align: center;
   padding: 23.5px 20px;
   text-decoration: none;
-}
-
-.topnav a:hover {
-  color: #073602;
-}
-
-.topnav a.active {
-  color: #073602;
 }
 
 .topnav .icon {
@@ -52,6 +54,9 @@ body {
     position: fixed;
     display: block;
     right: 0;
+  }
+  .topnav .nav a.icon img {
+    width: 20px
   }
   .topnav .snsnav a.sns {
     display: none;
@@ -80,6 +85,9 @@ body {
     right: 0;
     top: 0;
   }
+  .topnav.responsive .nav a.icon img {
+    width: 20px
+  }
   .topnav.responsive .nav a {
     float: none;
     display: block;
@@ -90,11 +98,27 @@ body {
     display: flex;
     padding-left: 10px;
   }
-  .topnav.responsive nav {
-    position: relative;
+  .topnav.responsive .nav {
+    /* position: relative; */
+    width: 200px;
+    right: 0;
+    height: 100%;
+    top: 60px;
+    z-index: 1;
+    background: white;
+    /* border-left: 0.1px solid #073602; */
+    position: fixed;
+    /* transition: 0.3s; */
+    animation: slide-in 0.5s forwards;
   }
+  /* .topnav.responsive .snsnav a.sns {
+    display: table;
+    top: 500px;
+    z-index: 2;
+  / */
 }
 
+/* snsnav */
 .snsnav {
   float: right;
   position: absolute;
@@ -111,25 +135,19 @@ body {
   font-size: 17px;
 }
 
-.snsnav .login img {
-  fill: #7cf9c1;
-}
-
-.snsnav .login img:hover {
-  fill: #4ad295;
-}
-
-img {
+.snsnav a.sns img {
   height: 20px;
-  fill: white;
   cursor: pointer;
   padding: 3px;
 }
 
-img:hover {
-  fill: #7cf9c1;
+.snsnav a.login img {
+  height: 20px;
+  cursor: pointer;
+  padding: 3px;
 }
 
+/* log  */
 .logo {
   display: flex;
   padding: 5px !important;
@@ -138,13 +156,8 @@ img:hover {
 .logo img {
   width: 50px;
   height: 50px;
-  fill: #7cf9c1;
   cursor: pointer;
   padding: 3px;
-}
-
-.logo img:hover {
-  fill: #4ad295;
 }
 
 /* power bi */
