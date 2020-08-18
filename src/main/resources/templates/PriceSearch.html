@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-	Theory by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
 <html xmlns:th="http://www.thymeleaf.org">
   <style>
     @import url(//fonts.googleapis.com/earlyaccess/jejuhallasan.css);
@@ -38,7 +33,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" th:href="@{/WebContent/css/navbar.css}" />
-    
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{WebContent/css/bootstrap.min.css}" />
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" th:href="@{WebContent/css/jumbotron.css}">
     <style>
       img {
         display: block;
@@ -65,52 +64,125 @@
     </script>
   </head>
   <body class="is-preload" style="font-family: 'S Core DREAM', Medium;">
-    <!-- Header -->
-    <header>
-      <div class="topnav" id="myTopnav">
-        <div class="nav">
-          <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-            <img th:src="@{WebContent/images/open-menu.svg}"/>
-          </a>
-          <a th:href="@{/pricesearch}">가격검색</a>
-          <a th:href="@{/warehouse}">창고검색</a>
-          <a th:href="@{/warehouse}">솔루션</a>
-          <a th:href="@{/whoarewe}">회사소개</a>
-        </div>
-        <div class="logodiv">
-          <a class="logo" href="http://www.nongbushim.com">
-            <img th:src="@{WebContent/images/logo.svg}"/>
-          </a>
-        </div>
-        <div class="snsnav">
-          <a class="sns" href=""><img th:src="@{WebContent/images/kakao-talk.svg}"/></a>
-          <a class="sns" href=""><img th:src="@{WebContent/images/icon_instagram.svg}"/></a>
-          <a class="sns" href=""><img th:src="@{WebContent/images/blog.svg}"/></a>
-          <a class="login" href=""><img th:src="@{WebContent/images/login.svg}"/></a>
+    <!-- 네비게이션 -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="http://www.nongbushim.com">
+        <img src="WebContent/images/logo.svg" style="width: 30px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" th:href="@{/pricesearch}">가격검색 <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/warehouse}">창고검색</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" th:href="@{/warehouse}" tabindex="-1" aria-disabled="true">솔루션</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" th:href="@{/whoarewe}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">회사소개</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" th:href="@{/whoarewe#company}">회사 밸류</a>
+              <a class="dropdown-item" th:href="@{/whoarewe#crew}">크루</a>
+              <a class="dropdown-item" th:href="@{/whoarewe#blog}">블로그글</a>
+              <a class="dropdown-item" th:href="@{/whoarewe#mail}">Contact Us</a>
+            </div>
+          </li>
+        </ul>
+        <a class="btn btn-outline-success my-2 my-sm-0 disabled">Login</a>
+      </div>
+    </nav>
+
+    <!-- 메인 -->
+    <main role="main" class="container-fluid col-md-9 col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <!-- 검색창 -->
+        <form action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
+          <input
+            id="searchInput"
+            name="searchInput"
+            type="text"
+            th:field="*{text}"
+          />
+          <input id="submitButton" type="submit" value="검색" />
+        </form>
+        <!-- 다운로드 -->
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary disabled">Share</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary disabled">Export</button>
+          </div>
         </div>
       </div>
-    </header>
 
-    <!-- 검색창 -->
-    <form action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
+      <!-- 그래프 -->
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">월별</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">일별</a>
+        </li>
+      </ul>
 
-      <input
-        id="searchInput"
-        name="searchInput"
-        type="text"
-        th:field="*{text}"
-      />
-      <input id="submitButton" type="submit" value="검색" />
-    </form>
+      <!-- 탭 -->
+      <div class="tab-content" id="myTabContent">
+        <!-- 월별 -->
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div
+          class="chart-container"
+          style="position: relative; height: 100vh; width: 80vw;"
+          th:if="${chartInfo} != null"
+        >
+            <!-- 그래프 -->
+            <canvas id="lineChart"></canvas>
+            <!-- 테이블 -->
+            <h3 class="pb-3 mb-4 font-italic"></h3>
+            <div class="table-responsive">
+              <table class="table table-striped table-sm" style="width: 100%;" th:if="${chartInfo} != null">
+                <thead>
+                  <tr>
+                    <th>구분</th>
+                    <th>1개월전</th>
+                    <th>1년전</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>평균</td>
+                    <td th:text="${chartInfo.avgMonthAgoPrice}"></td>
+                    <td th:text="${chartInfo.avgYearAgoPrice}"></td>
+                  </tr>
+                  <tr>
+                    <td>최고값</td>
+                    <td th:text="${chartInfo.maxMonthAgoPrice}"></td>
+                    <td th:text="${chartInfo.maxYearAgoPrice}"></td>
+                  </tr>
+                  <tr>
+                    <td>최저값</td>
+                    <td th:text="${chartInfo.minMonthAgoPrice}"></td>
+                    <td th:text="${chartInfo.minYearAgoPrice}"></td>
+                  </tr>
+                  <tr th:each="region: ${chartInfo.wholesaleRegionInfoList}">
+                    <td th:text="${region.region}"></td>
+                    <td th:text="${region.tableDto.monthAgoPrice}"></td>
+                    <td th:text="${region.tableDto.yearAgoPrice}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- 일별 -->
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Coming soon</div>
+      </div>
+    </main>
 
-    <!-- 그래프 -->
-    <div
-      class="chart-container"
-      style="position: relative; height: 100vh; width: 80vw;"
-      th:if="${chartInfo} != null"
-    >
-      <canvas id="lineChart"></canvas>
-    </div>
     <script type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
       var ctx = $('#lineChart');
@@ -162,33 +234,9 @@
       /*]]>*/
     </script>
 
-    <table style="width: 100%;" th:if="${chartInfo} != null">
-      <tr>
-        <th>구분</th>
-        <th>1개월전</th>
-        <th>1년전</th>
-      </tr>
-      <tr>
-        <td>평균</td>
-        <td th:text="${chartInfo.avgMonthAgoPrice}"></td>
-        <td th:text="${chartInfo.avgYearAgoPrice}"></td>
-      </tr>
-      <tr>
-        <td>최고값</td>
-        <td th:text="${chartInfo.maxMonthAgoPrice}"></td>
-        <td th:text="${chartInfo.maxYearAgoPrice}"></td>
-      </tr>
-      <tr>
-        <td>최저값</td>
-        <td th:text="${chartInfo.minMonthAgoPrice}"></td>
-        <td th:text="${chartInfo.minYearAgoPrice}"></td>
-      </tr>
-      <tr th:each="region: ${chartInfo.wholesaleRegionInfoList}">
-        <td th:text="${region.region}"></td>
-        <td th:text="${region.tableDto.monthAgoPrice}"></td>
-        <td th:text="${region.tableDto.yearAgoPrice}"></td>
-      </tr>
-    </table>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script th:src="@{WebContent/js/bootstrap.bundle.min.js}"></script>
     <script>
       function myFunction() {
         var x = document.getElementById("myTopnav");
@@ -198,6 +246,6 @@
           x.className = "topnav";
         }
       }
-      </script>
+    </script>
   </body>
 </html>

@@ -31,6 +31,11 @@
     <script th:src="@{/WebContent/assets/js/breakpoints.min.js}"></script>
     <script th:src="@{/WebContent/assets/js/util.js}"></script>
     <script th:src="@{/WebContent/assets/js/mainprice.js}"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{WebContent/css/bootstrap.min.css}" />
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" th:href="@{WebContent/css/jumbotron.css}">
     <style>
       img {
         display: block;
@@ -40,31 +45,50 @@
   </head>
   <body class="is-preload" style="font-family: 'S Core DREAM', Medium;">
 
-  <!-- Header -->
-  <header>
-		<div class="topnav" id="myTopnav">
-			<div class="nav">
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-          <img th:src="@{WebContent/images/open-menu.svg}"/>
-				</a>
-        <a th:href="@{/pricesearch}">가격검색</a>
-        <a th:href="@{/warehouse}">창고검색</a>
-        <a th:href="@{/warehouse}">솔루션</a>
-        <a th:href="@{/whoarewe}">회사소개</a>
-			</div>
-      <div class="logodiv">
-        <a class="logo" href="http://www.nongbushim.com">
-          <img th:src="@{WebContent/images/logo.svg}"/>
-				</a>
-      </div>
-			<div class="snsnav">
-				<a class="sns" href=""><img th:src="@{WebContent/images/kakao-talk.svg}"/></a>
-        <a class="sns" href=""><img th:src="@{WebContent/images/icon_instagram.svg}"/></a>
-				<a class="sns" href=""><img th:src="@{WebContent/images/blog.svg}"/></a>
-				<a class="login" href=""><img th:src="@{WebContent/images/login.svg}"/></a>
-			</div>
-		</div>
-	</header>
+  <!-- 네비게이션 -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="http://www.nongbushim.com">
+      <img src="WebContent/images/logo.svg" style="width: 30px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/pricesearch}">가격검색</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" th:href="@{/warehouse}">창고검색 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" th:href="@{/warehouse}" tabindex="-1" aria-disabled="true">솔루션</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" th:href="@{/whoarewe}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">회사소개</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" th:href="@{/whoarewe#company}">회사 밸류</a>
+            <a class="dropdown-item" th:href="@{/whoarewe#crew}">크루</a>
+            <a class="dropdown-item" th:href="@{/whoarewe##blog}">블로그글</a>
+            <a class="dropdown-item" th:href="@{/whoarewe#mail}">Contact Us</a>
+          </div>
+        </li>
+      </ul>
+    <!-- <div class="logodiv">
+          <a class="logo" href="http://www.nongbushim.com">
+            <img th:src="@{WebContent/images/logo.svg}"/>
+          </a>
+        </div>
+        <div class="snsnav">
+          <a class="sns" href=""><img th:src="@{WebContent/images/kakao-talk.svg}"/></a>
+          <a class="sns" href=""><img th:src="@{WebContent/images/icon_instagram.svg}"/></a>
+          <a class="sns" href=""><img th:src="@{WebContent/images/blog.svg}"/></a>
+          <a class="login" href=""><img th:src="@{WebContent/images/login.svg}"/></a>
+        </div> -->
+      <a class="btn btn-outline-success my-2 my-sm-0 disabled">Login</a>
+    </div>
+  </nav>
 
     <!-- Wrapper -->
     <div id="wrapper">
@@ -87,16 +111,21 @@
       </section>
     </div>
 
-    <!-- Footer -->
-    <footer id="footer" class="wrapper alt">
-      <div class="inner">
-        <ul class="menu">
-          <li>&copy; Untitled. All rights are yours.</li>
-          <li>Naver: <a href="http://www.naver.com">HTML5 UP</a></li>
-        </ul>
+  <!-- Footer -->
+  <div class="container">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+      <div class="row">
+        <div class="col-12 col-md text-center">
+          <img class="mb-2" src="../assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+          <small class="d-block mb-3 text-muted">&copy; 2020 NONGBUSHIM</small>
+        </div>
       </div>
     </footer>
+  </div>
 
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script th:src="@{WebContent/js/bootstrap.bundle.min.js}"></script>
     <script>
       function myFunction() {
         var x = document.getElementById("myTopnav");
@@ -106,6 +135,6 @@
           x.className = "topnav";
         }
       }
-      </script>
+    </script>
   </body>
 </html>
