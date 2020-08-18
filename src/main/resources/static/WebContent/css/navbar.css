@@ -108,7 +108,6 @@ body {
     background: white;
     /* border-left: 0.1px solid #073602; */
     position: fixed;
-    /* transition: 0.3s; */
     animation: slide-in 0.5s forwards;
   }
   /* .topnav.responsive .snsnav a.sns {
