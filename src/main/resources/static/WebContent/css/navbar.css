@@ -177,3 +177,26 @@ body {
   height: 100%;
   border: none;
 }
+
+/* .footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: #012e1c;
+  text-align: center;
+} */
+
+/* crew image */
+.crew-padding {
+  padding: 3em 1.5em;
+}
+
+.crew-image {
+  border-radius: 100%;
+  margin-bottom: 1em;
+}
+
+/* main-color */
+.bg-main-color {
+  background: #073602;
+}

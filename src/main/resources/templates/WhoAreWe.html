@@ -1,9 +1,4 @@
 <!DOCTYPE HTML>
-<!--
-	Theory by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
 <html xmlns:th="http://www.thymeleaf.org">
 	<style>
 	
@@ -25,154 +20,205 @@
 		<title>농부심/메인</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" th:href="@{WebContent/assets/css/main.css}" />
 		<link rel="stylesheet" th:href="@{WebContent/css/navbar.css}" />
-		<link rel="stylesheet" th:href="@{WebContent/css/Pricemain.css}" />
 		<script th:src="@{WebContent/assets/js/jquery.min.js}"></script>
 		<script th:src="@{WebContent/assets/js/skel.min.js}"></script>
 		<script th:src="@{WebContent/assets/js/util.js}"></script>
-		<script th:src="@{WebContent/assets/js/main.js}"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{WebContent/css/bootstrap.min.css}" />
+    <!-- Custom styles for this template -->
+		<link rel="stylesheet" th:href="@{WebContent/css/jumbotron.css}">
+
 		 <style>
 			img { display: block; margin: 0px auto; }
 		</style>
 	</head>
-	<body class="is-preload" style="font-family:'S Core DREAM', Medium">
+	<body class="is-preload" style="font-family: 'S Core DREAM', Medium;">
 
-<!-- 농부심 아이콘 -->
+  <!-- 네비게이션 -->
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+		<a class="navbar-brand" href="http://www.nongbushim.com">
+			<img src="WebContent/images/logo.svg" style="width: 30px;">
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-
-<a href="http://www.nongbushim.com"><img th:src="@{WebContent/images/농부심icon.jpg}" width="100" height="100"></a>
-
-<!-- Header -->
-<header id="header">
-	<nav>
-		<ul>
-			<!-- <li><a href="index.html">Home</a></li> -->
-			<li><a href="/pricesearch" class="active">가격검색</a></li>
-			<li><a href="/warehouse" class="active">창고검색</a></li>
-			<li><a href="/whoarewe" class="active">회사소개</a></li>
-			
-				<!-- <li><a href="elements.html">Elements</a></li> -->
-		</ul>
-		<div class="sub-navbar">
-			<a href="#one">회사 밸류</a>
-			<a href="#two">크루크루</a>
-			<a href="#two">contact us</a>
-			<a href="#three">블로그글</a>
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/pricesearch}">가격검색</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/warehouse}">창고검색</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" th:href="@{/warehouse}" tabindex="-1" aria-disabled="true">솔루션</a>
+				</li>
+				<li class="nav-item dropdown active">
+					<a class="nav-link dropdown-toggle" th:href="@{/whoarewe}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">회사소개 <span class="sr-only">(current)</span></a>
+					<div class="dropdown-menu" aria-labelledby="dropdown01">
+						<a class="dropdown-item" href="#company">회사 밸류</a>
+						<a class="dropdown-item" href="#crew">크루</a>
+						<a class="dropdown-item" href="#blog">블로그글</a>
+						<a class="dropdown-item" href="#mail">Contact Us</a>
+					</div>
+				</li>
+			</ul>
+			<a class="btn btn-outline-success my-2 my-sm-0 disabled">Login</a>
 		</div>
 	</nav>
-</header>
 
-<!-- Banner -->
-	<section id="banner">
-		<h2>농부심은 농부의 마음과 농부의 자부심이라는 이중적 의미가 있는 브랜드입니다</h2>
-		<p>농부의 속이 타들어 가지 않게, 농부로서 자부심을 느낄 수 있게 노력하겠습니다</p>
-	</section>
+  <!-- 회사 밸류 -->
+	<main id="company" role="main">
+		<section class="jumbotron text-center">
+			<div class="container">
+				<h3>농부심은 농부의 마음과 농부의 자부심이라는 이중적 의미가 있는 브랜드입니다</h3>
+				<p>농부의 속이 타들어 가지 않게, 농부로서 자부심을 느낄 수 있게 노력하겠습니다</p>
+			</div>
+		</section>
 
-<!-- One -->
-	<section id="one" class="wrapper">
-		<div class="inner">
-			<div class="flex flex-3">
-				<article>
-					<header>
-						<h3>농산물의 시각화<br /> 데이터의 취득 및 시각화</h3>
-					</header>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<h4>농산물의 시각화<br /> 데이터의 취득 및 시각화</h4>
 					<p>농산물 거래시장의 실시간 데이터 확보, 시각화를 통한 데이터 관리. 저온 창고 위치 및 이용 상세 표시를 통해 효율성 극대화</p>
-					<footer>
-						<a href="https://blog.naver.com/nbsim99/222045813317" class="button special">더 알아보기</a>
-					</footer>
-				</article>
-				<article>
-					<header>
-						<h3>공정한 수익분배<br /> 농산물 물류의 공정화</h3>
-					</header>
+					<p><a class="btn btn-secondary" href="https://blog.naver.com/nbsim99/222045813317" role="button">더 알아보기</a></p>
+				</div>
+				<div class="col-md-4">
+					<h4>공정한 수익분배<br /> 농산물 물류의 공정화</h4>
 					<p>유통 과정의 간소화를 통해 실제 농산물을 재배하는 곳에 수익이 분배되는 모델 구축을 통한 이익 창출</p>
-					<footer>
-						<a href="https://blog.naver.com/nbsim99/222047342144" class="button special">더 알아보기</a>
-					</footer>
-				</article>
-				<article>
-					<header>
-						<h3>AI/ML을 이용한 효율성 극대화<br /> 농업의 스마트화</h3>
-					</header>
-					<p>날씨, 메뚜기, 해외 수입현황 등 외부 요인을 분석하고 수요 예측,  결과적으로 잉여 농산물을 줄이고 환경 보호에 기여</p>
-					<footer>
-						<a href="https://blog.naver.com/nbsim99/222047416688" class="button special">더 알아보기</a>
-					</footer>
-				</article>
-			</div>
-		</div>
-	</section>
-
-<!-- Members -->
-	<section id="two" class="wrapper style1 special">
-		<div class="inner">
-			<header>
-				<h2>농부심 크루</h2>
-				<p>이 외에도 많은 분들이 서포트 해주셨습니다</p>
-			</header>
-			<div class="flex flex-4">
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member1.jpeg}" alt="Person 1" />
-					</div>
-					<h3>홍성자</h3>
-					<p>Advisor</p>
+				  <p><a class="btn btn-secondary" href="https://blog.naver.com/nbsim99/222047342144" role="button">더 알아보기</a></p>
 				</div>
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member2.jpeg}" alt="Person 2" />
-					</div>
-					<h3>신정연</h3>
-					<p>Product Developoment</p>
-				</div>
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member3.jpeg}" alt="Person 3" />
-					</div>
-					<h3>박성문</h3>
-					<p>Business Development</p>
-				</div>
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member4.png}" alt="Person 4" />
-					</div>
-					<h3>이재열</h3>
-					<p>System Engineer</p>
-				</div>
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member5.jpeg}" alt="Person 5" />
-					</div>
-					<h3>이상은</h3>
-					<p>System Engineer</p>
-				</div>
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member6.jpeg}" alt="Person 6" />
-					</div>
-					<h3>이신애</h3>
-					<p>Brand Marketer</p>
-				</div>
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member7.png}" alt="Person 4" />
-					</div>
-					<h3>이정아</h3>
-					<p>System Engineer</p>
-				</div>
-				<div class="box person">
-					<div class="image round">
-						<img th:src="@{WebContent/images/member4.png}" alt="Person 4" />
-					</div>
-					<h3>Coming Soon</h3>
-					<p>!</p>
+				<div class="col-md-4">
+					<h4>AI/ML을 이용한 효율성 극대화<br /> 농업의 스마트화</h4>
+          <p>날씨, 메뚜기, 해외 수입현황 등 외부 요인을 분석하고 수요 예측,  결과적으로 잉여 농산물을 줄이고 환경 보호에 기여</p>
+				  <p><a class="btn btn-secondary" href="https://blog.naver.com/nbsim99/222047416688" role="button">더 알아보기</a></p>
 				</div>
 			</div>
 		</div>
-	</section>
+	</main>
 
-<!-- mail등록 -->
+  <!-- 멤버 소개 -->
+  <div id="crew" class="container py-5 marketing">
+		<div class="justify-content-between flex-wrap flex-md-nowrap text-center pb-2 mb-3 border-bottom">
+			<h1 class="h2">농부심크루</h1>
+			<p>이 외에도 많은 분들이 서포트 해주셨습니다</p>
+		</div>
+    <div class="row">
+      <div class="col-lg-3 text-center crew-padding">
+				<img class="crew-image" th:src="@{WebContent/images/member1.jpeg}" alt="Person 1" />
+				<h5>홍성자</h5>
+				<p>Advisor</p>
+      </div><!-- /.col-lg-3 -->
+      <div class="col-lg-3 text-center crew-padding ">
+				<img class="crew-image" th:src="@{WebContent/images/member2.jpeg}" alt="Person 2" />
+				<h5>신정연</h5>
+				<p>Product Developoment</p>
+      </div><!-- /.col-lg-3 -->
+      <div class="col-lg-3 text-center crew-padding">
+				<img class="crew-image" th:src="@{WebContent/images/member3.jpeg}" alt="Person 3" />
+				<h5>박성문</h5>
+				<p>Business Development</p>
+			</div><!-- /.col-lg-3 -->
+			<div class="col-lg-3 text-center crew-padding">
+				<img class="crew-image" th:src="@{WebContent/images/member4.png}" alt="Person 4" />
+				<h5>이재열</h5>
+				<p>System Engineer</p>
+			</div><!-- /.col-lg-3 -->
+			<div class="col-lg-3 text-center crew-padding">
+				<img class="crew-image" th:src="@{WebContent/images/member5.jpeg}" alt="Person 5" />
+				<h5>이상은</h5>
+				<p>System Engineer</p>
+			</div><!-- /.col-lg-3 -->
+			<div class="col-lg-3 text-center crew-padding">
+				<img class="crew-image" th:src="@{WebContent/images/member6.jpeg}" alt="Person 6" />
+				<h5>이신애</h5>
+				<p>Brand Marketer</p>
+			</div><!-- /.col-lg-3 -->
+			<div class="col-lg-3 text-center crew-padding">
+				<img class="crew-image" th:src="@{WebContent/images/member7.png}" alt="Person 4" />
+				<h5>이정아</h5>
+				<p>System Engineer</p>
+			</div><!-- /.col-lg-3 -->
+			<div class="col-lg-3 text-center crew-padding">
+				<img class="crew-image" th:src="@{WebContent/images/member4.png}" alt="Person 4" />
+				<h5>Coming Soon</h5>
+				<p>!</p>
+      </div><!-- /.col-lg-3 -->
+		</div><!-- /.row -->
+  </div><!-- /.container -->
+
+  <!-- 블로그 -->
+  <div id="blog" class="container py-5 marketing">
+		<div class="justify-content-between flex-wrap flex-md-nowrap text-center pb-2 mb-3 border-bottom">
+			<h1 class="h2">블로그글</h1>
+		</div>
+		<div class="row mb-2">
+			<div class="col-md-6">
+				<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					<div class="col p-4 d-flex flex-column position-static">
+						<strong class="d-inline-block mb-2 text-primary">World</strong>
+						<h3 class="mb-0">Featured post</h3>
+						<div class="mb-1 text-muted">Nov 12</div>
+						<p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+						<a href="https://blog.naver.com/nbsim99/222045813317" class="stretched-link">Continue reading</a>
+					</div>
+					<div class="col-auto d-none d-lg-block">
+						<img th:src="@{WebContent/images/pic01.png}" alt="Pic 01" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					<div class="col p-4 d-flex flex-column position-static">
+						<strong class="d-inline-block mb-2 text-success">Design</strong>
+						<h3 class="mb-0">Post title</h3>
+						<div class="mb-1 text-muted">Nov 11</div>
+						<p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+						<a href="https://blog.naver.com/nbsim99/222045813317" class="stretched-link">Continue reading</a>
+					</div>
+					<div class="col-auto d-none d-lg-block">
+						<img th:src="@{WebContent/images/pic02.png}" alt="Pic 02" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- mail등록 -->
+	<div id="mail" class="container">
+		<div class="py-5 text-center">
+			<img class="d-block mx-auto mb-4" src="WebContent/images/logo.svg" alt="농부심" width="72" height="72">
+			<h2>Contact Us</h2>
+		</div>
+		<div class="container-fluid col-md-6 order-md-1">
+			<form class="needs-validation" novalidate="">
+				<div class="mb-3">
+					<label for="title">제목</label>
+					<input type="text" class="form-control" id="title" placeholder="" value="" required="">
+					<div class="invalid-feedback">
+						Valid title is required.
+					</div>
+				</div>
+				<div class="mb-3">
+					<label for="email">이메일</label>
+					<input type="email" class="form-control" id="email" placeholder="you@example.com">
+					<div class="invalid-feedback">
+						Please enter a valid email address.
+					</div>
+				</div>
+				<div class="mb-3">
+					<label for="comment">Comment:</label>
+					<textarea class="form-control" rows="5" id="comment"></textarea>
+				</div>
+				<hr class="mb-4">
+				<button class="btn btn-primary btn-lg btn-block" type="submit">보내기</button>
+			</form>
+		</div>
+	</div>
 <!-- <form name="a" action="mailSend.jsp" method="post">
 
 	<label></label><input type="text" name="name">
@@ -191,63 +237,21 @@
 	}
 	</script> -->
 
-
-<!-- Three -->
-	<section id="three" class="wrapper special">
-		<div class="inner">
-			<header class="align-center">
-				<h2>블로그 글</h2>
-				<p>Aliquam erat volutpat nam dui </p>
-			</header>
-			<div class="flex flex-2">
-				<article>
-					<div class="image fit">
-						<img th:src="@{WebContent/images/pic01.png}" alt="Pic 01" />
-					</div>
-					<header>
-						<h3>Praesent placerat magna</h3>
-					</header>
-					<p>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor lorem ipsum.</p>
-					<footer>
-						<a href="https://blog.naver.com/nbsim99/222045813317" class="button special">More</a>
-					</footer>
-				</article>
-				<article>
-					<div class="image fit">
-						<img th:src="@{WebContent/images/pic02.png}" alt="Pic 02" />
-					</div>
-					<header>
-						<h3>Fusce pellentesque tempus</h3>
-					</header>
-					<p>Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna non comodo sodales tempus.</p>
-					<footer>
-						<a href="#" class="button special">More</a>
-					</footer>
-				</article>
-			</div>
-		</div>
-	</section>
-
 <!-- Footer -->
-	<footer id="footer">
-		<div class="inner">
-			<div class="flex">
-				<div class="copyright">
-					&copy; Untitled. Design: <a href="https://blog.naver.com/nbsim99/222045813317">TEMPLATED</a>. Images: <a href="https://unsplash.com">Unsplash</a>.
-				</div>
-				<ul class="icons">
-					<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-					<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-					<li><a href="#" class="icon fa-linkedin"><span class="label">linkedIn</span></a></li>
-					<li><a href="#" class="icon fa-pinterest-p"><span class="label">Pinterest</span></a></li>
-					<li><a href="#" class="icon fa-vimeo"><span class="label">Vimeo</span></a></li>
-				</ul>
-			</div>
-		</div>
-	</footer>
+<div class="container">
+  <footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <div class="row">
+      <div class="col-12 col-md text-center">
+        <img class="mb-2" src="../assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+        <small class="d-block mb-3 text-muted">&copy; 2020 NONGBUSHIM</small>
+      </div>
+    </div>
+  </footer>
+</div>
 
-<!-- Scripts -->
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script th:src="@{WebContent/js/bootstrap.bundle.min.js}"></script>
 
-
-	</body>
+</body>
 </html>
