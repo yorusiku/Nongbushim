@@ -1,7 +1,7 @@
 package com.nongbushim;
 
 import com.nongbushim.Dto.ItemInfoDto;
-import com.nongbushim.Enum.GradeRank;
+import com.nongbushim.Enum.ProductRankCode;
 import com.nongbushim.Enum.ItemCode;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -41,9 +41,11 @@ public class SearchService {
         String grade = terms[2];
         ItemInfoDto itemInfoDto = new ItemInfoDto();
         ItemCode itemCode = ItemCode.searchCode(itemName);
+        ProductRankCode rank = ProductRankCode.searchRank(grade);
         itemInfoDto.setItemCode(itemCode.getCode());
         itemInfoDto.setItemCategoryCode(itemCode.getItemCategoryCode().getCode());
-        itemInfoDto.setGradeRank(GradeRank.searchGradeRank(grade).getCode());
+        itemInfoDto.setGradeRank(rank.getGradeRank());
+        itemInfoDto.setProductRank(rank.getProduceRank());
         itemInfoDto.setKindCode(searchKindCode(itemName + " " + kind));
         return itemInfoDto;
     }
