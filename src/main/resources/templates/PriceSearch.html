@@ -147,30 +147,25 @@
                 <thead>
                   <tr>
                     <th>구분</th>
-                    <th>1개월전</th>
-                    <th>1년전</th>
+                    <th th:each="label:${chartInfo.label}" th:text="${label}"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>평균</td>
-                    <td th:text="${chartInfo.avgMonthAgoPrice}"></td>
-                    <td th:text="${chartInfo.avgYearAgoPrice}"></td>
+                    <td th:each="avgPrice:${chartInfo.avgPrice}" th:text="${avgPrice}"></td>
                   </tr>
                   <tr>
                     <td>최고값</td>
-                    <td th:text="${chartInfo.maxMonthAgoPrice}"></td>
-                    <td th:text="${chartInfo.maxYearAgoPrice}"></td>
+                    <td th:each="maxPrice:${chartInfo.maxPrice}" th:text="${maxPrice}"></td>
                   </tr>
                   <tr>
                     <td>최저값</td>
-                    <td th:text="${chartInfo.minMonthAgoPrice}"></td>
-                    <td th:text="${chartInfo.minYearAgoPrice}"></td>
+                    <td th:each="minPrice:${chartInfo.minPrice}" th:text="${minPrice}"></td>
                   </tr>
-                  <tr th:each="region: ${chartInfo.wholesaleRegionInfoList}">
+                  <tr th:each="region:${chartInfo.wholesaleRegionInfoList}">
                     <td th:text="${region.region}"></td>
-                    <td th:text="${region.wholesalePastSalesDto.monthAgoPrice}"></td>
-                    <td th:text="${region.wholesalePastSalesDto.yearAgoPrice}"></td>
+                    <td th:each="monthlySales:${region.monthlySales}" th:text="${monthlySales}"></td>
                   </tr>
                 </tbody>
               </table>

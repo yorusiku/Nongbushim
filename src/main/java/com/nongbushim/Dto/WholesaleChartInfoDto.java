@@ -12,11 +12,8 @@ import java.util.List;
 public class WholesaleChartInfoDto {
     private String title;
     private String[] label;
-    private int avgMonthAgoPrice;
-    private int avgYearAgoPrice;
-    private int maxMonthAgoPrice;
-    private int maxYearAgoPrice;
-    private int minMonthAgoPrice;
-    private int minYearAgoPrice;
+    private int[] avgPrice;
+    private int[] maxPrice;
+    private int[] minPrice;
     private List<WholesaleRegionInfoDto> wholesaleRegionInfoList;
 }

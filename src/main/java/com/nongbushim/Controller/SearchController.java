@@ -118,8 +118,6 @@ public class SearchController {
         return "PriceSearch";
     }
 
-
-
     private List<WholesaleInfoDto> getWholesaleMonthlyPrice(List<ResponseEntity<String>> resultMapList) {
         Gson gson = new Gson();
         KamisResponseSingleDto singleDto;
@@ -180,8 +178,6 @@ public class SearchController {
         return parameters;
     }
 
-
-
     private WholesaleChartInfoDto createMonthlyChartInfo(List<WholesaleInfoDto> wholesaleInfoList) {
         WholesaleChartInfoDto chartInfoDto = new WholesaleChartInfoDto();
         List<WholesaleRegionInfoDto> wholesaleRegionInfoDtoList = new ArrayList<>();
@@ -220,14 +216,28 @@ public class SearchController {
 
     private void setAvgMaxMin(WholesaleChartInfoDto chartInfoDto) {
         List<WholesaleRegionInfoDto> list = chartInfoDto.getWholesaleRegionInfoList();
-        IntSummaryStatistics monthAgoStatistics = list.stream().mapToInt(dto -> dto.getWholesalePastSalesDto().getMonthAgoPrice()).summaryStatistics();
-        IntSummaryStatistics yearAgoStatistics = list.stream().mapToInt(dto -> dto.getWholesalePastSalesDto().getYearAgoPrice()).summaryStatistics();
-        chartInfoDto.setAvgMonthAgoPrice((int) monthAgoStatistics.getAverage());
-        chartInfoDto.setAvgYearAgoPrice((int) yearAgoStatistics.getAverage());
-        chartInfoDto.setMaxMonthAgoPrice(monthAgoStatistics.getMax());
-        chartInfoDto.setMaxYearAgoPrice(yearAgoStatistics.getMax());
-        chartInfoDto.setMinMonthAgoPrice(monthAgoStatistics.getMin());
-        chartInfoDto.setMinYearAgoPrice(yearAgoStatistics.getMin());
+        int[] avgArr = new int[12];
+        int[] maxArr = new int[12];
+        int[] minArr = new int[12];
+
+        for (int i = 0; i < 12; i++) {
+            int sum = 0;
+            int max = Integer.MIN_VALUE;
+            int min = Integer.MAX_VALUE;
+            for (WholesaleRegionInfoDto dto : list) {
+                int monthlySales = dto.getMonthlySales()[i];
+                sum += monthlySales;
+                if (max < monthlySales) max = monthlySales;
+                if (min > monthlySales) min = monthlySales;
+
+            }
+            avgArr[i] = sum / list.size();
+            maxArr[i] = max;
+            minArr[i] = min;
+        }
+        chartInfoDto.setAvgPrice(avgArr);
+        chartInfoDto.setMaxPrice(maxArr);
+        chartInfoDto.setMinPrice(minArr);
     }
 
     private WholesalePastSalesDto createTableInfo(WholesaleInfoDto wholesaleInfoDto) {
