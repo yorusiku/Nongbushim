@@ -12,4 +12,5 @@ public class ItemInfoDto {
     private String itemCode;
     private String kindCode;
     private String gradeRank;
+    private String productRank;
 }

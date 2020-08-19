@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * 검색 결과 그래프에 표시할 정보
- * 월, 가격
+ * 월단위 검색 결과 그래프에 표시할 정보
  */
 @Data
 @NoArgsConstructor
@@ -15,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class WholesaleRegionInfoDto {
     private String region;
     private int[] monthlySales;
-    private WholesalePastSalesDto tableDto;
+    private WholesalePastSalesDto wholesalePastSalesDto;
 }

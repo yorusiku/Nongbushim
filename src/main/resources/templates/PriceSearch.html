@@ -169,8 +169,8 @@
                   </tr>
                   <tr th:each="region: ${chartInfo.wholesaleRegionInfoList}">
                     <td th:text="${region.region}"></td>
-                    <td th:text="${region.tableDto.monthAgoPrice}"></td>
-                    <td th:text="${region.tableDto.yearAgoPrice}"></td>
+                    <td th:text="${region.wholesalePastSalesDto.monthAgoPrice}"></td>
+                    <td th:text="${region.wholesalePastSalesDto.yearAgoPrice}"></td>
                   </tr>
                 </tbody>
               </table>

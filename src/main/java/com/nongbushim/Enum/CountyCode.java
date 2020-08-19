@@ -2,10 +2,8 @@ package com.nongbushim.Enum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public enum CountyCode {
     COUNTY_CODE_1101("1101", "서울"),
