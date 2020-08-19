@@ -66,20 +66,39 @@
 					</div>
 				</li>
 			</ul>
-			<a class="btn btn-outline-success my-2 my-sm-0 disabled">Login</a>
+			<div class="navbar-nav navbar-expand d-flex justify-content-end">
+				<ul class="navbar-nav my-2 my-sm-0 pr-3">
+					<li class="nav-item">
+						<a class="nav-link pr-1 mx-1 py-3 my-n2" href="http://pf.kakao.com/_yXYIK/chat" target="_blank" rel="noopener" aria-label="GitHub" style="width: 37px;">
+							<img th:src="@{WebContent/images/kakao-talk.svg}"/>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link px-1 mx-1 py-3 my-n2" href="https://www.instagram.com/nongbushim/" target="_blank" rel="noopener" aria-label="Twitter" style="width: 33px;">
+							<img th:src="@{WebContent/images/icon_instagram.svg}"/>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link px-1 mx-1 py-3 my-n2" href="https://blog.naver.com/nbsim99" target="_blank" rel="noopener" aria-label="Slack" style="width: 33px;">
+							<img th:src="@{WebContent/images/blog.svg}"/>
+						</a>
+					</li>
+				</ul>
+				<a class="btn btn-outline-success my-2 my-sm-0 disabled pb-2 pt-2">Login</a>
+			</div>
 		</div>
 	</nav>
 
   <!-- 회사 밸류 -->
 	<main id="company" role="main">
 		<section class="jumbotron text-center">
-			<div class="container">
+			<div class="container pt-5 pb-5">
 				<h3>농부심은 농부의 마음과 농부의 자부심이라는 이중적 의미가 있는 브랜드입니다</h3>
 				<p>농부의 속이 타들어 가지 않게, 농부로서 자부심을 느낄 수 있게 노력하겠습니다</p>
 			</div>
 		</section>
 
-		<div class="container">
+		<div class="container pt-5 pb-5">
 			<div class="row">
 				<div class="col-md-4">
 					<h4>농산물의 시각화<br /> 데이터의 취득 및 시각화</h4>
@@ -102,7 +121,7 @@
 
   <!-- 멤버 소개 -->
   <div id="crew" class="container py-5 marketing">
-		<div class="justify-content-between flex-wrap flex-md-nowrap text-center pb-2 mb-3 border-bottom">
+		<div class="justify-content-between flex-wrap flex-md-nowrap text-center pt-5 pb-2 mb-3 border-bottom">
 			<h1 class="h2">농부심크루</h1>
 			<p>이 외에도 많은 분들이 서포트 해주셨습니다</p>
 		</div>
@@ -152,7 +171,7 @@
 
   <!-- 블로그 -->
   <div id="blog" class="container py-5 marketing">
-		<div class="justify-content-between flex-wrap flex-md-nowrap text-center pb-2 mb-3 border-bottom">
+		<div class="justify-content-between flex-wrap flex-md-nowrap text-center pt-5 pb-2 mb-3 border-bottom">
 			<h1 class="h2">블로그글</h1>
 		</div>
 		<div class="row mb-2">
@@ -190,7 +209,7 @@
 
 	<!-- mail등록 -->
 	<div id="mail" class="container">
-		<div class="py-5 text-center">
+		<div class="justify-content-between flex-wrap flex-md-nowrap text-center pt-5 pb-2 mb-3 border-bottom">
 			<img class="d-block mx-auto mb-4" src="WebContent/images/logo.svg" alt="농부심" width="72" height="72">
 			<h2>Contact Us</h2>
 		</div>
@@ -242,7 +261,6 @@
   <footer class="pt-4 my-md-5 pt-md-5 border-top">
     <div class="row">
       <div class="col-12 col-md text-center">
-        <img class="mb-2" src="../assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
         <small class="d-block mb-3 text-muted">&copy; 2020 NONGBUSHIM</small>
       </div>
     </div>
