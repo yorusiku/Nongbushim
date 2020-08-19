@@ -19,11 +19,7 @@
   
     <title>농부심/창고검색</title>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=no"
-    />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" th:href="@{WebContent/css/navbar.css}" />
     <script th:src="@{WebContent/js/jquery.min.js}"></script>
     <script th:src="@{WebContent/js/browser.minprice.js}"></script>
@@ -76,48 +72,57 @@
           </div>
         </li>
       </ul>
-    <!-- <div class="logodiv">
-          <a class="logo" href="http://www.nongbushim.com">
-            <img th:src="@{WebContent/images/logo.svg}"/>
-          </a>
-        </div>
-        <div class="snsnav">
-          <a class="sns" href=""><img th:src="@{WebContent/images/kakao-talk.svg}"/></a>
-          <a class="sns" href=""><img th:src="@{WebContent/images/icon_instagram.svg}"/></a>
-          <a class="sns" href=""><img th:src="@{WebContent/images/blog.svg}"/></a>
-          <a class="login" href=""><img th:src="@{WebContent/images/login.svg}"/></a>
-        </div> -->
-      <a class="btn btn-outline-success my-2 my-sm-0 disabled">Login</a>
+      <div class="navbar-nav navbar-expand d-flex justify-content-end">
+        <ul class="navbar-nav my-2 my-sm-0 pr-3">
+          <li class="nav-item">
+            <a class="nav-link pr-1 mx-1 py-3 my-n2" href="http://pf.kakao.com/_yXYIK/chat" target="_blank" rel="noopener" aria-label="GitHub" style="width: 37px;">
+              <img th:src="@{WebContent/images/kakao-talk.svg}"/>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-1 mx-1 py-3 my-n2" href="https://www.instagram.com/nongbushim/" target="_blank" rel="noopener" aria-label="Twitter" style="width: 33px;">
+              <img th:src="@{WebContent/images/icon_instagram.svg}"/>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-1 mx-1 py-3 my-n2" href="https://blog.naver.com/nbsim99" target="_blank" rel="noopener" aria-label="Slack" style="width: 33px;">
+              <img th:src="@{WebContent/images/blog.svg}"/>
+            </a>
+          </li>
+        </ul>
+        <a class="btn btn-outline-success my-2 my-sm-0 disabled pb-2 pt-2">Login</a>
+      </div>
     </div>
   </nav>
 
-    <!-- Wrapper -->
-    <div id="wrapper">
-      <!-- PowerBI 차트 넣었어요 -->
-      <section id="main" class="wrapper">
-        <div class="inner">
-          <h1 class="major" style="font-family: '산돌 곧은부리', Regular;">
-            창고검색
-          </h1>
-          <div class="container-powerbi">
-            <iframe
-              class="iframe-powerbi"
-              src="https://app.powerbi.com/view?r=eyJrIjoiN2Q4MDRmZjAtNjZkMy00OTgwLWE5ZWQtY2YwMzI3NjBjZTgyIiwidCI6IjczNmIwODYwLTdlOTgtNDM5Mi1hMDgwLTNkNmYzNjkyMGEzNiJ9&pageName=ReportSection"
-              frameborder="0"
-              allowfullscreen="true"
-            >
-            </iframe>
-          </div>
+  <div class="justify-content-between flex-wrap flex-md-nowrap text-center pb-2 mt-3 mb-3 border-bottom">
+    <h1 class="h2">창고검색</h1>
+    <p></p>
+  </div>
+  
+  <!-- Wrapper -->
+  <div id="wrapper">
+    <!-- PowerBI 차트 넣었어요 -->
+    <section id="main" class="wrapper">
+      <div class="inner">
+        <div class="container-powerbi">
+          <iframe
+            class="iframe-powerbi"
+            src="https://app.powerbi.com/view?r=eyJrIjoiN2Q4MDRmZjAtNjZkMy00OTgwLWE5ZWQtY2YwMzI3NjBjZTgyIiwidCI6IjczNmIwODYwLTdlOTgtNDM5Mi1hMDgwLTNkNmYzNjkyMGEzNiJ9&pageName=ReportSection"
+            frameborder="0"
+            allowfullscreen="true"
+          >
+          </iframe>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+  </div>
 
   <!-- Footer -->
   <div class="container">
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
       <div class="row">
         <div class="col-12 col-md text-center">
-          <img class="mb-2" src="../assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
           <small class="d-block mb-3 text-muted">&copy; 2020 NONGBUSHIM</small>
         </div>
       </div>
