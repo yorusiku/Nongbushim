@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.nongbushim.Dto.*;
 import com.nongbushim.Dto.KamisRequest.*;
-import com.nongbushim.Dto.KamisResponse.*;
+import com.nongbushim.Dto.KamisResponse.Monthly.KamisResponsePluralDto;
+import com.nongbushim.Dto.KamisResponse.Monthly.KamisResponseSingleDto;
+import com.nongbushim.Dto.KamisResponse.Monthly.MonthlyItemDto;
 import com.nongbushim.Enum.CountyCode;
 import com.nongbushim.SearchService;
 import org.springframework.http.*;
@@ -190,7 +192,7 @@ public class SearchController {
             lastItemIdx = wholesaleInfoDto.getPrice().getItem().size() - 1;
             int idx = 0;
             while (idx <= 11) {
-                Item current = wholesaleInfoDto.getPrice().getItem().get(lastItemIdx);
+                MonthlyItemDto current = wholesaleInfoDto.getPrice().getItem().get(lastItemIdx);
 
                 List<String> currentYearMonthlySalesList = currentYearMonthlySalesList(current);
                 for (int monthIdx = 11; monthIdx >= 0 && idx <= 11; monthIdx--) {
@@ -239,7 +241,7 @@ public class SearchController {
         chartInfoDto.setMinPrice(minArr);
     }
 
-    private List<String> currentYearMonthlySalesList(Item current) {
+    private List<String> currentYearMonthlySalesList(MonthlyItemDto current) {
         return Arrays.asList(
                 current.getM1(),
                 current.getM2(),

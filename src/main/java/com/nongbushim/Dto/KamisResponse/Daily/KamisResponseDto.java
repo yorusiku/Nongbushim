@@ -1,4 +1,4 @@
-package com.nongbushim.Dto.KamisResponse;
+package com.nongbushim.Dto.KamisResponse.Daily;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Price {
-    private String productclscode;
-
-    private String caption;
-
-    private List<Item> item;
-
+public class KamisResponseDto {
+    private List<ConditionDto> condition;
+    private DataDto data;
 }
