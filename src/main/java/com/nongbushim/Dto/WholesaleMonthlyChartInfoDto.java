@@ -9,11 +9,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WholesaleChartInfoDto {
+public class WholesaleMonthlyChartInfoDto {
     private String title;
     private String[] label;
     private int[] avgPrice;
     private int[] maxPrice;
     private int[] minPrice;
-    private List<WholesaleRegionInfoDto> wholesaleRegionInfoList;
+    private List<WholesaleMonthlyRegionInfoDto> wholesaleRegionInfoList;
 }

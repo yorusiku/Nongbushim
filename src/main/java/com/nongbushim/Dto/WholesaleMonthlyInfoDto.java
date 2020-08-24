@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WholesaleInfoDto {
+public class WholesaleMonthlyInfoDto {
     PriceDto price;
     CountyCode countyCode;
 }

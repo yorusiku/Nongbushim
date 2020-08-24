@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KamisResponseSingleDto extends KamisResponseDto {
+public class KamisMonthlyResponseSingleDto extends KamisMonthlyResponseDto {
 
     private PriceDto price;
 }

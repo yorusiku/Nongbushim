@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WholesaleRegionInfoDto {
+public class WholesaleMonthlyRegionInfoDto {
     private String region;
     private int[] monthlySales;
 }

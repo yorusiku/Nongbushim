@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KamisResponsePluralDto extends KamisResponseDto {
+public class KamisMonthlyResponsePluralDto extends KamisMonthlyResponseDto {
 
 
     private List<PriceDto> price;

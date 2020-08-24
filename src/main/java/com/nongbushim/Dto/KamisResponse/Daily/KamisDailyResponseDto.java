@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KamisResponseDto {
+public class KamisDailyResponseDto {
     private List<ConditionDto> condition;
     private DataDto data;
 }

@@ -1,14 +1,20 @@
 package com.nongbushim.Controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.*;
 import com.nongbushim.Dto.*;
 import com.nongbushim.Dto.KamisRequest.*;
-import com.nongbushim.Dto.KamisResponse.Monthly.KamisResponsePluralDto;
-import com.nongbushim.Dto.KamisResponse.Monthly.KamisResponseSingleDto;
+import com.nongbushim.Dto.KamisResponse.Daily.ConditionDto;
+import com.nongbushim.Dto.KamisResponse.Daily.DailyItemDto;
+import com.nongbushim.Dto.KamisResponse.Daily.KamisDailyResponseDto;
+import com.nongbushim.Dto.KamisResponse.Monthly.KamisMonthlyResponsePluralDto;
+import com.nongbushim.Dto.KamisResponse.Monthly.KamisMonthlyResponseSingleDto;
 import com.nongbushim.Dto.KamisResponse.Monthly.MonthlyItemDto;
 import com.nongbushim.Enum.CountyCode;
 import com.nongbushim.SearchService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -93,8 +99,8 @@ public class SearchController {
             resultMap2.add(restTemplate2.exchange(uri2.toString(), HttpMethod.GET, HTTP_ENTITY, String.class));
         }
 
-        List<WholesaleInfoDto> wholesaleMonthlyInfoList = getWholesaleMonthlyPrice(resultMap);
-        WholesaleChartInfoDto monthlyChartInfoDto;
+        List<WholesaleMonthlyInfoDto> wholesaleMonthlyInfoList = getWholesaleMonthlyPrice(resultMap);
+        WholesaleMonthlyChartInfoDto monthlyChartInfoDto;
         try {
             monthlyChartInfoDto = createMonthlyChartInfo(wholesaleMonthlyInfoList);
             model.addAttribute("chartInfo", monthlyChartInfoDto);
@@ -117,25 +123,57 @@ public class SearchController {
 
         }
 
+        List<WholesaleDailyInfoDto> WholesaleDailyInfoList = getWholesaleDailyPrice(resultMap2);
+
         return "PriceSearch";
     }
 
-    private List<WholesaleInfoDto> getWholesaleMonthlyPrice(List<ResponseEntity<String>> resultMapList) {
-        Gson gson = new Gson();
-        KamisResponseSingleDto singleDto;
-        KamisResponsePluralDto pluralDto;
+    private List<WholesaleDailyInfoDto> getWholesaleDailyPrice(List<ResponseEntity<String>> resultMapList) {
         // 도매값 대상
-        List<WholesaleInfoDto> wholesaleInfoList = new ArrayList<>();
+        List<WholesaleDailyInfoDto> wholesaleInfoList = new ArrayList<>();
+        for (ResponseEntity<String> resultMap : resultMapList) {
+            JSONObject responseBody = new JSONObject(resultMap.getBody());
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                ConditionDto condition = mapper.readValue(responseBody.getJSONArray("condition").getJSONObject(0).toString(), ConditionDto.class);
+                String countyCode = condition.getP_countycode();
+
+                JSONArray jsonArray = responseBody.getJSONObject("data").getJSONArray("item");
+                List<DailyItemDto> dailyItemList = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject current = jsonArray.getJSONObject(i);
+                    String itemName = current.get("itemname").toString();
+                    if ("[]".equals(itemName)) continue;
+                    DailyItemDto dailyItemDto = mapper.readValue(current.toString(), DailyItemDto.class);
+                    dailyItemList.add(dailyItemDto);
+                }
+                wholesaleInfoList.add(new WholesaleDailyInfoDto(dailyItemList, CountyCode.searchCountyCode(countyCode)));
+
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return wholesaleInfoList;
+    }
+
+    private List<WholesaleMonthlyInfoDto> getWholesaleMonthlyPrice(List<ResponseEntity<String>> resultMapList) {
+        Gson gson = new Gson();
+        KamisMonthlyResponseSingleDto singleDto;
+        KamisMonthlyResponsePluralDto pluralDto;
+        // 도매값 대상
+        List<WholesaleMonthlyInfoDto> wholesaleInfoList = new ArrayList<>();
         for (ResponseEntity<String> resultMap : resultMapList) {
             String countyCode;
             try {
-                singleDto = gson.fromJson(resultMap.getBody(), KamisResponseSingleDto.class);
+                singleDto = gson.fromJson(resultMap.getBody(), KamisMonthlyResponseSingleDto.class);
                 countyCode = singleDto.getCondition().get(0).get(9);
-                wholesaleInfoList.add(new WholesaleInfoDto(singleDto.getPrice(), CountyCode.searchCountyCode(countyCode)));
+                wholesaleInfoList.add(new WholesaleMonthlyInfoDto(singleDto.getPrice(), CountyCode.searchCountyCode(countyCode)));
             } catch (JsonSyntaxException e) {
-                pluralDto = gson.fromJson(resultMap.getBody(), KamisResponsePluralDto.class);
+                pluralDto = gson.fromJson(resultMap.getBody(), KamisMonthlyResponsePluralDto.class);
                 countyCode = pluralDto.getCondition().get(0).get(9);
-                wholesaleInfoList.add(new WholesaleInfoDto(pluralDto.getPrice().get(0), CountyCode.searchCountyCode(countyCode)));
+                wholesaleInfoList.add(new WholesaleMonthlyInfoDto(pluralDto.getPrice().get(0), CountyCode.searchCountyCode(countyCode)));
             }
         }
 
@@ -180,19 +218,19 @@ public class SearchController {
         return parameters;
     }
 
-    private WholesaleChartInfoDto createMonthlyChartInfo(List<WholesaleInfoDto> wholesaleInfoList) {
-        WholesaleChartInfoDto chartInfoDto = new WholesaleChartInfoDto();
-        List<WholesaleRegionInfoDto> wholesaleRegionInfoDtoList = new ArrayList<>();
+    private WholesaleMonthlyChartInfoDto createMonthlyChartInfo(List<WholesaleMonthlyInfoDto> wholesaleInfoList) {
+        WholesaleMonthlyChartInfoDto chartInfoDto = new WholesaleMonthlyChartInfoDto();
+        List<WholesaleMonthlyRegionInfoDto> wholesaleMonthlyRegionInfoDtoList = new ArrayList<>();
         int lastItemIdx;
         String[] label = new String[12];
-        for (WholesaleInfoDto wholesaleInfoDto : wholesaleInfoList) {
+        for (WholesaleMonthlyInfoDto wholesaleMonthlyInfoDto : wholesaleInfoList) {
             int[] monthlySales = new int[12];
-            WholesaleRegionInfoDto wholesaleRegionInfoDto = new WholesaleRegionInfoDto();
+            WholesaleMonthlyRegionInfoDto wholesaleMonthlyRegionInfoDto = new WholesaleMonthlyRegionInfoDto();
 
-            lastItemIdx = wholesaleInfoDto.getPrice().getItem().size() - 1;
+            lastItemIdx = wholesaleMonthlyInfoDto.getPrice().getItem().size() - 1;
             int idx = 0;
             while (idx <= 11) {
-                MonthlyItemDto current = wholesaleInfoDto.getPrice().getItem().get(lastItemIdx);
+                MonthlyItemDto current = wholesaleMonthlyInfoDto.getPrice().getItem().get(lastItemIdx);
 
                 List<String> currentYearMonthlySalesList = currentYearMonthlySalesList(current);
                 for (int monthIdx = 11; monthIdx >= 0 && idx <= 11; monthIdx--) {
@@ -204,19 +242,19 @@ public class SearchController {
                 }
                 lastItemIdx--;
             }
-            wholesaleRegionInfoDto.setRegion(wholesaleInfoDto.getCountyCode().getName());
-            wholesaleRegionInfoDto.setMonthlySales(monthlySales);
-            wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
+            wholesaleMonthlyRegionInfoDto.setRegion(wholesaleMonthlyInfoDto.getCountyCode().getName());
+            wholesaleMonthlyRegionInfoDto.setMonthlySales(monthlySales);
+            wholesaleMonthlyRegionInfoDtoList.add(wholesaleMonthlyRegionInfoDto);
         }
         chartInfoDto.setTitle(wholesaleInfoList.get(0).getPrice().getCaption());
-        chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
+        chartInfoDto.setWholesaleRegionInfoList(wholesaleMonthlyRegionInfoDtoList);
         chartInfoDto.setLabel(label);
         setAvgMaxMin(chartInfoDto);
         return chartInfoDto;
     }
 
-    private void setAvgMaxMin(WholesaleChartInfoDto chartInfoDto) {
-        List<WholesaleRegionInfoDto> list = chartInfoDto.getWholesaleRegionInfoList();
+    private void setAvgMaxMin(WholesaleMonthlyChartInfoDto chartInfoDto) {
+        List<WholesaleMonthlyRegionInfoDto> list = chartInfoDto.getWholesaleRegionInfoList();
         int[] avgArr = new int[12];
         int[] maxArr = new int[12];
         int[] minArr = new int[12];
@@ -225,7 +263,7 @@ public class SearchController {
             int sum = 0;
             int max = Integer.MIN_VALUE;
             int min = Integer.MAX_VALUE;
-            for (WholesaleRegionInfoDto dto : list) {
+            for (WholesaleMonthlyRegionInfoDto dto : list) {
                 int monthlySales = dto.getMonthlySales()[i];
                 sum += monthlySales;
                 if (max < monthlySales) max = monthlySales;

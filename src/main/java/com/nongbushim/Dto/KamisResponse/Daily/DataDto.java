@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class DataDto {
     private String error_code;
-    private List<ItemDto> item;
+    private List<DailyItemDto> item;
 }
