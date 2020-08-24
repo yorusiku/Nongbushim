@@ -202,7 +202,6 @@ public class SearchController {
                 }
                 lastItemIdx--;
             }
-            wholesaleRegionInfoDto.setWholesalePastSalesDto(createTableInfo(wholesaleInfoDto));
             wholesaleRegionInfoDto.setRegion(wholesaleInfoDto.getCountyCode().getName());
             wholesaleRegionInfoDto.setMonthlySales(monthlySales);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
@@ -238,22 +237,6 @@ public class SearchController {
         chartInfoDto.setAvgPrice(avgArr);
         chartInfoDto.setMaxPrice(maxArr);
         chartInfoDto.setMinPrice(minArr);
-    }
-
-    private WholesalePastSalesDto createTableInfo(WholesaleInfoDto wholesaleInfoDto) {
-        WholesalePastSalesDto wholesalePastSalesDto = new WholesalePastSalesDto();
-        int lastItemIdx = wholesaleInfoDto.getPrice().getItem().size() - 1;
-        Item thisYearItem = wholesaleInfoDto.getPrice().getItem().get(lastItemIdx);
-        Item lastYearItem = wholesaleInfoDto.getPrice().getItem().get(lastItemIdx - 1);
-        List<String> thisYearMonthlySalesList = currentYearMonthlySalesList(thisYearItem);
-        List<String> lastYearMonthlySalesList = currentYearMonthlySalesList(lastYearItem);
-        LocalDate today = LocalDate.now();
-        int lastMonthIdx = today.getMonthValue() - 2;
-
-        wholesalePastSalesDto.setMonthAgoPrice(Integer.parseInt(thisYearMonthlySalesList.get(lastMonthIdx).replace(",", "")));
-        wholesalePastSalesDto.setYearAgoPrice(Integer.parseInt(lastYearMonthlySalesList.get(lastMonthIdx).replace(",", "")));
-
-        return wholesalePastSalesDto;
     }
 
     private List<String> currentYearMonthlySalesList(Item current) {

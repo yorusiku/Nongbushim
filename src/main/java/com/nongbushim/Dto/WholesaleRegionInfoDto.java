@@ -14,5 +14,4 @@ import lombok.NoArgsConstructor;
 public class WholesaleRegionInfoDto {
     private String region;
     private int[] monthlySales;
-    private WholesalePastSalesDto wholesalePastSalesDto;
 }
