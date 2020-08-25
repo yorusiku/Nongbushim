@@ -37,6 +37,7 @@ public class SearchController {
     private final static HttpEntity<?> HTTP_ENTITY;
     private final static String ACCESS_KEY = "c870db87-9503-48c8-aca3-dee7f28a42ba";
     private final static Set<CountyCode> WHOLESALE_COUNTY_CODES = EnumSet.of(CountyCode.COUNTY_CODE_1101, CountyCode.COUNTY_CODE_2100, CountyCode.COUNTY_CODE_2200, CountyCode.COUNTY_CODE_2401, CountyCode.COUNTY_CODE_2501);
+    private static String chartTitle;
 
     static {
         HTTP_HEADERS = new HttpHeaders();
@@ -149,7 +150,8 @@ public class SearchController {
             WholesaleRegionInfoDto wholesaleRegionInfoDto = new WholesaleRegionInfoDto();
 
             List<Integer> dailyPrices = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            int len = dto.getDailyItemList().size();
+            for (int i = 0; i < len; i++) {
                 DailyItemDto currentItem = dto.getDailyItemList().get(i);
                 dailyPrices.add(Integer.parseInt(currentItem.getPrice().replace(",", "")));
             }
@@ -157,7 +159,7 @@ public class SearchController {
             wholesaleRegionInfoDto.setPrices(dailyPrices);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
-        chartInfoDto.setTitle("TEST");
+        chartInfoDto.setTitle(chartTitle);
         chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
         chartInfoDto.setLabel(label);
         setAvgMaxMin(chartInfoDto);
@@ -167,7 +169,7 @@ public class SearchController {
 
     private List<String> createLabel(List<WholesaleDailyInfoDto> wholesaleDailyInfoList) {
         List<String> label = new ArrayList<>();
-        for (DailyItemDto dto: wholesaleDailyInfoList.get(0).getDailyItemList())
+        for (DailyItemDto dto : wholesaleDailyInfoList.get(0).getDailyItemList())
             label.add(dto.getRegday());
         return label;
     }
@@ -280,7 +282,7 @@ public class SearchController {
                 for (int monthIdx = 11; monthIdx >= 0 && idx <= 11; monthIdx--) {
                     String sales = currentYearMonthlySalesList.get(monthIdx);
                     if ("-".equals(sales)) continue;
-                    label[11 - idx] = current.getYyyy() + "년-" + (monthIdx + 1) + "월";
+                    label[11 - idx] = createLabel(current, monthIdx);
                     monthlySales.add(0, Integer.parseInt(sales.replace(",", "")));
                     idx++;
                 }
@@ -290,11 +292,17 @@ public class SearchController {
             wholesaleRegionInfoDto.setPrices(monthlySales);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
-        chartInfoDto.setTitle(wholesaleInfoList.get(0).getPrice().getCaption());
+        chartTitle = wholesaleInfoList.get(0).getPrice().getCaption();
+        chartInfoDto.setTitle(chartTitle);
         chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
         chartInfoDto.setLabel(Arrays.asList(label));
         setAvgMaxMin(chartInfoDto);
         return chartInfoDto;
+    }
+
+    private String createLabel(MonthlyItemDto current, int monthIdx) {
+        String month = (monthIdx + 1) / 10 == 1 ? String.valueOf(monthIdx + 1) : "0" + (monthIdx + 1);
+        return current.getYyyy() + "/" + month;
     }
 
     private void setAvgMaxMin(WholesaleChartInfoDto chartInfoDto) {
