@@ -169,42 +169,81 @@
           <div
           class="chart-container"
           style="position: relative; margin: auto; height: 80vh; width: 80vw;"
-          th:if="${chartInfo} != null">
+          th:if="${monthlyChartInfo} != null">
             <canvas id="lineChart"></canvas>
           </div>
           <!-- 테이블 -->
           <h3 class="pb-3 mb-4 font-italic"></h3>
           <div class="table-responsive">
-            <table class="table table-striped table-sm" style="width: 100%;" th:if="${chartInfo} != null">
+            <table class="table table-striped table-sm" style="width: 100%;" th:if="${monthlyChartInfo} != null">
               <thead>
                 <tr>
                   <th>구분</th>
-                  <th th:each="label:${chartInfo.label}" th:text="${label}"></th>
+                  <th th:each="label:${monthlyChartInfo.label}" th:text="${label}"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>평균</td>
-                  <td th:each="avgPrice:${chartInfo.avgPrice}" th:text="${avgPrice}"></td>
+                  <td th:each="avgPrice:${monthlyChartInfo.avgPrice}" th:text="${avgPrice}"></td>
                 </tr>
                 <tr>
                   <td>최고값</td>
-                  <td th:each="maxPrice:${chartInfo.maxPrice}" th:text="${maxPrice}"></td>
+                  <td th:each="maxPrice:${monthlyChartInfo.maxPrice}" th:text="${maxPrice}"></td>
                 </tr>
                 <tr>
                   <td>최저값</td>
-                  <td th:each="minPrice:${chartInfo.minPrice}" th:text="${minPrice}"></td>
+                  <td th:each="minPrice:${monthlyChartInfo.minPrice}" th:text="${minPrice}"></td>
                 </tr>
-                <tr th:each="region:${chartInfo.wholesaleRegionInfoList}">
+                <tr th:each="region:${monthlyChartInfo.wholesaleRegionInfoList}">
                   <td th:text="${region.region}"></td>
-                  <td th:each="monthlySales:${region.monthlySales}" th:text="${monthlySales}"></td>
+                  <td th:each="monthlySales:${region.prices}" th:text="${monthlySales}"></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
         <!-- 일별 -->
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Coming soon</div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <!-- 그래프 -->
+          <div
+          class="chart-container"
+          style="position: relative; margin: auto; height: 80vh; width: 80vw;"
+          th:if="${dailyChartInfo} != null">
+            <canvas id="dailyChart"></canvas>
+          </div>
+          <!-- 테이블 -->
+          <h3 class="pb-3 mb-4 font-italic"></h3>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm" style="width: 100%;" th:if="${dailyChartInfo} != null">
+              <thead>
+              <tr>
+                <th>구분</th>
+                <th th:each="label:${dailyChartInfo.label}" th:text="${label}"></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>평균</td>
+                <td th:each="avgPrice:${dailyChartInfo.avgPrice}" th:text="${avgPrice}"></td>
+              </tr>
+              <tr>
+                <td>최고값</td>
+                <td th:each="maxPrice:${dailyChartInfo.maxPrice}" th:text="${maxPrice}"></td>
+              </tr>
+              <tr>
+                <td>최저값</td>
+                <td th:each="minPrice:${dailyChartInfo.minPrice}" th:text="${minPrice}"></td>
+              </tr>
+              <tr th:each="region:${dailyChartInfo.wholesaleRegionInfoList}">
+                <td th:text="${region.region}"></td>
+                <td th:each="dailyPrice:${region.prices}" th:text="${dailyPrice}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
       </div>
     </main>
 
@@ -225,7 +264,7 @@
       var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: [[${chartInfo?.label}]],
+          labels: [[${monthlyChartInfo?.label}]],
           datasets: [{
 
             label: [[${seoulLabel}]],
@@ -263,7 +302,55 @@
         }, options: {
           title: {
             display: true,
-            text: [[${chartInfo?.title}]]
+            text: [[${monthlyChartInfo?.title}]]
+          },
+          maintainAspectRatio: false,
+        }
+      });
+
+      var ctx2 = $('#dailyChart');
+      var dailyChart = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: [[${dailyChartInfo?.label}]],
+          datasets: [{
+
+            label: [[${seoulLabel2}]],
+            fill: false,
+            backgroundColor: 'rgba(193, 66, 66, 1)',
+            borderColor: 'rgba(193, 66, 66, 1)',
+            data: [[${seoulData2}]]
+          }, {
+            label: [[${busanLabel2}]],
+            fill: false,
+            backgroundColor: 'rgba(63, 191, 191, 1)',
+            borderColor: 'rgba(63, 191, 191, 1)',
+            data: [[${busanData2}]]
+          }, {
+            label: [[${daeguLabel2}]],
+            fill: false,
+            backgroundColor: 'rgba(63, 84, 191, 1)',
+            borderColor: 'rgba(63, 84, 191, 1)',
+            data: [[${daeguData2}]]
+          }, {
+            label: [[${gwangjuLabel2}]],
+            fill: false,
+            backgroundColor: 'rgba(99, 63, 191, 1)',
+            borderColor: 'rgba(99, 63, 191, 1)',
+            data: [[${gwangjuData2}]]
+          }, {
+            label: [[${daejeonLabel2}]],
+            fill: false,
+            backgroundColor: 'rgba(191, 159, 63)',
+            borderColor: 'rgba(191, 159, 63)',
+            data: [[${daejeonData2}]]
+          }
+
+          ]
+        }, options: {
+          title: {
+            display: true,
+            text: [[${dailyChartInfo?.title}]]
           },
           maintainAspectRatio: false,
         }
