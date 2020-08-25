@@ -1,4 +1,4 @@
-package com.nongbushim.Dto.KamisResponse;
+package com.nongbushim.Dto.KamisResponse.Monthly;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Item {
+public class MonthlyItemDto {
     private String yyyy;
 
     private String m1;
