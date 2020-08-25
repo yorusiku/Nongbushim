@@ -1,4 +1,4 @@
-package com.nongbushim.Dto.KamisResponse;
+package com.nongbushim.Dto.KamisResponse.Monthly;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +14,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KamisResponsePluralDto extends KamisResponseDto{
+public class KamisMonthlyResponsePluralDto extends KamisMonthlyResponseDto {
 
 
-    private List<Price> price;
+    private List<PriceDto> price;
 }

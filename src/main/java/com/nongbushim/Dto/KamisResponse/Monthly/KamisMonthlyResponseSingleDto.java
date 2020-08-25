@@ -1,4 +1,4 @@
-package com.nongbushim.Dto.KamisResponse;
+package com.nongbushim.Dto.KamisResponse.Monthly;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KamisResponseSingleDto extends KamisResponseDto {
+public class KamisMonthlyResponseSingleDto extends KamisMonthlyResponseDto {
 
-    private Price price;
+    private PriceDto price;
 }

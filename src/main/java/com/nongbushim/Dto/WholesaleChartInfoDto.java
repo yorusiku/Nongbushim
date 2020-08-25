@@ -11,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class WholesaleChartInfoDto {
     private String title;
-    private String[] label;
-    private int[] avgPrice;
-    private int[] maxPrice;
-    private int[] minPrice;
+    private List<String> label;
+    private List<Integer> avgPrice;
+    private List<Integer> maxPrice;
+    private List<Integer> minPrice;
     private List<WholesaleRegionInfoDto> wholesaleRegionInfoList;
 }
