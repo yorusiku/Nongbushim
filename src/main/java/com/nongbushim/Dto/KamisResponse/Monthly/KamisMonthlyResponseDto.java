@@ -1,4 +1,4 @@
-package com.nongbushim.Dto.KamisResponse;
+package com.nongbushim.Dto.KamisResponse.Monthly;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KamisResponseDto {
+public class KamisMonthlyResponseDto {
     private List<List<String>> condition;
 
     private String error_code;
