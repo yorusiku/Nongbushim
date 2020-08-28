@@ -1,0 +1,10 @@
+
+/* Split */
+
+.split {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    background-color: #5385c1;
+}
