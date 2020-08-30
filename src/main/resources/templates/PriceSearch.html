@@ -50,14 +50,21 @@
         $("#searchInput").autocomplete({
           source: "autoComplete",
           minLength: 1,
-          response: function (event, ui) {
-            var resultCount = ui.content.length;
-            if (resultCount === 0) {
-              $("#submitButton").prop("disabled", true);
-            } else {
-              $("#submitButton").prop("disabled", false);
-            }
+          delay: 500,
+          select: function(event, ui) {
+            $(this).val(ui.item.value);
+            $("#searchForm").submit();
           },
+          focus: function(event, ui) {
+            return false;
+          },
+
+        });
+      });
+
+      $(function () {
+        $("#resetButton").click(function(){
+          $("#searchInput").val("");
         });
       });
     </script>
@@ -121,18 +128,18 @@
       <!-- 사용방법 -->
       <div class="pt-3">
         <p class="text-justify mb-0" style="font-weight: 100; font-size: small;">
-          사용방법 - 품종을 검색해주시고 아래 보기창에서 원하시는 내용을 선택해주세요.
+          사용방법 - 품종(예시:쌀)을 검색해주시고 아래 보기창에서 원하시는 내용을 선택해주세요.
         </p>
       </div>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
         <!-- 검색창 -->
-        <form class="mt-md-0" style="display: flex;" action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
+        <form class="mt-md-0" id="searchForm" style="display: flex;" action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
           <input class="form-control mr-2"
             id="searchInput"
             name="searchInput"
             type="text"
             th:field="*{text}" />
-          <input class="btn btn-outline-secondary" id="submitButton" type="submit" value="검색" />
+          <button type="button" class="btn btn-outline-secondary" id="resetButton" value="Reset">검색초기화</button>
         </form>
         <!-- 다운로드 -->
         <div class="btn-toolbar mb-md-0">
