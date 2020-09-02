@@ -28,7 +28,7 @@ public class SearchService {
 
         String line;
         while((line = reader.readLine()) != null){
-            if (line.contains(item)) break;
+            if (line.substring(3).equals(item)) break;
         }
         String kindCode = line.substring(0,2);
         return kindCode;
@@ -36,9 +36,18 @@ public class SearchService {
 
     public ItemInfoDto searchInfo(String input) throws IOException {
         String[] terms = input.split(" ");
+        int lastIdx = terms.length-1;
         String itemName = terms[0];
         String kind = terms[1];
-        String grade = terms[2];
+        String grade = terms[lastIdx];
+        if (lastIdx > 2){
+            // input이 3단어보다 긴 경우
+            StringBuilder sb = new StringBuilder(kind);
+            while (--lastIdx>1) {
+                sb.append(" ").append(terms[lastIdx]);
+            }
+            kind = sb.toString();
+        }
         ItemInfoDto itemInfoDto = new ItemInfoDto();
         ItemCode itemCode = ItemCode.searchCode(itemName);
         ProductRankCode rank = ProductRankCode.searchRank(grade);

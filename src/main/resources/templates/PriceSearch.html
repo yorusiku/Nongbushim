@@ -167,9 +167,11 @@
 
       <!-- 탭 -->
       <div class="tab-content" id="myTabContent">
-        <!-- 월별 -->
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <!-- 그래프 -->
+          <!-- 월별 -->
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <!-- 검색 결과 없음-->
+          <div th:if="${monthlyNoSearchResult} != null" th:text="${monthlyNoSearchResult}"></div>
+              <!-- 그래프 -->
           <div
           class="chart-container"
           style="position: relative; margin: auto; height: 80vh; width: 80vw;"
@@ -209,6 +211,8 @@
         </div>
         <!-- 일별 -->
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <!-- 검색 결과 없음-->
+          <div th:if="${dailyNoSearchResult} != null" th:text="${dailyNoSearchResult}"></div>
           <!-- 그래프 -->
           <div
           class="chart-container"
@@ -262,47 +266,31 @@
     </footer>
   </div>
 
-    <script type="text/javascript" th:inline="javascript">
+    <script type="text/javascript" th:inline="javascript" th:if="${monthlyChartInfo} != null">
       /*<![CDATA[*/
+      var monthlyChartInfoArray = [[${monthlyChartInfo.wholesaleRegionInfoList}]];
+      var dailyChartInfoArray = [[${dailyChartInfo.wholesaleRegionInfoList}]];
       var ctx = $('#lineChart');
+
+      function createDatasets(array) {
+        var dataset = []
+        for (let i=0;i<array.length;i++){
+          dataset.push({
+            label: array[i].region,
+            fill: false,
+            backgroundColor: array[i].backgroundColor,
+            borderColor: array[i].borderColor,
+            data: array[i].prices
+          });
+        }
+        return dataset;
+      }
+
       var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: [[${monthlyChartInfo?.label}]],
-          datasets: [{
-
-            label: [[${seoulLabel}]],
-            fill: false,
-            backgroundColor: 'rgba(193, 66, 66, 1)',
-            borderColor: 'rgba(193, 66, 66, 1)',
-            data: [[${seoulData}]]
-          }, {
-            label: [[${busanLabel}]],
-            fill: false,
-            backgroundColor: 'rgba(63, 191, 191, 1)',
-            borderColor: 'rgba(63, 191, 191, 1)',
-            data: [[${busanData}]]
-          }, {
-            label: [[${daeguLabel}]],
-            fill: false,
-            backgroundColor: 'rgba(63, 84, 191, 1)',
-            borderColor: 'rgba(63, 84, 191, 1)',
-            data: [[${daeguData}]]
-          }, {
-            label: [[${gwangjuLabel}]],
-            fill: false,
-            backgroundColor: 'rgba(99, 63, 191, 1)',
-            borderColor: 'rgba(99, 63, 191, 1)',
-            data: [[${gwangjuData}]]
-          }, {
-            label: [[${daejeonLabel}]],
-            fill: false,
-            backgroundColor: 'rgba(191, 159, 63)',
-            borderColor: 'rgba(191, 159, 63)',
-            data: [[${daejeonData}]]
-          }
-
-          ]
+          datasets: createDatasets(monthlyChartInfoArray),
         }, options: {
           title: {
             display: true,
@@ -312,45 +300,14 @@
         }
       });
 
+
+
       var ctx2 = $('#dailyChart');
       var dailyChart = new Chart(ctx2, {
         type: 'line',
         data: {
           labels: [[${dailyChartInfo?.label}]],
-          datasets: [{
-
-            label: [[${seoulLabel2}]],
-            fill: false,
-            backgroundColor: 'rgba(193, 66, 66, 1)',
-            borderColor: 'rgba(193, 66, 66, 1)',
-            data: [[${seoulData2}]]
-          }, {
-            label: [[${busanLabel2}]],
-            fill: false,
-            backgroundColor: 'rgba(63, 191, 191, 1)',
-            borderColor: 'rgba(63, 191, 191, 1)',
-            data: [[${busanData2}]]
-          }, {
-            label: [[${daeguLabel2}]],
-            fill: false,
-            backgroundColor: 'rgba(63, 84, 191, 1)',
-            borderColor: 'rgba(63, 84, 191, 1)',
-            data: [[${daeguData2}]]
-          }, {
-            label: [[${gwangjuLabel2}]],
-            fill: false,
-            backgroundColor: 'rgba(99, 63, 191, 1)',
-            borderColor: 'rgba(99, 63, 191, 1)',
-            data: [[${gwangjuData2}]]
-          }, {
-            label: [[${daejeonLabel2}]],
-            fill: false,
-            backgroundColor: 'rgba(191, 159, 63)',
-            borderColor: 'rgba(191, 159, 63)',
-            data: [[${daejeonData2}]]
-          }
-
-          ]
+          datasets: createDatasets(dailyChartInfoArray),
         }, options: {
           title: {
             display: true,
