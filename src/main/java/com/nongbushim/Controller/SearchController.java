@@ -2,17 +2,16 @@ package com.nongbushim.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.*;
 import com.nongbushim.Dto.*;
 import com.nongbushim.Dto.KamisRequest.*;
 import com.nongbushim.Dto.KamisResponse.Daily.ConditionDto;
 import com.nongbushim.Dto.KamisResponse.Daily.DailyItemDto;
-import com.nongbushim.Dto.KamisResponse.Monthly.KamisMonthlyResponsePluralDto;
-import com.nongbushim.Dto.KamisResponse.Monthly.KamisMonthlyResponseSingleDto;
 import com.nongbushim.Dto.KamisResponse.Monthly.MonthlyItemDto;
+import com.nongbushim.Dto.KamisResponse.Monthly.PriceDto;
 import com.nongbushim.Enum.CountyCode;
 import com.nongbushim.SearchService;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -37,7 +36,10 @@ public class SearchController {
     private final static HttpEntity<?> HTTP_ENTITY;
     private final static String ACCESS_KEY = "c870db87-9503-48c8-aca3-dee7f28a42ba";
     private final static Set<CountyCode> WHOLESALE_COUNTY_CODES = EnumSet.of(CountyCode.COUNTY_CODE_1101, CountyCode.COUNTY_CODE_2100, CountyCode.COUNTY_CODE_2200, CountyCode.COUNTY_CODE_2401, CountyCode.COUNTY_CODE_2501);
-    private static String chartTitle;
+    private static String CHART_TITLE;
+    private static final int THIS_YEAR = LocalDate.now().getYear();
+    private static final String NO_SEARCH_MONTHLY_RESULT = THIS_YEAR + "년도에 해당하는 데이터가 없습니다";
+    private static final String NO_SEARCH_DAILY_RESULT = "검색조건에 해당하는 데이터가 없습니다";
 
     static {
         HTTP_HEADERS = new HttpHeaders();
@@ -99,45 +101,27 @@ public class SearchController {
             resultMap2.add(restTemplate2.exchange(uri2.toString(), HttpMethod.GET, HTTP_ENTITY, String.class));
         }
 
+        WholesaleChartInfoDto monthlyChartInfoDto = null;
+        WholesaleChartInfoDto dailyChartInfoDto = null;
+
         List<WholesaleMonthlyInfoDto> wholesaleMonthlyInfoList = getWholesaleMonthlyPrice(resultMap);
-        WholesaleChartInfoDto monthlyChartInfoDto = createMonthlyChartInfo(wholesaleMonthlyInfoList);
+        if (wholesaleMonthlyInfoList.isEmpty()) {
+            model.addAttribute("monthlyNoSearchResult", NO_SEARCH_MONTHLY_RESULT);
+            model.addAttribute("monthlyChartInfo", monthlyChartInfoDto);
+            return "PriceSearch";
+        }
+        monthlyChartInfoDto = createMonthlyChartInfo(wholesaleMonthlyInfoList);
         model.addAttribute("monthlyChartInfo", monthlyChartInfoDto);
 
-        model.addAttribute("seoulData", monthlyChartInfoDto.getWholesaleRegionInfoList().get(0).getPrices());
-        model.addAttribute("seoulLabel", monthlyChartInfoDto.getWholesaleRegionInfoList().get(0).getRegion());
-
-        model.addAttribute("busanData", monthlyChartInfoDto.getWholesaleRegionInfoList().get(1).getPrices());
-        model.addAttribute("busanLabel", monthlyChartInfoDto.getWholesaleRegionInfoList().get(1).getRegion());
-
-        model.addAttribute("daeguData", monthlyChartInfoDto.getWholesaleRegionInfoList().get(2).getPrices());
-        model.addAttribute("daeguLabel", monthlyChartInfoDto.getWholesaleRegionInfoList().get(2).getRegion());
-
-        model.addAttribute("gwangjuData", monthlyChartInfoDto.getWholesaleRegionInfoList().get(3).getPrices());
-        model.addAttribute("gwangjuLabel", monthlyChartInfoDto.getWholesaleRegionInfoList().get(3).getRegion());
-
-        model.addAttribute("daejeonData", monthlyChartInfoDto.getWholesaleRegionInfoList().get(4).getPrices());
-        model.addAttribute("daejeonLabel", monthlyChartInfoDto.getWholesaleRegionInfoList().get(4).getRegion());
-
-
         List<WholesaleDailyInfoDto> wholesaleDailyInfoList = getWholesaleDailyPrice(resultMap2);
-        WholesaleChartInfoDto dailyChartInfoDto = createDailyChartInfo(wholesaleDailyInfoList);
-
+        if (wholesaleDailyInfoList.isEmpty()) {
+            model.addAttribute("dailyNoSearchResult", NO_SEARCH_DAILY_RESULT);
+            model.addAttribute("dailyChartInfo", dailyChartInfoDto);
+            return "PriceSearch";
+        }
+        dailyChartInfoDto = createDailyChartInfo(wholesaleDailyInfoList);
         model.addAttribute("dailyChartInfo", dailyChartInfoDto);
 
-        model.addAttribute("seoulData2", dailyChartInfoDto.getWholesaleRegionInfoList().get(0).getPrices());
-        model.addAttribute("seoulLabel2", dailyChartInfoDto.getWholesaleRegionInfoList().get(0).getRegion());
-
-        model.addAttribute("busanData2", dailyChartInfoDto.getWholesaleRegionInfoList().get(1).getPrices());
-        model.addAttribute("busanLabel2", dailyChartInfoDto.getWholesaleRegionInfoList().get(1).getRegion());
-
-        model.addAttribute("daeguData2", dailyChartInfoDto.getWholesaleRegionInfoList().get(2).getPrices());
-        model.addAttribute("daeguLabel2", dailyChartInfoDto.getWholesaleRegionInfoList().get(2).getRegion());
-
-        model.addAttribute("gwangjuData2", dailyChartInfoDto.getWholesaleRegionInfoList().get(3).getPrices());
-        model.addAttribute("gwangjuLabel2", dailyChartInfoDto.getWholesaleRegionInfoList().get(3).getRegion());
-
-        model.addAttribute("daejeonData2", dailyChartInfoDto.getWholesaleRegionInfoList().get(4).getPrices());
-        model.addAttribute("daejeonLabel2", dailyChartInfoDto.getWholesaleRegionInfoList().get(4).getRegion());
         return "PriceSearch";
     }
 
@@ -157,13 +141,13 @@ public class SearchController {
             }
             wholesaleRegionInfoDto.setRegion(dto.getCountyCode().getName());
             wholesaleRegionInfoDto.setPrices(dailyPrices);
+            setColour(wholesaleRegionInfoDto);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
-        chartInfoDto.setTitle(chartTitle);
+        chartInfoDto.setTitle(CHART_TITLE);
         chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
         chartInfoDto.setLabel(label);
         setAvgMaxMin(chartInfoDto);
-
         return chartInfoDto;
     }
 
@@ -196,7 +180,10 @@ public class SearchController {
                 wholesaleInfoList.add(new WholesaleDailyInfoDto(dailyItemList, CountyCode.searchCountyCode(countyCode)));
 
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+            } catch (JSONException e) {
+                // 데이터가 없는 경우
+                if (e.getMessage().equals("JSONObject[\"data\"] is not a JSONObject."))
+                    return wholesaleInfoList;
             }
 
         }
@@ -205,24 +192,63 @@ public class SearchController {
     }
 
     private List<WholesaleMonthlyInfoDto> getWholesaleMonthlyPrice(List<ResponseEntity<String>> resultMapList) {
-        Gson gson = new Gson();
-        KamisMonthlyResponseSingleDto singleDto;
-        KamisMonthlyResponsePluralDto pluralDto;
-        // 도매값 대상
         List<WholesaleMonthlyInfoDto> wholesaleInfoList = new ArrayList<>();
         for (ResponseEntity<String> resultMap : resultMapList) {
-            String countyCode;
+            JSONObject responseBody = new JSONObject(resultMap.getBody());
+            ObjectMapper mapper = new ObjectMapper();
+
+            WholesaleMonthlyInfoDto res = new WholesaleMonthlyInfoDto();
             try {
-                singleDto = gson.fromJson(resultMap.getBody(), KamisMonthlyResponseSingleDto.class);
-                countyCode = singleDto.getCondition().get(0).get(9);
-                wholesaleInfoList.add(new WholesaleMonthlyInfoDto(singleDto.getPrice(), CountyCode.searchCountyCode(countyCode)));
-            } catch (JsonSyntaxException e) {
-                pluralDto = gson.fromJson(resultMap.getBody(), KamisMonthlyResponsePluralDto.class);
-                countyCode = pluralDto.getCondition().get(0).get(9);
-                wholesaleInfoList.add(new WholesaleMonthlyInfoDto(pluralDto.getPrice().get(0), CountyCode.searchCountyCode(countyCode)));
+                List<String> condition = Arrays.asList(mapper.readValue(responseBody.getJSONArray("condition").getJSONArray(0).toString(), String[].class));
+
+                //레스폰스에 도, 소매 둘다 있는 경우
+                JSONArray priceArr = responseBody.optJSONArray("price");
+                //레스폰스에 도매만 있는 경우
+                JSONObject priceObj = responseBody.optJSONObject("price");
+
+                JSONArray itemArr = null;
+                JSONObject itemObj = null;
+                JSONObject wholesaleObject;
+                List<MonthlyItemDto> item;
+
+                // 도매값 대상
+                wholesaleObject = (priceArr != null) ? priceArr.getJSONObject(0) : priceObj;
+                //도매 가격정보 존재
+                itemArr = wholesaleObject.optJSONArray("item");
+                //도매 가격정보 부족(false positive)
+                itemObj = wholesaleObject.optJSONObject("item");
+                String productclscode = wholesaleObject.getString("productclscode");
+                String caption = wholesaleObject.getString("caption");
+                String countyCode = condition.get(condition.size() - 1);
+
+                res.setCountyCode(CountyCode.searchCountyCode(countyCode));
+                PriceDto priceDto = new PriceDto();
+                priceDto.setProductclscode(productclscode);
+                priceDto.setCaption(caption);
+                if (itemArr != null) {
+                    item = Arrays.asList(mapper.readValue(itemArr.toString(), MonthlyItemDto[].class));
+                } else if (itemObj != null) {
+                    item = Collections.singletonList(mapper.readValue(itemObj.toString(), MonthlyItemDto.class));
+                } else {
+                    // 도, 소매 가격정보 없음
+                    return new ArrayList<>();
+                }
+                priceDto.setItem(item);
+                res.setPrice(priceDto);
+                wholesaleInfoList.add(res);
+
+            } catch (JsonProcessingException e) {
             }
         }
 
+        int invalidCount = 0;
+        for (WholesaleMonthlyInfoDto dto : wholesaleInfoList) {
+            List<MonthlyItemDto> item = dto.getPrice().getItem();
+            int lastIdx = item.size() - 1;
+            if (THIS_YEAR != Integer.parseInt(item.get(lastIdx).getYyyy())) invalidCount++;
+        }
+        if (invalidCount == wholesaleInfoList.size())
+            wholesaleInfoList = new ArrayList<>();
         return wholesaleInfoList;
     }
 
@@ -274,8 +300,11 @@ public class SearchController {
             WholesaleRegionInfoDto wholesaleRegionInfoDto = new WholesaleRegionInfoDto();
 
             lastItemIdx = wholesaleMonthlyInfoDto.getPrice().getItem().size() - 1;
+            if (THIS_YEAR != Integer.parseInt(wholesaleMonthlyInfoDto.getPrice().getItem().get(lastItemIdx).getYyyy()))
+                continue;
+
             int idx = 0;
-            while (idx <= 11) {
+            while (idx <= 11 && lastItemIdx >= 0) {
                 MonthlyItemDto current = wholesaleMonthlyInfoDto.getPrice().getItem().get(lastItemIdx);
 
                 List<String> currentYearMonthlySalesList = currentYearMonthlySalesList(current);
@@ -290,14 +319,23 @@ public class SearchController {
             }
             wholesaleRegionInfoDto.setRegion(wholesaleMonthlyInfoDto.getCountyCode().getName());
             wholesaleRegionInfoDto.setPrices(monthlySales);
+            setColour(wholesaleRegionInfoDto);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
-        chartTitle = wholesaleInfoList.get(0).getPrice().getCaption();
-        chartInfoDto.setTitle(chartTitle);
+        CHART_TITLE = wholesaleInfoList.get(0).getPrice().getCaption();
+        chartInfoDto.setTitle(CHART_TITLE);
         chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
         chartInfoDto.setLabel(Arrays.asList(label));
         setAvgMaxMin(chartInfoDto);
         return chartInfoDto;
+    }
+
+    private void setColour(WholesaleRegionInfoDto dto) {
+        Random r = new Random();
+        int[] randomNumbers = r.ints(3, 0, 200).toArray();
+        String rgba = "rgba(" + randomNumbers[0] + "," + randomNumbers[1] + "," + randomNumbers[2] + ",1)";
+        dto.setBackgroundColor(rgba);
+        dto.setBorderColor(rgba);
     }
 
     private String createLabel(MonthlyItemDto current, int monthIdx) {
@@ -317,11 +355,14 @@ public class SearchController {
             int max = Integer.MIN_VALUE;
             int min = Integer.MAX_VALUE;
             for (WholesaleRegionInfoDto dto : list) {
-                int monthlySales = dto.getPrices().get(i);
-                sum += monthlySales;
-                if (max < monthlySales) max = monthlySales;
-                if (min > monthlySales) min = monthlySales;
-
+                int monthlySales;
+                try {
+                    monthlySales = dto.getPrices().get(i);
+                    sum += monthlySales;
+                    if (max < monthlySales) max = monthlySales;
+                    if (min > monthlySales) min = monthlySales;
+                } catch (IndexOutOfBoundsException e) {
+                }
             }
             avgArr.add(sum / list.size());
             maxArr.add(max);
@@ -361,7 +402,7 @@ public class SearchController {
                     .p_kindcode(itemInfoDto.getKindCode())
                     .p_convert_kg_yn("N")
                     .p_yyyy("2020")
-                    .p_period("3")
+                    .p_period("10")
                     .p_countycode(wholesaleCode.getCode())
                     .build();
             wholesaleRequestList.add(dto);
