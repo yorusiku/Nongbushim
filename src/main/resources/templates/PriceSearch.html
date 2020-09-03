@@ -201,7 +201,7 @@
                   <td>MIN</td>
                   <td th:each="minPrice:${monthlyChartInfo.minPrice}" th:text="${minPrice}"></td>
                 </tr>
-                <tr th:each="region:${monthlyChartInfo.wholesaleRegionInfoList}">
+                <tr th:each="region:${monthlyChartInfo?.wholesaleRegionInfoList}">
                   <td th:text="${region.region}"></td>
                   <td th:each="monthlySales:${region.prices}" th:text="${monthlySales}"></td>
                 </tr>
@@ -243,7 +243,7 @@
                 <td>MIN</td>
                 <td th:each="minPrice:${dailyChartInfo.minPrice}" th:text="${minPrice}"></td>
               </tr>
-              <tr th:each="region:${dailyChartInfo.wholesaleRegionInfoList}">
+              <tr th:each="region:${dailyChartInfo?.wholesaleRegionInfoList}">
                 <td th:text="${region.region}"></td>
                 <td th:each="dailyPrice:${region.prices}" th:text="${dailyPrice}"></td>
               </tr>
@@ -268,8 +268,8 @@
 
     <script type="text/javascript" th:inline="javascript" th:if="${monthlyChartInfo} != null">
       /*<![CDATA[*/
-      var monthlyChartInfoArray = [[${monthlyChartInfo.wholesaleRegionInfoList}]];
-      var dailyChartInfoArray = [[${dailyChartInfo.wholesaleRegionInfoList}]];
+      var monthlyChartInfoArray = [[${monthlyChartInfo?.wholesaleRegionInfoList}]];
+      var dailyChartInfoArray = [[${dailyChartInfo?.wholesaleRegionInfoList}]];
       var ctx = $('#lineChart');
 
       function createDatasets(array) {

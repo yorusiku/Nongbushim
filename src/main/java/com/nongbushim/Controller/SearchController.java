@@ -101,21 +101,25 @@ public class SearchController {
             resultMap2.add(restTemplate2.exchange(uri2.toString(), HttpMethod.GET, HTTP_ENTITY, String.class));
         }
 
+        WholesaleChartInfoDto monthlyChartInfoDto = null;
+        WholesaleChartInfoDto dailyChartInfoDto = null;
+
         List<WholesaleMonthlyInfoDto> wholesaleMonthlyInfoList = getWholesaleMonthlyPrice(resultMap);
         if (wholesaleMonthlyInfoList.isEmpty()) {
             model.addAttribute("monthlyNoSearchResult", NO_SEARCH_MONTHLY_RESULT);
+            model.addAttribute("monthlyChartInfo", monthlyChartInfoDto);
             return "PriceSearch";
         }
-        WholesaleChartInfoDto monthlyChartInfoDto = createMonthlyChartInfo(wholesaleMonthlyInfoList);
+        monthlyChartInfoDto = createMonthlyChartInfo(wholesaleMonthlyInfoList);
+        model.addAttribute("monthlyChartInfo", monthlyChartInfoDto);
 
         List<WholesaleDailyInfoDto> wholesaleDailyInfoList = getWholesaleDailyPrice(resultMap2);
         if (wholesaleDailyInfoList.isEmpty()) {
             model.addAttribute("dailyNoSearchResult", NO_SEARCH_DAILY_RESULT);
+            model.addAttribute("dailyChartInfo", dailyChartInfoDto);
             return "PriceSearch";
         }
-        WholesaleChartInfoDto dailyChartInfoDto = createDailyChartInfo(wholesaleDailyInfoList);
-
-        model.addAttribute("monthlyChartInfo", monthlyChartInfoDto);
+        dailyChartInfoDto = createDailyChartInfo(wholesaleDailyInfoList);
         model.addAttribute("dailyChartInfo", dailyChartInfoDto);
 
         return "PriceSearch";
