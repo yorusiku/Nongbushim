@@ -16,4 +16,6 @@ import java.util.List;
 public class WholesaleRegionInfoDto {
     private String region;
     private List<Integer> prices;
+    private String backgroundColor;
+    private String borderColor;
 }

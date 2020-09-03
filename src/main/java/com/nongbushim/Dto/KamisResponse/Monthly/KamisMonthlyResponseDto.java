@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class KamisMonthlyResponseDto {
     private List<List<String>> condition;
-
     private String error_code;
+    private List<PriceDto> prices;
 }

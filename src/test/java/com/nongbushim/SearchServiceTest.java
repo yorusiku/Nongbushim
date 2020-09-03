@@ -1,5 +1,6 @@
 package com.nongbushim;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,11 @@ class SearchServiceTest {
         List<String> expected = new LinkedList<>();
         List<String> actual = service.searchAutoCompleteTarget(term);
         assertEquals(expected, actual);
+    }
+
+    @AfterAll
+    public void done() throws IOException {
+        resource.close();
+        reader.close();
     }
 }
