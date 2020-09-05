@@ -163,7 +163,7 @@
               type="text"
               style="border: 0px;"
               th:field="*{text}"/>
-            <a type="button" class="m-3" id="resetButton" value="Reset">
+            <a class="m-3" id="resetButton" value="Reset" style="cursor: pointer;">
               <img th:src="@{WebContent/images/x.svg}"/>
             </a>
           </div>
@@ -181,11 +181,9 @@
 
         <!-- 다운로드 -->
         <div class="btn-toolbar" style="display: initial;position: absolute;right: 5%;">
-          <button type="button" class="btn btn-sm btn-outline-secondary disabled" style="cursor: default;">
-            다운로드
-            <a type="button" class="" id="resetButton" value="Reset">
-              <img th:src="@{WebContent/images/data-transfer-download.svg}"/>
-            </a>
+          <button type="button" class="btn btn-sm btn-outline-secondary disabled"
+                  style="cursor: default;display: flex;align-items: center;justify-content: center;">
+            다운로드<img class="pl-2" th:src="@{WebContent/images/data-transfer-download.svg}"/>
           </button>
         </div>
 
