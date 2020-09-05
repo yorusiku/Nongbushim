@@ -129,39 +129,47 @@
       <div class="pt-3">
         <p class="text-justify mb-0" style="font-weight: 100; font-size: small;">
           사용방법 - 품종(예시:쌀)을 검색해주시고 아래 보기창에서 원하시는 내용을 선택해주세요.
+          <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            이용안내 더보기
+          </a>
         </p>
-      </div>
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
-        <!-- 검색창 -->
-        <form class="mt-md-0" id="searchForm" style="display: flex;" action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
-          <input class="form-control mr-2"
-            id="searchInput"
-            name="searchInput"
-            type="text"
-            th:field="*{text}" />
-          <button type="button" class="btn btn-outline-secondary" id="resetButton" value="Reset">검색초기화</button>
-        </form>
-        <!-- 다운로드 -->
-        <div class="btn-toolbar mb-md-0">
-          <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary disabled">Export</button>
+
+        <!-- 안내문 -->
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body p-3" style="background-color: #e9ecef;border: none;" >
+            <p class="mb-0" style="font-weight: 100;font-size: small;">
+              도매시장 중도매인 상회에서 소상인 및 실수요자에게 판매하는 가격입니다.
+              <br>・ 농산물 특성상 크기와 색상 등이 다양하고 저장기간, 기후변화에 따라 동일 등급에도 다소 차이가 있을 수 있음.
+              <br>・ 1개월전, 1년전, 평년 가격은 해당일자 기준 5일 이동평균 가격임. (이동평균은 해당일 기준 전후로 4~5일의 평균값) 
+              <br>・ 평년은 5년간(금년 제외) 해당일에 대한 최고값과 최소값을 제외한 3년 평균값. (해당일 평균가격은 5일 이동평균값을 적용) 
+              <br>・ 조사단위가 중량이 아닌 품목(포기, 개, 접, 마리 등)은 kg 단위 환산이 제공되지 않음.
+              <br>・ 본 가격자료는 전국 주요 시장에서 조사된 도∙소매 평균가격으로 개별 판매처 및 산지, 브랜드, 규격 등에 따라 가격이 다를 수 있으므로
+              실거래에 있어서 참고 자료로만 활용하여 주시기 바랍니다.
+              <br>・ 2018.1.8일 부터 깐마늘(국산)은 대서종과 남도종 구분조사·제공합니다. (이전 깐마늘가격은 품종 혼합가격임)
+              <br>・ 2020.6.23일 부터 난지형 피마늘은 대서종과 남도종 구분조사·제공합니다. (이전 난지형 피마늘 가격은 품종 혼합가격임)
+            </p>
           </div>
         </div>
+
       </div>
-      <!-- 안내문 -->
-      <div class="jumbotron pt-1 pb-1">
-        <p class="text-justify pt-3" style="font-weight: 100;font-size: small;">
-          도매시장 중도매인 상회에서 소상인 및 실수요자에게 판매하는 가격입니다.
-          <br>・ 농산물 특성상 크기와 색상 등이 다양하고 저장기간, 기후변화에 따라 동일 등급에도 다소 차이가 있을 수 있음.
-          <br>・ 1개월전, 1년전, 평년 가격은 해당일자 기준 5일 이동평균 가격임. (이동평균은 해당일 기준 전후로 4~5일의 평균값)     
-          <br>・ 평년은 5년간(금년 제외) 해당일에 대한 최고값과 최소값을 제외한 3년 평균값. (해당일 평균가격은 5일 이동평균값을 적용)     
-          <br>・ 조사단위가 중량이 아닌 품목(포기, 개, 접, 마리 등)은 kg 단위 환산이 제공되지 않음.
-          <br>・ 본 가격자료는 전국 주요 시장에서 조사된 도∙소매 평균가격으로 개별 판매처 및 산지, 브랜드, 규격 등에 따라 가격이 다를 수 있으므로
-          실거래에 있어서 참고 자료로만 활용하여 주시기 바랍니다.
-          <br>・ 2018.1.8일 부터 깐마늘(국산)은 대서종과 남도종 구분조사·제공합니다. (이전 깐마늘가격은 품종 혼합가격임)
-          <br>・ 2020.6.23일 부터 난지형 피마늘은 대서종과 남도종 구분조사·제공합니다. (이전 난지형 피마늘 가격은 품종 혼합가격임)
-        </p>
+
+      <!-- 검색창 -->
+      <div class="input-group input-group-sm mb-3 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
+        <form class="mt-md-0 p-0 col-lg-4 col-sm-12" id="searchForm" style="width: 100%;" action="#" th:action="@{/pricesearch}" th:object="${form}" method="post">
+          <div style="display: flex; border: 1px solid #ced4da; border-radius: .25rem;">
+            <input class="form-control"
+              id="searchInput"
+              name="searchInput"
+              type="text"
+              style="border: 0px;"
+              th:field="*{text}"/>
+            <a type="button" class="m-3" id="resetButton" value="Reset">
+              <img th:src="@{WebContent/images/x.svg}"/>
+            </a>
+          </div>
+        </form>
       </div>
+
       <!-- 그래프 -->
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -170,6 +178,17 @@
         <li class="nav-item" role="presentation">
           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">일별</a>
         </li>
+
+        <!-- 다운로드 -->
+        <div class="btn-toolbar" style="display: initial;position: absolute;right: 5%;">
+          <button type="button" class="btn btn-sm btn-outline-secondary disabled" style="cursor: default;">
+            다운로드
+            <a type="button" class="" id="resetButton" value="Reset">
+              <img th:src="@{WebContent/images/data-transfer-download.svg}"/>
+            </a>
+          </button>
+        </div>
+
       </ul>
 
       <!-- 탭 -->
