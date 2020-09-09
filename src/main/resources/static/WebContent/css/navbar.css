@@ -200,3 +200,23 @@ body {
 .bg-main-color {
   background: #073602;
 }
+
+/* menu bar */
+.nongbushim-menu:hover {
+  color: #073602 !important;
+  border-bottom: 1px solid #073602 !important;
+}
+
+.nongbushim-menu:active {
+  color: #073602 !important;
+  border-bottom: 1px solid #073602 !important;
+}
+
+.nongbushim-menu-active {
+  color: #073602 !important;
+  border-bottom: 1px solid #073602 !important;
+}
+
+.nongbushim-menu {
+  color: #073602 !important;
+}
