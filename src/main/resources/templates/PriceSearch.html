@@ -71,7 +71,7 @@
   </head>
   <body class="is-preload" style="font-family: 'S Core DREAM', Medium;">
     <!-- 네비게이션 -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-md navbar-light bg-white fixed-top pb-0 pt-1">
       <a class="navbar-brand" href="http://www.nongbushim.com">
         <img src="WebContent/images/logo.svg" style="width: 30px;">
       </a>
@@ -81,17 +81,17 @@
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" th:href="@{/pricesearch}">가격검색 <span class="sr-only">(current)</span></a>
+          <li class="nav-item active pl-2 pr-2">
+            <a class="nav-link nongbushim-menu-active" th:href="@{/pricesearch}">도매가격검색 <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" th:href="@{/warehouse}">창고검색</a>
+          <li class="nav-item pl-2 pr-2">
+            <a class="nav-link nongbushim-menu" th:href="@{/warehouse}">창고검색</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item pl-2 pr-2">
             <a class="nav-link disabled" th:href="@{/warehouse}" tabindex="-1" aria-disabled="true">솔루션</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" th:href="@{/whoarewe}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">회사소개</a>
+          <li class="nav-item dropdown pl-2 pr-2">
+            <a class="nav-link nongbushim-menu dropdown-toggle" th:href="@{/whoarewe}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">회사소개</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
               <a class="dropdown-item" th:href="@{/whoarewe#company}">회사 밸류</a>
               <a class="dropdown-item" th:href="@{/whoarewe#crew}">크루</a>
