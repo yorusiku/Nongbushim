@@ -180,7 +180,7 @@
       </div>
 
       <!-- 그래프 -->
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <ul th:if="${dailyChartInfo} != null" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">월별</a>
         </li>
@@ -285,6 +285,11 @@
           </div>
 
         </div>
+      </div>
+
+      <!-- 사용설명서 -->
+      <div th:if="${dailyChartInfo} == null">
+        <img th:src="@{WebContent/images/nongbushim_intro2.png}" class="img-fluid" alt="Responsive image" />
       </div>
     </main>
 
