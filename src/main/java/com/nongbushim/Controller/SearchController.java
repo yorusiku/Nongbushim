@@ -134,13 +134,21 @@ public class SearchController {
             WholesaleRegionInfoDto wholesaleRegionInfoDto = new WholesaleRegionInfoDto();
 
             List<Integer> dailyPrices = new ArrayList<>();
-            int len = dto.getDailyItemList().size();
+            List<String> dailyPricesForTable = new ArrayList<>();
+            int len = wholesaleDailyInfoList.stream().max(Comparator.comparing(dailyInfoDto -> dailyInfoDto.getDailyItemList().size())).get().getDailyItemList().size();
             for (int i = 0; i < len; i++) {
-                DailyItemDto currentItem = dto.getDailyItemList().get(i);
-                dailyPrices.add(Integer.parseInt(currentItem.getPrice().replace(",", "")));
+                try {
+                    DailyItemDto currentItem = dto.getDailyItemList().get(i);
+                    String price = currentItem.getPrice().replace(",", "");
+                    dailyPrices.add(Integer.parseInt(price));
+                    dailyPricesForTable.add(price);
+                }catch (IndexOutOfBoundsException e){
+                    dailyPricesForTable.add("-");
+                }
             }
             wholesaleRegionInfoDto.setRegion(dto.getCountyCode().getName());
             wholesaleRegionInfoDto.setPrices(dailyPrices);
+            wholesaleRegionInfoDto.setPricesForTable(dailyPricesForTable);
             setColour(wholesaleRegionInfoDto);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
@@ -153,7 +161,8 @@ public class SearchController {
 
     private List<String> createLabel(List<WholesaleDailyInfoDto> wholesaleDailyInfoList) {
         List<String> label = new ArrayList<>();
-        for (DailyItemDto dto : wholesaleDailyInfoList.get(0).getDailyItemList())
+        WholesaleDailyInfoDto maxSizeDto = wholesaleDailyInfoList.stream().max(Comparator.comparing(dto -> dto.getDailyItemList().size())).get();
+        for (DailyItemDto dto : maxSizeDto.getDailyItemList())
             label.add(dto.getRegday());
         return label;
     }
@@ -349,22 +358,24 @@ public class SearchController {
         List<Integer> maxArr = new ArrayList<>();
         List<Integer> minArr = new ArrayList<>();
 
-        int len = list.get(0).getPrices().size();
+        int len = list.stream().max(Comparator.comparing(dto -> dto.getPrices().size())).get().getPrices().size();
         for (int i = 0; i < len; i++) {
             int sum = 0;
             int max = Integer.MIN_VALUE;
             int min = Integer.MAX_VALUE;
+            int dtoCount = 0;
             for (WholesaleRegionInfoDto dto : list) {
                 int monthlySales;
                 try {
                     monthlySales = dto.getPrices().get(i);
                     sum += monthlySales;
+                    dtoCount++;
                     if (max < monthlySales) max = monthlySales;
                     if (min > monthlySales) min = monthlySales;
-                } catch (IndexOutOfBoundsException e) {
+                } catch (Exception e) {
                 }
             }
-            avgArr.add(sum / list.size());
+            avgArr.add(sum / dtoCount);
             maxArr.add(max);
             minArr.add(min);
         }

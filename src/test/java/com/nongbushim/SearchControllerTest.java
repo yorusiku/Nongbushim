@@ -35,7 +35,7 @@ public class SearchControllerTest {
     }
 
     @Test
-    public void searchAllItem_shouldNotReturnError() throws Exception {
+    public void whenSearchAllItem_shouldNotReturnError() throws Exception {
         String line;
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
