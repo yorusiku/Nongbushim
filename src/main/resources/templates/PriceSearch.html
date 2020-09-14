@@ -269,7 +269,7 @@
               </tr>
               <tr th:each="region:${dailyChartInfo?.wholesaleRegionInfoList}">
                 <td th:text="${region.region}"></td>
-                <td th:each="dailyPrice:${region.prices}" th:text="${dailyPrice}"></td>
+                <td th:each="dailyPrice:${region.pricesForTable}" th:text="${dailyPrice}"></td>
               </tr>
               </tbody>
             </table>
@@ -323,8 +323,6 @@
           maintainAspectRatio: false,
         }
       });
-
-
 
       var ctx2 = $('#dailyChart');
       var dailyChart = new Chart(ctx2, {
