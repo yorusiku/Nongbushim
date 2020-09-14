@@ -204,7 +204,7 @@
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
           <!-- 검색 결과 없음-->
           <div th:if="${monthlyNoSearchResult} != null" th:text="${monthlyNoSearchResult}"></div>
-              <!-- 그래프 -->
+          <!-- 그래프 -->
           <div
           class="chart-container"
           style="position: relative; margin: auto; height: 50vh; width: 80vw;"
@@ -304,11 +304,10 @@
     </footer>
   </div>
 
-    <script type="text/javascript" th:inline="javascript" th:if="${monthlyChartInfo} != null">
+    <script type="text/javascript" th:inline="javascript" th:if="${monthlyChartInfo} != null or ${dailyChartInfo} != null">
       /*<![CDATA[*/
       var monthlyChartInfoArray = [[${monthlyChartInfo?.wholesaleRegionInfoList}]];
       var dailyChartInfoArray = [[${dailyChartInfo?.wholesaleRegionInfoList}]];
-      var ctx = $('#lineChart');
 
       function createDatasets(array) {
         var dataset = []
@@ -324,35 +323,45 @@
         return dataset;
       }
 
-      var myLineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: [[${monthlyChartInfo?.label}]],
-          datasets: createDatasets(monthlyChartInfoArray),
-        }, options: {
-          title: {
-            display: true,
-            text: [[${monthlyChartInfo?.title}]]
-          },
-          maintainAspectRatio: false,
-        }
-      });
+      function createMonthlyChart() {
+        if (monthlyChartInfoArray === null) return;
 
-      var ctx2 = $('#dailyChart');
-      var dailyChart = new Chart(ctx2, {
-        type: 'line',
-        data: {
-          labels: [[${dailyChartInfo?.label}]],
-          datasets: createDatasets(dailyChartInfoArray),
-        }, options: {
-          title: {
-            display: true,
-            text: [[${dailyChartInfo?.title}]]
-          },
-          maintainAspectRatio: false,
-        }
-      });
+        var ctx = $('#lineChart');
+        var myLineChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: [[${monthlyChartInfo?.label}]],
+            datasets: createDatasets(monthlyChartInfoArray),
+          }, options: {
+            title: {
+              display: true,
+              text: [[${monthlyChartInfo?.title}]]
+            },
+            maintainAspectRatio: false,
+          }
+        });
+      }
+
+      function createDailyChart() {
+        if (dailyChartInfoArray === null) return;
+        var ctx2 = $('#dailyChart');
+        var dailyChart = new Chart(ctx2, {
+          type: 'line',
+          data: {
+            labels: [[${dailyChartInfo?.label}]],
+            datasets: createDatasets(dailyChartInfoArray),
+          }, options: {
+            title: {
+              display: true,
+              text: [[${dailyChartInfo?.title}]]
+            },
+            maintainAspectRatio: false,
+          }
+        });
+      }
       /*]]>*/
+      createMonthlyChart();
+      createDailyChart();
     </script>
 
     <!-- Scripts -->
