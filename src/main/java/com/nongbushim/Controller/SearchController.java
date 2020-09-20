@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -191,8 +192,6 @@ public class SearchController {
             } catch (JsonProcessingException e) {
             } catch (JSONException e) {
                 // 데이터가 없는 경우
-                if (e.getMessage().equals("JSONObject[\"data\"] is not a JSONObject."))
-                    return wholesaleInfoList;
             }
 
         }
@@ -240,7 +239,7 @@ public class SearchController {
                     item = Collections.singletonList(mapper.readValue(itemObj.toString(), MonthlyItemDto.class));
                 } else {
                     // 도, 소매 가격정보 없음
-                    return new ArrayList<>();
+                    continue;
                 }
                 priceDto.setItem(item);
                 res.setPrice(priceDto);
@@ -320,7 +319,7 @@ public class SearchController {
                 for (int monthIdx = 11; monthIdx >= 0 && idx <= 11; monthIdx--) {
                     String sales = currentYearMonthlySalesList.get(monthIdx);
                     if ("-".equals(sales)) continue;
-                    label[11 - idx] = createLabel(current, monthIdx);
+                    if (label[11 - idx] == null) label[11 - idx] = createLabel(current, monthIdx);
                     monthlySales.add(0, Integer.parseInt(sales.replace(",", "")));
                     idx++;
                 }
@@ -334,7 +333,7 @@ public class SearchController {
         CHART_TITLE = wholesaleInfoList.get(0).getPrice().getCaption();
         chartInfoDto.setTitle(CHART_TITLE);
         chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
-        chartInfoDto.setLabel(Arrays.asList(label));
+        chartInfoDto.setLabel(Arrays.stream(label).filter(Objects::nonNull).collect(Collectors.toList()));
         setAvgMaxMin(chartInfoDto);
         return chartInfoDto;
     }
