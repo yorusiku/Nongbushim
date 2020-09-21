@@ -1,4 +1,4 @@
-package com.nongbushim;
+package com.nongbushim.Service.AutoComplete;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -18,20 +18,28 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class SearchServiceTest {
+class AutoCompleteServiceTest {
 
     @Autowired
-    private SearchService service;
+    private AutoCompleteServiceImpl service;
 
     List<String> garlicList1 = new ArrayList<>();
     List<String> garlicList2 = new ArrayList<>();
-    InputStream resource;
-    BufferedReader reader;
+    static InputStream resource;
+    static BufferedReader reader;
 
     @BeforeEach
     public void init() throws IOException {
         resource = new ClassPathResource("static/list.txt").getInputStream();
         reader = new BufferedReader(new InputStreamReader(resource));
+        garlicList1.add("피마늘 햇난지(대서) 상품");
+        garlicList1.add("피마늘 햇난지(대서) 중품");
+        garlicList1.add("피마늘 난지(대서) 상품");
+        garlicList1.add("피마늘 난지(대서) 중품");
+        garlicList1.add("피마늘 햇난지(남도) 상품");
+        garlicList1.add("피마늘 햇난지(남도) 중품");
+        garlicList1.add("피마늘 난지(남도) 상품");
+        garlicList1.add("피마늘 난지(남도) 중품");
         garlicList1.add("피마늘 한지1접 상품");
         garlicList1.add("피마늘 한지1접 중품");
         garlicList1.add("피마늘 난지1접 상품");
@@ -44,8 +52,6 @@ class SearchServiceTest {
         garlicList1.add("피마늘 햇한지1접 중품");
         garlicList1.add("피마늘 햇난지1접 상품");
         garlicList1.add("피마늘 햇난지1접 중품");
-        garlicList1.add("피마늘 쪽마늘 상품");
-        garlicList1.add("피마늘 쪽마늘 중품");
         garlicList1.add("피마늘 햇한지 상품");
         garlicList1.add("피마늘 햇한지 중품");
         garlicList1.add("피마늘 햇난지 상품");
@@ -90,7 +96,7 @@ class SearchServiceTest {
     }
 
     @AfterAll
-    public void done() throws IOException {
+    static void done() throws IOException {
         resource.close();
         reader.close();
     }

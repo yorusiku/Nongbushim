@@ -1,15 +1,15 @@
-package com.nongbushim.Dto;
+package com.nongbushim.Dto.WholesaleInfo;
 
-import com.nongbushim.Dto.KamisResponse.Monthly.PriceDto;
 import com.nongbushim.Enum.CountyCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WholesaleMonthlyInfoDto {
-    PriceDto price;
+@SuperBuilder
+public class WholesaleInfoDto {
     CountyCode countyCode;
 }
