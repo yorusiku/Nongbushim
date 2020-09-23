@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service("monthlyChartService")
 public class MonthlyChartServiceImpl extends ChartService {
@@ -19,50 +18,57 @@ public class MonthlyChartServiceImpl extends ChartService {
     public WholesaleChartInfoDto createChart(List<WholesaleInfoDto> wholesaleInfoList) {
         WholesaleChartInfoDto chartInfoDto = new WholesaleChartInfoDto();
         List<WholesaleRegionInfoDto> wholesaleRegionInfoDtoList = new ArrayList<>();
+        List<String> label = createLabel();
+
         int lastItemIdx;
-        String[] label = new String[12];
         for (WholesaleInfoDto dto : wholesaleInfoList) {
             WholesaleMonthlyInfoDto wholesaleMonthlyInfoDto = (WholesaleMonthlyInfoDto) dto;
             if (CHART_TITLE == null) CHART_TITLE = wholesaleMonthlyInfoDto.getPrice().getCaption();
-            List<Integer> monthlySales = new LinkedList<>();
+
+            List<Integer> monthlyPrices = new LinkedList<>();
+            List<String> monthlyPricesForTable = new LinkedList<>();
             WholesaleRegionInfoDto wholesaleRegionInfoDto = new WholesaleRegionInfoDto();
 
             lastItemIdx = wholesaleMonthlyInfoDto.getPrice().getItem().size() - 1;
             if (THIS_YEAR != Integer.parseInt(wholesaleMonthlyInfoDto.getPrice().getItem().get(lastItemIdx).getYyyy()))
                 continue;
 
-            int idx = 0;
-            while (idx <= 11 && lastItemIdx >= 0) {
-                MonthlyItemDto current = wholesaleMonthlyInfoDto.getPrice().getItem().get(lastItemIdx);
-
-                List<String> currentYearMonthlySalesList = currentYearMonthlySalesList(current);
-                for (int monthIdx = 11; monthIdx >= 0 && idx <= 11; monthIdx--) {
-                    String sales = currentYearMonthlySalesList.get(monthIdx);
-                    if ("-".equals(sales)) continue;
-                    if (label[11 - idx] == null) label[11 - idx] = createLabel(current, monthIdx);
-                    monthlySales.add(0, Integer.parseInt(sales.replace(",", "")));
-                    idx++;
+            Map<Integer, List<String>> monthlyPricesPerYearMap = createMonthlyPricePerYearMap(wholesaleMonthlyInfoDto.getPrice().getItem());
+            LocalDate now = LocalDate.now();
+            for (int i = 0; i < 12; i++) {
+                int currentYear = now.minusMonths(i).getYear();
+                int currentMonth = now.minusMonths(i).getMonthValue();
+                if (!monthlyPricesPerYearMap.containsKey(currentYear)) {
+                    monthlyPrices.add(0, 0);
+                    monthlyPricesForTable.add(0, "-");
+                    continue;
                 }
-                lastItemIdx--;
+
+                String price = monthlyPricesPerYearMap.get(currentYear).get(currentMonth - 1);
+
+                if ("-".equals(price)) {
+                    monthlyPrices.add(0, 0);
+                    monthlyPricesForTable.add(0, price);
+                } else {
+                    price = price.replace(",", "");
+                    monthlyPrices.add(0, Integer.parseInt(price));
+                    monthlyPricesForTable.add(0, price);
+                }
             }
             wholesaleRegionInfoDto.setRegion(wholesaleMonthlyInfoDto.getCountyCode().getName());
-            wholesaleRegionInfoDto.setPrices(monthlySales);
+            wholesaleRegionInfoDto.setPrices(monthlyPrices);
+            wholesaleRegionInfoDto.setPricesForTable(monthlyPricesForTable);
             setColour(wholesaleRegionInfoDto);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
         chartInfoDto.setTitle(CHART_TITLE);
         chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
-        chartInfoDto.setLabel(Arrays.stream(label).filter(Objects::nonNull).collect(Collectors.toList()));
+        chartInfoDto.setLabel(label);
         setAvgMaxMin(chartInfoDto);
         return chartInfoDto;
     }
 
-    private String createLabel(MonthlyItemDto current, int monthIdx) {
-        String month = (monthIdx + 1) / 10 == 1 ? String.valueOf(monthIdx + 1) : "0" + (monthIdx + 1);
-        return current.getYyyy() + "/" + month;
-    }
-
-    private List<String> currentYearMonthlySalesList(MonthlyItemDto current) {
+    private List<String> getYearMonthlySalesList(MonthlyItemDto current) {
         return Arrays.asList(
                 current.getM1(),
                 current.getM2(),
@@ -77,5 +83,28 @@ public class MonthlyChartServiceImpl extends ChartService {
                 current.getM11(),
                 current.getM12()
         );
+    }
+
+    private Map<Integer, List<String>> createMonthlyPricePerYearMap(List<MonthlyItemDto> item) {
+        Map<Integer, List<String>> map = new LinkedHashMap<>();
+        for (MonthlyItemDto dto : item) {
+            map.put(Integer.parseInt(dto.getYyyy()), getYearMonthlySalesList(dto));
+        }
+        return map;
+    }
+
+    private List<String> createLabel() {
+        List<String> label = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        for (int i = 0; i < 12; i++) {
+            int currentYear = now.minusMonths(i).getYear();
+            int currentMonth = now.minusMonths(i).getMonthValue();
+            label.add(0, currentYear + "/" + editTypo(currentMonth));
+        }
+        return label;
+    }
+
+    private String editTypo(int monthValue) {
+        return monthValue / 10 == 1 ? String.valueOf(monthValue) : "0" + monthValue;
     }
 }

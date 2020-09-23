@@ -27,19 +27,27 @@ public abstract class ChartService {
             int min = Integer.MAX_VALUE;
             int dtoCount = 0;
             for (WholesaleRegionInfoDto dto : list) {
-                int monthlySales;
+                int price;
                 try {
-                    monthlySales = dto.getPrices().get(i);
-                    sum += monthlySales;
+                    price = dto.getPrices().get(i);
+                    if (price==0) continue;
+                    sum += price;
                     dtoCount++;
-                    if (max < monthlySales) max = monthlySales;
-                    if (min > monthlySales) min = monthlySales;
+                    if (max < price) max = price;
+                    if (min > price) min = price;
                 } catch (Exception e) {
                 }
             }
-            avgArr.add(sum / dtoCount);
-            maxArr.add(max);
-            minArr.add(min);
+            if (dtoCount == 0) {
+                avgArr.add(0);
+                maxArr.add(0);
+                minArr.add(0);
+            }
+            else {
+                avgArr.add(sum / dtoCount);
+                maxArr.add(max);
+                minArr.add(min);
+            }
         }
         chartInfoDto.setAvgPrice(avgArr);
         chartInfoDto.setMaxPrice(maxArr);

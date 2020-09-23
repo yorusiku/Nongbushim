@@ -236,7 +236,7 @@
                 </tr>
                 <tr th:each="region:${monthlyChartInfo?.wholesaleRegionInfoList}">
                   <td th:text="${region.region}"></td>
-                  <td th:each="monthlySales:${region.prices}" th:text="${monthlySales}"></td>
+                  <td th:each="monthlySales:${region.pricesForTable}" th:text="${monthlySales}"></td>
                 </tr>
               </tbody>
             </table>
