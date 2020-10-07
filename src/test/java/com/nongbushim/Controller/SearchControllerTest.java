@@ -1,4 +1,4 @@
-package com.nongbushim;
+package com.nongbushim.Controller;
 
 import com.nongbushim.Dto.FormDto;
 import org.junit.jupiter.api.AfterAll;

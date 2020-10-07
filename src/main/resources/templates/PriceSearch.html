@@ -225,21 +225,21 @@
             <table class="table table-striped table-sm" style="width: 100%;" th:if="${monthlyChartInfo} != null">
               <thead>
                 <tr>
-                  <th></th>
+                  <th>단위(원)</th>
                   <th th:each="label:${monthlyChartInfo.label}" th:text="${label}"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>AVG</td>
+                  <td>평균</td>
                   <td th:each="avgPrice:${monthlyChartInfo.avgPrice}" th:text="${avgPrice}"></td>
                 </tr>
                 <tr>
-                  <td>MAX</td>
+                  <td>최대</td>
                   <td th:each="maxPrice:${monthlyChartInfo.maxPrice}" th:text="${maxPrice}"></td>
                 </tr>
                 <tr>
-                  <td>MIN</td>
+                  <td>최소</td>
                   <td th:each="minPrice:${monthlyChartInfo.minPrice}" th:text="${minPrice}"></td>
                 </tr>
                 <tr th:each="region:${monthlyChartInfo?.wholesaleRegionInfoList}">
@@ -267,21 +267,21 @@
             <table class="table table-striped table-sm" style="width: 100%;" th:if="${dailyChartInfo} != null">
               <thead>
               <tr>
-                <th></th>
+                <th>단위(원)</th>
                 <th th:each="label:${dailyChartInfo.label}" th:text="${label}"></th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <td>AVG</td>
+                <td>평균</td>
                 <td th:each="avgPrice:${dailyChartInfo.avgPrice}" th:text="${avgPrice}"></td>
               </tr>
               <tr>
-                <td>MAX</td>
+                <td>최대</td>
                 <td th:each="maxPrice:${dailyChartInfo.maxPrice}" th:text="${maxPrice}"></td>
               </tr>
               <tr>
-                <td>MIN</td>
+                <td>최소</td>
                 <td th:each="minPrice:${dailyChartInfo.minPrice}" th:text="${minPrice}"></td>
               </tr>
               <tr th:each="region:${dailyChartInfo?.wholesaleRegionInfoList}">
@@ -340,12 +340,31 @@
           data: {
             labels: [[${monthlyChartInfo?.label}]],
             datasets: createDatasets(monthlyChartInfoArray),
-          }, options: {
+          },
+          options: {
             title: {
               display: true,
               text: [[${monthlyChartInfo?.title}]]
             },
             maintainAspectRatio: false,
+            // Add commas to y-axis and tooltip
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function(value, index, values) {
+                    return value.toLocaleString()+'원';
+                  }
+                },
+              }],
+            },
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                  var tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                  return parseInt(tooltipValue).toLocaleString()+'원';
+                }
+              }
+            }
           }
         });
       }
@@ -358,16 +377,34 @@
           data: {
             labels: [[${dailyChartInfo?.label}]],
             datasets: createDatasets(dailyChartInfoArray),
-          }, options: {
+          },
+          options: {
             title: {
               display: true,
               text: [[${dailyChartInfo?.title}]]
             },
             maintainAspectRatio: false,
+            // Add commas to y-axis and tooltip
+            scales: {
+              yAxes: [{
+                ticks: {
+                  userCallback: function(value, index, values) {
+                    return value.toLocaleString()+'원';
+                  }
+                },
+              }],
+            },
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                  var tooltipValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                  return parseInt(tooltipValue).toLocaleString()+'원';
+                }
+              }
+            },
           }
         });
       }
-
       /*]]>*/
       createMonthlyChart();
       createDailyChart();

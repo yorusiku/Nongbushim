@@ -12,8 +12,8 @@ import java.util.List;
 public class WholesaleChartInfoDto {
     private String title;
     private List<String> label;
-    private List<Integer> avgPrice;
-    private List<Integer> maxPrice;
-    private List<Integer> minPrice;
+    private List<String> avgPrice;
+    private List<String> maxPrice;
+    private List<String> minPrice;
     private List<WholesaleRegionInfoDto> wholesaleRegionInfoList;
 }
