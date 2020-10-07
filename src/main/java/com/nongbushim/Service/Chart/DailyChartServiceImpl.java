@@ -29,8 +29,8 @@ public class DailyChartServiceImpl extends ChartService {
             for (int i = 0; i < len; i++) {
                 try {
                     DailyItemDto currentItem = dto.getDailyItemList().get(i);
-                    String price = currentItem.getPrice().replace(",", "");
-                    dailyPrices.add(Integer.parseInt(price));
+                    String price = currentItem.getPrice();
+                    dailyPrices.add(Integer.parseInt(price.replace(",", "")));
                     dailyPricesForTable.add(price);
                 }catch (IndexOutOfBoundsException e){
                     dailyPricesForTable.add("-");

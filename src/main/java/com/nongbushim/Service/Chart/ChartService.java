@@ -16,9 +16,9 @@ public abstract class ChartService {
 
     protected void setAvgMaxMin(WholesaleChartInfoDto chartInfoDto) {
         List<WholesaleRegionInfoDto> list = chartInfoDto.getWholesaleRegionInfoList();
-        List<Integer> avgArr = new ArrayList<>();
-        List<Integer> maxArr = new ArrayList<>();
-        List<Integer> minArr = new ArrayList<>();
+        List<String> avgArr = new ArrayList<>();
+        List<String> maxArr = new ArrayList<>();
+        List<String> minArr = new ArrayList<>();
 
         int len = list.stream().max(Comparator.comparing(dto -> dto.getPrices().size())).get().getPrices().size();
         for (int i = 0; i < len; i++) {
@@ -39,14 +39,14 @@ public abstract class ChartService {
                 }
             }
             if (dtoCount == 0) {
-                avgArr.add(0);
-                maxArr.add(0);
-                minArr.add(0);
+                avgArr.add("0");
+                maxArr.add("0");
+                minArr.add("0");
             }
             else {
-                avgArr.add(sum / dtoCount);
-                maxArr.add(max);
-                minArr.add(min);
+                avgArr.add(String.format("%,d",sum / dtoCount));
+                maxArr.add(String.format("%,d",max));
+                minArr.add(String.format("%,d",min));
             }
         }
         chartInfoDto.setAvgPrice(avgArr);

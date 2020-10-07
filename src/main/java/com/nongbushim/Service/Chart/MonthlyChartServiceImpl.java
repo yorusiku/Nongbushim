@@ -47,11 +47,10 @@ public class MonthlyChartServiceImpl extends ChartService {
                 String price = monthlyPricesPerYearMap.get(currentYear).get(currentMonth - 1);
 
                 if ("-".equals(price)) {
-                    monthlyPrices.add(0, 0);
+                    monthlyPrices.add(0, null);
                     monthlyPricesForTable.add(0, price);
                 } else {
-                    price = price.replace(",", "");
-                    monthlyPrices.add(0, Integer.parseInt(price));
+                    monthlyPrices.add(0, Integer.parseInt(price.replace(",", "")));
                     monthlyPricesForTable.add(0, price);
                 }
             }
