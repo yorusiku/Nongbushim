@@ -23,7 +23,6 @@ public class MonthlyChartServiceImpl extends ChartService {
         int lastItemIdx;
         for (WholesaleInfoDto dto : wholesaleInfoList) {
             WholesaleMonthlyInfoDto wholesaleMonthlyInfoDto = (WholesaleMonthlyInfoDto) dto;
-            if (CHART_TITLE == null) CHART_TITLE = wholesaleMonthlyInfoDto.getPrice().getCaption();
 
             List<Integer> monthlyPrices = new LinkedList<>();
             List<String> monthlyPricesForTable = new LinkedList<>();
@@ -60,11 +59,18 @@ public class MonthlyChartServiceImpl extends ChartService {
             setColour(wholesaleRegionInfoDto);
             wholesaleRegionInfoDtoList.add(wholesaleRegionInfoDto);
         }
-        chartInfoDto.setTitle(CHART_TITLE);
+        chartInfoDto.setTitle(createChartTitle(wholesaleInfoList));
         chartInfoDto.setWholesaleRegionInfoList(wholesaleRegionInfoDtoList);
         chartInfoDto.setLabel(label);
         setAvgMaxMin(chartInfoDto);
         return chartInfoDto;
+    }
+
+    private String createChartTitle(List<WholesaleInfoDto> wholesaleInfoList) {
+        return CHART_TITLE = wholesaleInfoList.stream().filter(WholesaleMonthlyInfoDto.class::isInstance)
+                .map(WholesaleMonthlyInfoDto.class::cast)
+                .filter(dto -> dto.getPrice() != null)
+                .findFirst().get().getPrice().getCaption();
     }
 
     private List<String> getYearMonthlySalesList(MonthlyItemDto current) {
