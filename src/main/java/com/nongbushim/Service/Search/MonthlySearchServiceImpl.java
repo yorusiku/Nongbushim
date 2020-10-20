@@ -53,8 +53,7 @@ public class MonthlySearchServiceImpl extends SearchService {
 
             WholesaleMonthlyInfoDto res = new WholesaleMonthlyInfoDto();
             try {
-                String test = responseBody.getJSONArray("condition").get(0).toString();
-                List<Object> condition = Arrays.asList(mapper.readValue(test, Object[].class));
+                JSONObject conditionObj = responseBody.getJSONArray("condition").getJSONObject(0);
 
                 //레스폰스에 도, 소매 둘다 있는 경우
                 JSONArray priceArr = responseBody.optJSONArray("price");
@@ -74,7 +73,7 @@ public class MonthlySearchServiceImpl extends SearchService {
                 itemObj = wholesaleObject.optJSONObject("item");
                 String productclscode = wholesaleObject.getString("productclscode");
                 String caption = wholesaleObject.getString("caption");
-                String countyCode = (String) condition.get(condition.size() - 1);
+                String countyCode = conditionObj.getString("p_countycode");
 
                 res.setCountyCode(CountyCode.searchCountyCode(countyCode));
                 PriceDto priceDto = new PriceDto();
