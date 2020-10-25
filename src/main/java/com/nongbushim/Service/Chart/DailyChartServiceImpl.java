@@ -5,6 +5,7 @@ import com.nongbushim.Dto.WholesaleChartInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleDailyInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
 import com.nongbushim.Dto.WholesaleRegionInfoDto;
+import com.nongbushim.Helper.DailyHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class DailyChartServiceImpl extends ChartService {
     public WholesaleChartInfoDto createChart(List<WholesaleInfoDto> wholesaleInfoList) {
         WholesaleChartInfoDto chartInfoDto = new WholesaleChartInfoDto();
         List<WholesaleRegionInfoDto> wholesaleRegionInfoDtoList = new ArrayList<>();
-        List<String> label = createLabel(wholesaleInfoList);
+        List<String> label = DailyHelper.createLabel(wholesaleInfoList);
 
         for (WholesaleInfoDto infoDto : wholesaleInfoList) {
             WholesaleDailyInfoDto dto = (WholesaleDailyInfoDto) infoDto;
@@ -25,8 +26,8 @@ public class DailyChartServiceImpl extends ChartService {
 
             List<Integer> dailyPrices = new ArrayList<>();
             List<String> dailyPricesForTable = new ArrayList<>();
-            int len = getMaxSizeDailyInfoDto(wholesaleInfoList).getDailyItemList().size();
-            for (int i = 0; i < len; i++) {
+            int maxLen = DailyHelper.getMaxSizeDailyInfoDto(wholesaleInfoList).getDailyItemList().size();
+            for (int i = 0; i < maxLen; i++) {
                 try {
                     DailyItemDto currentItem = dto.getDailyItemList().get(i);
                     String price = currentItem.getPrice();
@@ -49,19 +50,4 @@ public class DailyChartServiceImpl extends ChartService {
         return chartInfoDto;
     }
 
-    private List<String> createLabel(List<WholesaleInfoDto> wholesaleDailyInfoList) {
-        List<String> label = new ArrayList<>();
-        WholesaleDailyInfoDto maxSizeDto = getMaxSizeDailyInfoDto(wholesaleDailyInfoList);
-        for (DailyItemDto dto : maxSizeDto.getDailyItemList())
-            label.add(dto.getRegday());
-        return label;
-    }
-
-    private WholesaleDailyInfoDto getMaxSizeDailyInfoDto(List<WholesaleInfoDto> wholesaleDailyInfoList) {
-        return wholesaleDailyInfoList.stream()
-                    .filter(WholesaleDailyInfoDto.class::isInstance)
-                    .map(WholesaleDailyInfoDto.class::cast)
-                    .max(Comparator.comparing(dto -> dto.getDailyItemList().size()))
-                    .get();
-    }
 }

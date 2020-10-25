@@ -198,7 +198,7 @@
 
         <!-- 다운로드 -->
         <div class="btn-toolbar" style="display: initial;position: absolute;right: 5%;">
-          <button type="button" class="btn btn-sm btn-outline-secondary disabled"
+          <button id="downloadExcelButton" type="button" class="btn btn-sm btn-outline-secondary"
                   style="cursor: default;display: flex;align-items: center;justify-content: center;">
             다운로드<img class="pl-2" th:src="@{WebContent/images/data-transfer-download.svg}"/>
           </button>
@@ -408,6 +408,10 @@
       /*]]>*/
       createMonthlyChart();
       createDailyChart();
+
+      $("#downloadExcelButton").click(function () {
+        window.location = 'excel';
+      });
     </script>
 
     <!-- Scripts -->
