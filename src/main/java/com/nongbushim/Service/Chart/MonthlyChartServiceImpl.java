@@ -5,6 +5,7 @@ import com.nongbushim.Dto.WholesaleChartInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleMonthlyInfoDto;
 import com.nongbushim.Dto.WholesaleRegionInfoDto;
+import com.nongbushim.Helper.MonthlyHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -73,27 +74,10 @@ public class MonthlyChartServiceImpl extends ChartService {
                 .findFirst().get().getPrice().getCaption();
     }
 
-    private List<String> getYearMonthlySalesList(MonthlyItemDto current) {
-        return Arrays.asList(
-                current.getM1(),
-                current.getM2(),
-                current.getM3(),
-                current.getM4(),
-                current.getM5(),
-                current.getM6(),
-                current.getM7(),
-                current.getM8(),
-                current.getM9(),
-                current.getM10(),
-                current.getM11(),
-                current.getM12()
-        );
-    }
-
     private Map<Integer, List<String>> createMonthlyPricePerYearMap(List<MonthlyItemDto> item) {
         Map<Integer, List<String>> map = new LinkedHashMap<>();
         for (MonthlyItemDto dto : item) {
-            map.put(Integer.parseInt(dto.getYyyy()), getYearMonthlySalesList(dto));
+            map.put(Integer.parseInt(dto.getYyyy()), MonthlyHelper.getYearMonthlyPriceList(dto));
         }
         return map;
     }

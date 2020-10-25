@@ -5,6 +5,7 @@ import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
 import com.nongbushim.Service.Chart.ChartService;
 import com.nongbushim.Service.Chart.DailyChartServiceImpl;
 import com.nongbushim.Service.Chart.MonthlyChartServiceImpl;
+import com.nongbushim.Service.Excel.ExcelService;
 import com.nongbushim.Service.Search.DailySearchServiceImpl;
 import com.nongbushim.Service.Search.MonthlySearchServiceImpl;
 import com.nongbushim.Service.Search.SearchService;
@@ -48,12 +49,15 @@ public class SearchController {
     private final ChartService dailyChartService;
     @Autowired
     private final ChartService monthlyChartService;
+    @Autowired
+    private final ExcelService excelService;
 
-    public SearchController(DailySearchServiceImpl dailySearchService, MonthlySearchServiceImpl monthlySearchService, DailyChartServiceImpl dailyChartService, MonthlyChartServiceImpl monthlyChartService) {
+    public SearchController(DailySearchServiceImpl dailySearchService, MonthlySearchServiceImpl monthlySearchService, DailyChartServiceImpl dailyChartService, MonthlyChartServiceImpl monthlyChartService, ExcelService excelService) {
         this.dailySearchService = dailySearchService;
         this.monthlySearchService = monthlySearchService;
         this.dailyChartService = dailyChartService;
         this.monthlyChartService = monthlyChartService;
+        this.excelService = excelService;
     }
 
     @GetMapping(value = {"/pricesearch", "/PriceSearch.html"})
@@ -81,6 +85,7 @@ public class SearchController {
         resultMap = getResponsesFromOpenAPI(monthlyRequestParameters, MONTHLY_URL);
 
         List<WholesaleInfoDto> wholesaleMonthlyInfoList = monthlySearchService.getWholesalePrice(resultMap);
+
         if (wholesaleMonthlyInfoList.isEmpty()) {
             model.addAttribute("monthlyNoSearchResult", NO_SEARCH_MONTHLY_RESULT);
             model.addAttribute("monthlyChartInfo", monthlyChartInfoDto);
@@ -99,10 +104,19 @@ public class SearchController {
             model.addAttribute("dailyChartInfo", dailyChartInfoDto);
             return "PriceSearch";
         }
+
+        // save monthly&daily price information to the excel in memory
+        createExcel(monthlyChartInfoDto, wholesaleMonthlyInfoList, wholesaleDailyInfoList);
+
         dailyChartInfoDto = dailyChartService.createChart(wholesaleDailyInfoList);
         model.addAttribute("dailyChartInfo", dailyChartInfoDto);
 
         return "PriceSearch";
+    }
+
+    private void createExcel(WholesaleChartInfoDto monthlyChartInfoDto, List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList) {
+        String title = monthlyChartInfoDto.getTitle();
+        excelService.createExcel(wholesaleMonthlyInfoList, wholesaleDailyInfoList, title);
     }
 
     private List<ResponseEntity<String>> getResponsesFromOpenAPI(List<String> requestParameters, String monthlyUrl) {
