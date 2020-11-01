@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -26,6 +29,9 @@ public class ExcelServiceImpl implements ExcelService {
     private static final String YEAR_AVG_HEADER = "연평균";
     private static final int IDX_YEAR_AVG = 13;
 
+    private final LocalDate now = LocalDate.now();
+    private final LocalDate startDate = now.minusYears(1);
+
     @Override
     public ByteArrayInputStream createExcel(List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList, String title) {
 
@@ -33,11 +39,60 @@ public class ExcelServiceImpl implements ExcelService {
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             Sheet monthlySheet = workbook.createSheet(MONTHLY_SHEET);
-//            Sheet dailySheet = workbook.createSheet(DAILY_SHEET);
+            Sheet dailySheet = workbook.createSheet(DAILY_SHEET);
 
             // Create monthly sheet
             createMonthlySheet(wholesaleMonthlyInfoList, title, monthlySheet);
 
+            // Create daily sheet
+            int rowIdx = createTitle(title, dailySheet);
+
+            // Row for Header
+            Row headerRow = dailySheet.createRow(rowIdx++);
+            Cell headerCell = headerRow.createCell(0);
+            LocalDate baseDate = startDate;
+            int dateIdx = 1;
+            while (baseDate.isBefore(now) || baseDate.isEqual(now)) {
+                if (baseDate.getDayOfWeek() == DayOfWeek.SATURDAY || baseDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                    baseDate = baseDate.plusDays(1);
+                    continue;
+                }
+                headerCell = headerRow.createCell(dateIdx++);
+                headerCell.setCellValue(baseDate.format(DateTimeFormatter.ofPattern("MM/dd")));
+                baseDate = baseDate.plusDays(1);
+            }
+
+            for (WholesaleInfoDto infoDto : wholesaleDailyInfoList) {
+                WholesaleDailyInfoDto dto = (WholesaleDailyInfoDto) infoDto;
+                String region = dto.getCountyCode().getName();
+
+                // Row for each day
+                dateIdx = 0;
+                Row row = dailySheet.createRow(rowIdx++);
+                Cell cell = row.createCell(dateIdx++);
+                cell.setCellValue(region);
+
+                baseDate = startDate;
+                for (DailyItemDto currentItem : dto.getDailyItemList()) {
+                    LocalDate currentDate = LocalDate.parse(currentItem.getYyyy() + "/" + currentItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+                    while (baseDate.isBefore(currentDate) || baseDate.isEqual(currentDate)) {
+                        if (baseDate.getDayOfWeek() == DayOfWeek.SATURDAY || baseDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                            baseDate = baseDate.plusDays(1);
+                            continue;
+                        }
+
+                        if (baseDate.isBefore(currentDate)) {
+                            cell = row.createCell(dateIdx++);
+                            cell.setCellValue("-");
+                        } else if (baseDate.isEqual(currentDate)) {
+                            cell = row.createCell(dateIdx++);
+                            cell.setCellValue(currentItem.getPrice());
+                        }
+                        baseDate = baseDate.plusDays(1);
+                    }
+                }
+                rowIdx++;
+            }
             workbook.write(baos);
             return excel = new ByteArrayInputStream(baos.toByteArray());
         } catch (IOException e) {

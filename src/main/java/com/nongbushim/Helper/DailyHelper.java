@@ -4,6 +4,9 @@ import com.nongbushim.Dto.KamisResponse.Daily.DailyItemDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleDailyInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,9 +14,15 @@ import java.util.List;
 public class DailyHelper {
     public static List<String> createLabel(List<WholesaleInfoDto> wholesaleDailyInfoList) {
         List<String> label = new ArrayList<>();
-        WholesaleDailyInfoDto maxSizeDto = getMaxSizeDailyInfoDto(wholesaleDailyInfoList);
-        for (DailyItemDto dto : maxSizeDto.getDailyItemList())
-            label.add(dto.getRegday());
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.minusWeeks(2).plusDays(1);
+
+        for (int days=0;days<14;days++){
+            LocalDate date = startDate.plusDays(days);
+            DayOfWeek day = date.getDayOfWeek();
+            if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) continue;
+            label.add(date.format(DateTimeFormatter.ofPattern("MM/dd")));
+        }
         return label;
     }
 

@@ -1,6 +1,8 @@
 package com.nongbushim.Controller;
 
 import com.nongbushim.Dto.*;
+import com.nongbushim.Dto.KamisResponse.Daily.DailyItemDto;
+import com.nongbushim.Dto.WholesaleInfo.WholesaleDailyInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
 import com.nongbushim.Service.Chart.ChartService;
 import com.nongbushim.Service.Chart.DailyChartServiceImpl;
@@ -20,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -33,7 +36,7 @@ public class SearchController {
     private final static String ACCESS_KEY = "c870db87-9503-48c8-aca3-dee7f28a42ba";
     private static final int THIS_YEAR = LocalDate.now().getYear();
     private static final String NO_SEARCH_MONTHLY_RESULT = THIS_YEAR + "년도에 해당하는 데이터가 없습니다";
-    private static final String NO_SEARCH_DAILY_RESULT = "검색조건에 해당하는 데이터가 없습니다";
+    private static final String NO_SEARCH_DAILY_RESULT = "최근 2주일간 해당하는 데이터가 없습니다";
 
     static {
         HTTP_HEADERS = new HttpHeaders();
@@ -107,11 +110,31 @@ public class SearchController {
 
         // save monthly&daily price information to the excel in memory
         createExcel(monthlyChartInfoDto, wholesaleMonthlyInfoList, wholesaleDailyInfoList);
-
+        if (isInvalid(wholesaleDailyInfoList)){
+            model.addAttribute("dailyNoSearchResult", NO_SEARCH_DAILY_RESULT);
+            model.addAttribute("dailyChartInfo", dailyChartInfoDto);
+            return "PriceSearch";
+        }
         dailyChartInfoDto = dailyChartService.createChart(wholesaleDailyInfoList);
         model.addAttribute("dailyChartInfo", dailyChartInfoDto);
 
         return "PriceSearch";
+    }
+
+    private boolean isInvalid(List<WholesaleInfoDto> wholesaleDailyInfoList) {
+        WholesaleDailyInfoDto target = wholesaleDailyInfoList.stream()
+                .filter(WholesaleDailyInfoDto.class::isInstance)
+                .map(WholesaleDailyInfoDto.class::cast)
+                .max(Comparator.comparing(dto -> {
+                    int lastIdx = dto.getDailyItemList().size()-1;
+                    DailyItemDto lastItem = dto.getDailyItemList().get(lastIdx);
+                    LocalDate lastDate = LocalDate.parse(lastItem.getYyyy()+"/"+lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+                    return lastDate;
+                }))
+                .get();
+        DailyItemDto lastItem = target.getDailyItemList().get(target.getDailyItemList().size()-1);
+        LocalDate latestDate = LocalDate.parse(lastItem.getYyyy()+"/"+lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        return latestDate.isBefore(LocalDate.now().minusDays(14));
     }
 
     private void createExcel(WholesaleChartInfoDto monthlyChartInfoDto, List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList) {
