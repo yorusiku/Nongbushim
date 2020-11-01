@@ -82,9 +82,9 @@ public class DailySearchServiceImpl extends SearchService {
         ItemInfoDto itemInfoDto = searchInfo(input);
         List<KamisDailyRequestDto> wholesaleRequestList = new ArrayList<>();
         LocalDate now = LocalDate.now();
-        LocalDate fourteenDaysAgo = now.minusDays(14);
+        LocalDate oneYearAgo = now.minusYears(1);
         String endDay = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String startDay = fourteenDaysAgo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String startDay = oneYearAgo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         for (CountyCode wholesaleCode : WHOLESALE_COUNTY_CODES) {
             KamisDailyRequestDto dto = KamisDailyRequestDto.builder()
                     .p_startday(startDay)

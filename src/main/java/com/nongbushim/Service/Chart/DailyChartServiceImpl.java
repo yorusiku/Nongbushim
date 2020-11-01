@@ -8,6 +8,8 @@ import com.nongbushim.Dto.WholesaleRegionInfoDto;
 import com.nongbushim.Helper.DailyHelper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -26,16 +28,28 @@ public class DailyChartServiceImpl extends ChartService {
 
             List<Integer> dailyPrices = new ArrayList<>();
             List<String> dailyPricesForTable = new ArrayList<>();
-            int maxLen = DailyHelper.getMaxSizeDailyInfoDto(wholesaleInfoList).getDailyItemList().size();
-            for (int i = 0; i < maxLen; i++) {
-                try {
-                    DailyItemDto currentItem = dto.getDailyItemList().get(i);
-                    String price = currentItem.getPrice();
-                    dailyPrices.add(Integer.parseInt(price.replace(",", "")));
-                    dailyPricesForTable.add(price);
-                }catch (IndexOutOfBoundsException e){
+
+            WholesaleDailyInfoDto maxDto = DailyHelper.getMaxSizeDailyInfoDto(wholesaleInfoList);
+            int maxLen = maxDto.getDailyItemList().size();
+            int maxIdx = 0;
+            int currentIdx = 0;
+
+            while (maxIdx < maxLen && currentIdx < maxLen) {
+                DailyItemDto currentItem = dto.getDailyItemList().get(currentIdx);
+                LocalDate currentDate = LocalDate.parse(currentItem.getYyyy() + "/" + currentItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+                DailyItemDto maxItem = maxDto.getDailyItemList().get(maxIdx);
+                LocalDate maxDate = LocalDate.parse(maxItem.getYyyy() + "/" + maxItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+                if (maxDate.isBefore(currentDate)) {
+                    dailyPrices.add(0);
                     dailyPricesForTable.add("-");
+                    maxIdx++;
+                    continue;
                 }
+                String price = currentItem.getPrice();
+                dailyPrices.add(Integer.parseInt(price.replace(",", "")));
+                dailyPricesForTable.add(price);
+                maxIdx++;
+                currentIdx++;
             }
             wholesaleRegionInfoDto.setRegion(dto.getCountyCode().getName());
             wholesaleRegionInfoDto.setPrices(dailyPrices);
