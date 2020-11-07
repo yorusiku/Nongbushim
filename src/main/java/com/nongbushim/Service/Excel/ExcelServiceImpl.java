@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -45,60 +46,96 @@ public class ExcelServiceImpl implements ExcelService {
             createMonthlySheet(wholesaleMonthlyInfoList, title, monthlySheet);
 
             // Create daily sheet
-            int rowIdx = createTitle(title, dailySheet);
+            createDailySheet(wholesaleDailyInfoList, title, dailySheet);
 
-            // Row for Header
-            Row headerRow = dailySheet.createRow(rowIdx++);
-            Cell headerCell = headerRow.createCell(0);
-            LocalDate baseDate = startDate;
-            int dateIdx = 1;
-            while (baseDate.isBefore(now) || baseDate.isEqual(now)) {
-                if (baseDate.getDayOfWeek() == DayOfWeek.SATURDAY || baseDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                    baseDate = baseDate.plusDays(1);
-                    continue;
-                }
-                headerCell = headerRow.createCell(dateIdx++);
-                headerCell.setCellValue(baseDate.format(DateTimeFormatter.ofPattern("MM/dd")));
-                baseDate = baseDate.plusDays(1);
-            }
-
-            for (WholesaleInfoDto infoDto : wholesaleDailyInfoList) {
-                WholesaleDailyInfoDto dto = (WholesaleDailyInfoDto) infoDto;
-                String region = dto.getCountyCode().getName();
-
-                // Row for each day
-                dateIdx = 0;
-                Row row = dailySheet.createRow(rowIdx++);
-                Cell cell = row.createCell(dateIdx++);
-                cell.setCellValue(region);
-
-                baseDate = startDate;
-                for (DailyItemDto currentItem : dto.getDailyItemList()) {
-                    LocalDate currentDate = LocalDate.parse(currentItem.getYyyy() + "/" + currentItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-                    while (baseDate.isBefore(currentDate) || baseDate.isEqual(currentDate)) {
-                        if (baseDate.getDayOfWeek() == DayOfWeek.SATURDAY || baseDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                            baseDate = baseDate.plusDays(1);
-                            continue;
-                        }
-
-                        if (baseDate.isBefore(currentDate)) {
-                            cell = row.createCell(dateIdx++);
-                            cell.setCellValue("-");
-                        } else if (baseDate.isEqual(currentDate)) {
-                            cell = row.createCell(dateIdx++);
-                            cell.setCellValue(currentItem.getPrice());
-                        }
-                        baseDate = baseDate.plusDays(1);
-                    }
-                }
-                rowIdx++;
-            }
             workbook.write(baos);
             return excel = new ByteArrayInputStream(baos.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
+    }
+
+    private void createDailySheet(List<WholesaleInfoDto> wholesaleDailyInfoList, String title, Sheet dailySheet) {
+        int rowIdx = createTitle(title, dailySheet);
+
+        LocalDate minStartDate = getMinStartDate(wholesaleDailyInfoList);
+        LocalDate maxEndDate = getMaxEndDate(wholesaleDailyInfoList);
+
+        // Row for Header
+        Row headerRow = dailySheet.createRow(rowIdx++);
+        Cell headerCell = headerRow.createCell(0);
+        LocalDate baseDate = minStartDate;
+        int dateIdx = 1;
+        while (baseDate.isBefore(maxEndDate) || baseDate.isEqual(maxEndDate)) {
+            if (baseDate.getDayOfWeek() == DayOfWeek.SATURDAY || baseDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                baseDate = baseDate.plusDays(1);
+                continue;
+            }
+            headerCell = headerRow.createCell(dateIdx);
+            if (dateIdx == 1) headerCell.setCellValue(baseDate.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+            else headerCell.setCellValue(baseDate.format(DateTimeFormatter.ofPattern("MM/dd")));
+            baseDate = baseDate.plusDays(1);
+            dateIdx++;
+        }
+
+        // Row for each day
+        for (WholesaleInfoDto infoDto : wholesaleDailyInfoList) {
+            WholesaleDailyInfoDto dto = (WholesaleDailyInfoDto) infoDto;
+            String region = dto.getCountyCode().getName();
+
+            dateIdx = 0;
+            Row row = dailySheet.createRow(rowIdx++);
+            Cell cell = row.createCell(dateIdx++);
+            cell.setCellValue(region);
+
+            baseDate = minStartDate;
+            for (DailyItemDto currentItem : dto.getDailyItemList()) {
+                LocalDate currentDate = getDate(currentItem);
+                while (baseDate.isBefore(currentDate) || baseDate.isEqual(currentDate)) {
+                    if (baseDate.getDayOfWeek() == DayOfWeek.SATURDAY || baseDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                        baseDate = baseDate.plusDays(1);
+                        continue;
+                    }
+
+                    if (baseDate.isBefore(currentDate)) {
+                        cell = row.createCell(dateIdx++);
+                        cell.setCellValue("-");
+                    } else if (baseDate.isEqual(currentDate)) {
+                        cell = row.createCell(dateIdx++);
+                        cell.setCellValue(currentItem.getPrice());
+                    }
+                    baseDate = baseDate.plusDays(1);
+                }
+            }
+            rowIdx++;
+        }
+    }
+
+    private LocalDate getMaxEndDate(List<WholesaleInfoDto> wholesaleDailyInfoList) {
+        DailyItemDto maxEndDateItem = wholesaleDailyInfoList.stream().filter(WholesaleDailyInfoDto.class::isInstance)
+                .map(WholesaleDailyInfoDto.class::cast)
+                .map(WholesaleDailyInfoDto::getDailyItemList)
+                .map(list -> {
+                    int lastIdx = list.size() - 1;
+                    return list.get(lastIdx);
+                })
+                .max(Comparator.comparing(this::getDate)).get();
+        return getDate(maxEndDateItem);
+    }
+
+    private LocalDate getMinStartDate(List<WholesaleInfoDto> wholesaleDailyInfoList) {
+        DailyItemDto minStartDateItem = wholesaleDailyInfoList.stream().filter(WholesaleDailyInfoDto.class::isInstance)
+                .map(WholesaleDailyInfoDto.class::cast)
+                .map(WholesaleDailyInfoDto::getDailyItemList)
+                .map(list -> list.get(0))
+                .min(Comparator.comparing(this::getDate)).get();
+
+        return getDate(minStartDateItem);
+    }
+
+    private LocalDate getDate(DailyItemDto dto) {
+        return LocalDate.parse(dto.getYyyy() + "/" + dto.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 
     private void createMonthlySheet(List<WholesaleInfoDto> wholesaleMonthlyInfoList, String title, Sheet monthlySheet) {
