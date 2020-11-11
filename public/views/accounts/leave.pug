@@ -1,0 +1,36 @@
+extends ../../layout.pug
+
+block content
+    .background
+        .card
+            - if (user) 
+                h2.guide-title 회원탈퇴
+                .guide-desc.mt-2.mb-4
+                    | 회원탈퇴시 소유 농장과 관련 정보들이 
+                    span.red 모두 삭제
+                    | 됩니다.
+                    br
+                    | 농장이 삭제되는 것을 원치 않으시면 농장 역할을 
+                    span.red '소유자'
+                    | 가 아닌 것으로 바꾸세요.
+                - if (user.strategy == 0)
+                    .form-control.mt-4.mr-3
+                        .title
+                            .red * 
+                            | 비밀번호 
+                        .guide 로그인 시 사용하는 비밀번호를 한번 더 입력 해 주세요.
+                        input#input_password.full-width.app-input(type='password', placeholder='비밀번호')
+                - else 
+                    .form-control.mt-4
+                        .title
+                            .red * 
+                            | 성함
+                        .guide 현재 계정에 등록된 성함을 입력 해 주세요.
+                        input#input_name.full-width.app-input(type='text', placeholder='성함')
+                button#btn_leave.mt-4.btn-social-login(type='button') 회원탈퇴
+            - else 
+                h2.guide-title 로그인 필요
+                .guide-desc.mt-2.mb-4
+                    | 회원탈퇴를 계속하시려면 먼저 로그인을 해 주세요.
+                a.mt-4.btn-primary.full-width(href="/accounts/login") 로그인
+    script(src='/js/babel/leave.js')

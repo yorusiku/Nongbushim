@@ -1,0 +1,7 @@
+
+extends ../../layout.pug
+
+block content
+    div=sign
+    - if (user)
+        div=JSON.stringify(user)

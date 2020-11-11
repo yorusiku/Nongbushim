@@ -1,0 +1,39 @@
+extends ../../layout.pug
+
+block content
+    .background
+        .card
+            h2.guide-title 회원가입
+            .guide-desc.mt-2.mb-4 농부심 ERP 회원가입을 진행하시려면 아래 폼을 작성 해 주세요.
+            //- 소셜 로그인이라도 이메일을 못받아왔다면 입력하게 함
+            - var strategy = profile ? profile.strategy : 0
+            - var socialId = profile ? profile.socialId : ''
+            - var isSocialLogin = strategy != 0
+            - if (!isSocialLogin || !validateEmail(profile.username)) 
+                .form-control
+                    .title
+                        .red * 
+                        | 이메일
+                    input#input_username.full-width.app-input(type='email', placeholder='이메일' strategy=strategy social_id=socialId)
+            - else 
+                input#input_username.hide(type='email', value=profile.username, strategy=strategy social_id=socialId)
+            - if (!isSocialLogin)
+                .form-left-right
+                    .form-control.mt-4.mr-3
+                        .title
+                            .red * 
+                            | 비밀번호 
+                        input#input_password.full-width.app-input(type='password', placeholder='비밀번호 6자 이상')
+                    .form-control.mt-4
+                        .title
+                            .red * 
+                            | 비밀번호 확인
+                        input#input_password_confirm.full-width.app-input(type='password', placeholder='비밀번호 확인')
+            .form-control.mt-4
+                .title
+                    .red * 
+                    | 성함
+                .guide 실제 성함을 입력 해 주세요.
+                input#input_name.full-width.app-input(type='text', placeholder='이름')
+            button#btn_sign_up.mt-4.btn-social-login(type='button') 회원가입
+    script(src='/js/babel/sign_up.js')

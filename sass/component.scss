@@ -1,0 +1,323 @@
+.page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    width: $sideBarWidth;
+    color: $green0;
+    background: $primary;
+    height: 100%;
+    border-right: 1px solid #eee;
+}
+
+.page-header::-webkit-scrollbar {
+    display: none;
+}
+
+.page-header nav {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+/* Sidebar Menu */
+.page-header .menu-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.page-header .menu-container .main-menu>li:last-child {
+    margin-bottom: 20px;
+}
+
+.page-header .menu-container .main-menu li {
+    padding: $appPadding;
+
+    i {
+        margin-right: 10px;
+    }
+}
+
+.page-header .menu-container .main-menu li+.sub-menu {
+    display: none;
+}
+
+.page-header .menu-container .main-menu li+.sub-menu {
+    display: none;
+}
+
+.page-header .menu-container .main-menu li.expanded+.sub-menu {
+    display: block;
+}
+
+.page-header .menu-container .sub-menu {
+    background: $green2;
+    padding-left: $appPadding * 2;
+    .active {
+        color: white;
+    }
+}
+
+.page-header .menu-container a {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.page-header .menu-container .menu-heading {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 12px;
+    margin-top: $appPadding;
+    color: $green3;
+    font-weight: bold;
+    padding: $appPadding;
+}
+
+.brand-container {
+    @extend .form-v-center;
+    background: white;
+    height: $navBarHeight;
+    padding: $appPadding * 2 $appPadding;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    img {
+        width: 75%;
+        height: auto;
+    }
+}
+
+.login-state {
+    font-size: 14px;
+    padding: $appPadding;
+    text-align: center;
+    color: white;
+    .app-padding {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .collapsed.page-header {
+        width: $collapsedSideBarWidth;
+    }
+
+    .collapsed.page-header .menu-container {
+        padding: 0;
+    }
+
+    .collapsed.page-header .menu-container li>* {
+        padding: 12px;
+    }
+
+    .collapsed.page-header .brand-container {
+        padding: 0 4px;
+    }
+
+    .collapsed.page-header .brand-container .icon {
+        display: inline-block;
+    }
+
+    ‰ .collapsed.page-header .brand-container .logo,
+    .collapsed.page-header .menu-container .menu-title,
+    .collapsed.page-header .menu-container .menu-heading {
+        display: none;
+    }
+
+    .collapsed.page-header .menu-container .main-menu i {
+        margin-right: 0;
+    }
+
+    .collapsed.page-header .btn-collapse i {
+        transform: rotate(180deg);
+        margin: 0;
+    }
+
+    .collapsed .page-content {
+        left: $collapsedSideBarWidth;
+        width: calc(100% - #{$collapsedSideBarWidth});
+    }
+
+    .btn-collapse {
+        display: block;
+    }
+
+    .btn-drawer {
+        display: none;
+    }
+}
+
+.page-content {
+    position: relative;
+    left: $sideBarWidth;
+    width: calc(100% - #{$sideBarWidth});
+    min-height: 100vh;
+}
+
+.page-content header {
+    @extend .form-v-center;
+    @extend .form-left-right;
+    height: $navBarHeight;
+    border-bottom: 1px solid $divider;
+    padding: $appPadding;
+}
+
+.page-content .page-navigator {
+    .bread-crumb {
+        font-size: 0.7rem;
+        color: $gray;
+    }
+
+    h3 {
+        font-weight: bold;
+        margin-top: 6px;
+        font-size: 24px;
+    }
+}
+
+.container {
+    font-size: 14px;
+    padding: $appPadding;
+}
+
+.guide-title {
+    color: $green0;
+}
+
+.guide-desc {
+    color: gray;
+    font-size: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+        font-weight: bold;
+        border-top: 1px solid $divider;
+        border-bottom: 3px solid $green2;
+        color: $green3;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid $divider;
+    }
+}
+
+table th,
+td {
+    padding: $appPadding;
+}
+
+.form-control {
+    .title {
+        @extend .form-v-center;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 4px;
+        color: $green3;
+    }
+
+    .guide {
+        font-size: 13px;
+        color: $gray;
+        margin-bottom: 4px;
+    }
+}
+
+.form-control.inline {
+    @extend .form-v-center;
+
+    .title {
+        margin-right: $appPadding;
+        min-width: 100px;
+    }
+}
+
+// Mobile
+@media screen and (max-width: 768px) {
+
+    .page-header,
+    .page-content {
+        position: static;
+        width: 100%;
+        border-bottom: 1px solid $divider;
+    }
+
+    .page-header nav {
+        flex-direction: row;
+        background: white !important;
+    }
+
+    .page-header .menu-container {
+        position: absolute;
+        left: 0;
+        top: $navBarHeight;
+        bottom: 0;
+        z-index: 100;
+        width: $sideBarWidth;
+        background: $primary;
+    }
+
+    .brand-container {
+        width: 90%
+    }
+    .brand-container .logo {
+        display: none;
+    }
+    .brand-container .icon {
+        display: inline-block;
+        width: 2rem !important;
+    }
+}
+
+.card {
+    border-radius: 4px;
+    background: white;
+    padding: 2rem;
+    min-width: 22rem;
+}
+
+.background {
+    @extend .bg-green3;
+    @extend .form-vh-center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+#map {
+    .info {position:relative;top:5px;left:5px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;font-size:12px;padding:5px;background:#fff;list-style:none;margin:0;} 
+    .info:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
+    .info .label {display:inline-block;width:50px;}
+    .number {font-weight:bold;color:#00a0e9;}  
+}
+
+.image-upload-container {
+    position: relative;
+    border: 1px solid $border;
+    background: #f5f5f5;
+    width: 19.2rem;
+    height: 10.8rem;
+    span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 40px;
+        font-weight: 100;
+        color: #aaa;
+    }
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}

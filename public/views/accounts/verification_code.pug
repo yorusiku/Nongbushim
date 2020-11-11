@@ -1,0 +1,24 @@
+extends ../../layout.pug
+
+block content
+    .background
+        #container_send.card
+            h2.guide-title 인증코드 전송
+            .guide-desc.mt-2.mb-4
+                | 비밀번호 재설정을 위해, 가입하신 이메일 주소로 인증코드를 전송 해 드립니다.
+            .form-control.mt-4.mr-3
+                .title
+                    | 이메일 
+                .guide 비밀번호 재설정을 하려는 계정의 이메일 주소를 입력 해 주세요.
+                input#input_username.full-width.app-input(type='email', placeholder='이메일')
+            button#btn_send.mt-4.btn-social-login(type='button') 인증코드 전송
+        #container_verify.card(style='display: none')
+            h2.guide-title 인증코드 확인
+            .guide-desc.mt-2.mb-4
+                | 이메일로 전송된 인증코드 6자리를 입력 해 주세요.
+            .form-control.mt-4.mr-3
+                .title
+                    | 인증코드 
+                input#input_code.full-width.app-input(type='number', placeholder='숫자 6자리')
+            button#btn_verify.mt-4.btn-social-login(type='button') 비밀번호 재설정
+    script(src='/js/babel/verification_code.js')

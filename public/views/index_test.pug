@@ -1,0 +1,101 @@
+extends ../layout.pug
+
+block content
+	#main-wrapper(data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+		data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full")
+			header.topbar(data-navbarbg="skin5")
+				//- Navbar
+				nav.navbar.top-navbar.navbar-expand-md.navbar-dark
+					.navbar-header(data-logobg="skin6")
+						a.navbar-brand(href="/")
+							b.logo-icon
+								img(src="plugins/images/logo-icon.png")
+							span.logo-text
+								img(src="plugins/images/logo-text.png")
+						a.nav-toggler.waves-effect.waves-light.text-dark.d-block.d-md-none(href="/")
+							i.ti-menu.ti-close
+					#navbarSupportedContent.navbar-collapse.collapse(data-navbarbg="skin5")
+						ul.navbar-nav.d-none.d-md-block.d-lg-none
+							li.nav-item
+								a.nav-toggler.nav-link.waves-effect.waves-light.text-white(href="#")
+									i.ti-menu.ti-close
+						//- Navbar Right Menu - Profile
+						ul.navbar-nav.ml-auto.d-flex.align-items-center
+							li
+								a.profile-pic(href="#")
+									img.img-circle(src="plugins/images/users/varun.jpg")
+									span.text-white.font-medium Steave
+			//- Left Sidebar
+			aside.left-sidebar(data-sidebarbg="skin6")
+				.scroll-sidebar
+					nav.sidebar-nav
+						ul#sidebarnav
+							li.sidebar-item.pt-2
+								a.sidebar-link.waves-effect.waves-dark.sidebar-link(href="#" aria-expanded="false")
+									i.far.fa-clock(aria-hidden="true")
+									span.hide-menu Dashboard
+							li.sidebar-item
+								a.sidebar-link.waves-effect.waves-dark.sidebar-link(href="#" aria-expanded="false")
+									i.far.fa-user(aria-hidden="true")
+									span.hide-menu Profile
+			//- Page Wrapper
+			.page-wrapper
+				//- Top bar - BreadCrumb
+				.page-breadcrumb.bg-white
+					.row.align-items-center
+						.col-log-3.col-md-4.col-sm-4.col-xs-12
+							h4.page-title.text-uppercase.font-medium.font-14
+								| Dashboard
+						.col-lg-9.col-sm-8.col-md-8.col-xs-12
+							.d-md-flex
+								ol.breadcrumb.ml-auto
+									li
+										a(href="#") Dashboard
+				//- Container
+				.container-fluid
+					.row
+						.col-md-12.col-log-12.col-sm-12
+							.white-box
+								.d-md-flex.mb-3
+									h3.box-title.mb-0 Recent Sales
+									.col-md-3.col-sm-4.col-xs-6.ml-auto
+										select.form-control.row.border-top
+											option March 1000
+											option March 1000
+											option March 1000
+											option March 1000
+								.table-responsive
+									table.table.no-wrap
+										thead
+											tr
+												th.border-top-0 #
+												th.border-top-0 NAME
+												th.border-top-0 STATUS
+												th.border-top-0 DATE
+												th.border-top-0 PRICE
+										tbody
+											tr
+												td 1
+												td.txt-oflo Elite admin
+												td EXTENDED
+												td.txt-oflo April 19, 2019
+												td $2012
+											tr
+												td 1
+												td.txt-oflo Elite admin
+												td EXTENDED
+												td.txt-oflo April 19, 2019
+												td $2012
+											tr
+												td 1
+												td.txt-oflo Elite admin
+												td EXTENDED
+												td.txt-oflo April 19, 2019
+												td $2012
+	script(src="/js/dashboard/app-style-switcher.js")
+	script(src="/js/dashboard/waves.js")
+	script(src="/js/dashboard/sidebarmenu.js")
+	script(src="/js/dashboard/custom.js")
+
+
+

@@ -1,0 +1,102 @@
+extends ../../layout.pug
+
+block content
+    .page-content
+        header
+            .page-navigator
+                .bread-crumb
+                    | 농장관리 / 농장생성
+                h3 농장생성
+            div
+                button#btn_create.btn-primary 생성하기
+        section.container
+            h3.guide-title 기본정보
+            .row
+                .col-sm.mt-2
+                    .form-control.inline
+                        .title
+                            .red * 
+                            | 농장명
+                        input#input_name.app-input.full-width(type='text' placeholder='농장이름')
+                    .form-control.inline.mt-2
+                        .title 농장주소
+                        .form-v-center.full-width
+                            input#input_post_code.app-input.mr-2(placeholder='우편번호' style='width: 5rem')
+                            .form-v-center.flex-1
+                                input#input_address.app-input.mr-2.full-width(type='text' placeholder='주소')
+                                button.btn-primary(onclick="openPostcodeModal()") 주소검색
+                    .form-control.inline.mt-2
+                        .title
+                        input#input_address_detail.app-input.full-width(type='text' placeholder='상세주소')
+                    .form-control.inline.mt-2
+                        .title.app-padding-tb 영역
+                        .guide-desc 지도를 좌클릭하면 그리기가 시작되고, 우클릭하면 영역을 완성합니다.
+                    #map(style='width: 100%; height: 200px; border: 1px solid #ddd; border-radius: 4px')
+                .col-sm.mt-2
+                    .form-control.inline
+                        .title
+                            .red *  
+                            | 전화번호
+                        input#input_phone.app-input.full-width(type='text' placeholder='전화번호')
+                    .form-control.inline.mt-2
+                        .title 농장주 성함
+                        input#input_owner_name.app-input.full-width(type='text' placeholder='홍길동')
+                    .form-control.inline.mt-2
+                        .title 법인번호
+                        input#input_corp_number.app-input.full-width(type='text' placeholder='법인번호')
+                    .form-control.inline.mt-2
+                        .title 사이트
+                        input#input_web.app-input.full-width(type='text' placeholder='사이트 URL')
+            h3.guide-title.mt-4 사진정보
+            .form-control.mt-2
+                .title 농장 사진
+            .row
+                .col-sm
+                    .image-upload-container#img1_preview
+                        span +
+                        button.btn-delete(style="display: none") 삭제
+                        img(src="#" style="display: none;")
+                    input#input_file_img1.hide(type="file" accept="image/*" onchange="showPreview(event, 'img1_preview')")
+                .col-sm
+                    .image-upload-container#img2_preview
+                        span +
+                        button.btn-delete(style="display: none") 삭제
+                        img(src="#" style="display: none;")
+                    input#input_file_img2.hide(type="file" accept="image/*" onchange="showPreview(event, 'img2_preview')")
+                .col-sm
+                    .image-upload-container#img3_preview
+                        span +
+                        button.btn-delete(style="display: none") 삭제
+                        img(src="#" style="display: none;")
+                    input#input_file_img3.hide(type="file" accept="image/*" onchange="showPreview(event, 'img3_preview')")
+            .row.mt-4
+                .col-sm
+                    .form-control.mt-2
+                        .title 로고
+                    .image-upload-container#logo_preview
+                        span +
+                        button.btn-delete(style="display: none") 삭제
+                        img(src="#" style="display: none;")
+                    input#input_file_logo.hide(type="file" accept="image/*" onchange="showPreview(event, 'logo_preview')")
+                .col-sm
+                    .form-control.mt-2
+                        .title 농장주 사진
+                    .image-upload-container#owner_preview
+                        span +
+                        button.btn-delete(style="display: none") 삭제
+                        img(src="#" style="display: none;")
+                    input#input_file_owner.hide(type="file" accept="image/*" onchange="showPreview(event, 'owner_preview')")
+                .col-sm
+            .row.mt-6
+    script(src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js")
+    script(src='/js/babel/farm_map.js')
+    script(src='/js/babel/farm_create.js')
+
+
+
+			
+
+
+
+
+

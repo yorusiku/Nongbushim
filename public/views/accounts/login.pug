@@ -1,0 +1,24 @@
+extends ../../layout.pug
+
+block content
+    .background
+        img.mb-2(src="/img/logo.png" width="300")
+        br
+        .card
+            .form-control
+                .title 이메일
+                input#input_username.full-width.app-input(type='text', placeholder='이메일')
+            .form-control.mt-4
+                .title 비밀번호
+                input#input_password.full-width.app-input(type='password', placeholder='비밀번호')
+            button#btn_login.mt-4.btn-social-login(type='button') 로그인
+            .form-left-right.mt-2
+                a(href="/accounts/sign_up") 회원가입
+                a(href="/accounts/leave") 회원탈퇴
+            .form-left-right.mt-1
+                a(href="/accounts/verification_code") 비밀번호 찾기
+            hr.mt-3.mb-3
+            button#btn_kakao.btn-social-login(type='button') 
+                img(src="/img/ic_kakao.png")
+                span 카카오로 로그인
+    script(src='/js/babel/login.js')

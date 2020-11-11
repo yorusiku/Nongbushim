@@ -1,0 +1,324 @@
+$sideBarWidth: 220px;
+$collapsedSideBarWidth: 46px;
+$navBarHeight: 66px;
+$primary: #006e3e !important;
+$green0: #1faa6d;
+$green1: #076f2f;
+$green2: #056637;
+$green3: #113725;
+$divider: #e7eee7;
+$border: #daddda;
+$red: #ff2146;
+$gray: #aaa;
+$appPadding: 12px;
+
+@import "./component";
+@import "./font";
+@import "./input";
+@import "./button";
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a,
+button {
+  color: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  cursor: pointer;
+}
+
+input {
+  -webkit-appearance: none;
+}
+
+button,
+input {
+  border: none;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.preline {
+  white-space: pre-line !important; // .json 내에서 \n으로 개행 가능하도록
+}
+
+.scrollable {
+  overflow-y: scroll;
+  overflow: hidden;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.full-width {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+.right {
+  float: right;
+}
+
+.form-v-center {
+  display: flex !important;
+  align-items: center;
+}
+
+.form-h-center {
+  display: flex !important;
+  justify-content: center;
+}
+
+.form-vh-center {
+  @extend .form-v-center;
+  justify-content: center;
+}
+
+.form-left-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-left-right-start {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.form-start {
+  display: flex;
+  align-items: flex-start;
+}
+
+.form-top-bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.app-padding {
+  padding: $appPadding;
+}
+
+.app-padding-lr {
+  padding: 0 $appPadding;
+}
+
+.app-padding-tb {
+  padding: $appPadding 0;
+}
+
+.app-padding-tlr {
+  padding: $appPadding $appPadding 0 $appPadding;
+}
+
+.app-padding-blr {
+  padding: 0 $appPadding $appPadding $appPadding;
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.hide {
+  display: none;
+}
+
+.mt-1 {
+  margin-top: 0.25rem !important;
+}
+
+.mr-1 {
+  margin-right: 0.25rem !important;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem !important;
+}
+
+.ml-1 {
+  margin-left: 0.25rem !important;
+}
+
+.mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+.mr-2 {
+  margin-right: 0.5rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+.ml-2 {
+  margin-left: 0.5rem !important;
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
+.mr-3 {
+  margin-right: 1rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.ml-3 {
+  margin-left: 1rem !important;
+}
+
+.mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+.mr-4 {
+  margin-right: 1.5rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.ml-4 {
+  margin-left: 1.5rem !important;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mr-5 {
+  margin-right: 3rem !important;
+}
+
+.mb-5 {
+  margin-bottom: 3rem !important;
+}
+
+.ml-5 {
+  margin-left: 3rem !important;
+}
+
+.mt-6 {
+  margin-top: 6rem !important;
+}
+
+.mb-6 {
+  margin-bottom: 6rem !important;
+}
+
+.mb-7 {
+  margin-bottom: 7rem !important;
+}
+
+.mb-8 {
+  margin-bottom: 8rem !important;
+}
+
+.red {
+  color: $red;
+}
+
+.fi-padding {
+  width: 1.1em !important;
+  height: 1.1em !important;
+}
+
+hr {
+  border-top: 1px solid $border;
+}
+
+.bg-green0 {
+  background: $green0;
+}
+
+.bg-green1 {
+  background: $green1;
+}
+
+.bg-green2 {
+  background: $green2;
+}
+
+.bg-green3 {
+  background: $green3;
+}
+
+.col {
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+.row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -12px;
+  margin-left: -12px;
+}
+
+.col-sm {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+@media (min-width: 576px) {
+  .col-sm {
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%;
+  }
+}

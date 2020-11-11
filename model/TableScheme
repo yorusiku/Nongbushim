@@ -1,0 +1,37 @@
+CREATE TABLE `users` (
+	`id` bigint(20) NOT NULL AUTO_INCREMENT,
+	`user_id` varchar(30) NOT NULL,
+	`username` varchar(60) NOT NULL,
+	`password` varchar(255) NOT NULL,
+	`name` varchar(10) NOT NULL,
+	`strategy` bigint(20) DEFAULT '0', 
+	`createdAt` datetime NOT NULL,
+    `modifiedAt` datetime NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY (`user_id`)) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE `farm_user_states` (
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+    `fid` bigint(20) NOT NULL,
+    `uid` VARCHAR(30) NOT NULL,
+    `job` VARCHAR(8) DEFAULT NULL,
+    `company` VARCHAR(20) DEFAULT NULL,
+    `state` bigint(20) DEFAULT '0',
+	`createdAt` datetime NOT NULL,
+    `modifiedAt` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4 COLLATE = UTF8MB4_UNICODE_CI;
+
+CREATE TABLE `farms` (
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(20) NOT NULL,
+    `address` VARCHAR(100) DEFAULT NULL,
+    `areaPaths` TEXT DEFAULT NULL,
+    `phone` VARCHAR(20) NOT NULL,
+    `ownerName` VARCHAR(10) DEFAULT NULL,
+    `corpNumber` VARCHAR(20) DEFAULT NULL,
+    `web` VARCHAR(100) DEFAULT NULL,
+	`createdAt` datetime NOT NULL,
+    `modifiedAt` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4 COLLATE = UTF8MB4_UNICODE_CI;

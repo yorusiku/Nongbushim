@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/fonts/otf/NotoSansKR-Regular-Hestia.otf) format("opentype"); }
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/otf/NotoSansKR-Medium-Hestia.otf) format("opentype"); }
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/otf/NotoSansKR-Bold-Hestia.otf) format("opentype"); }
+
+@font-face {
+  font-family: 'NanumSquareRound';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/otf/nanum_square_round_eb.otf) format("opentype"); }
+
+@font-face {
+  font-family: 'NanumSquareRound';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/otf/nanum_square_round_b.otf) format("opentype"); }
