@@ -36,6 +36,7 @@ module.exports = class Farm {
     async insert() {
         delete this.id
         this.createdAt = new Date()
+        this.modifiedAt = new Date()
         this.areaPaths = JSON.stringify(this.areaPaths)
         let [result] = await pool.query(`
             INSERT INTO farms SET ?;
@@ -54,6 +55,8 @@ module.exports = class Farm {
 
     async update(farmProfile) {
         Object.assign(this, farmProfile)
+        delete this["createdAt"]
+        this["modifiedAt"] =  new Date(Date.parse(this.modifiedAt));
         this.areaPaths = JSON.stringify(this.areaPaths)
         await pool.query(`
             UPDATE farms SET ? WHERE id=? LIMIT 1

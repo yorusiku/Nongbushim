@@ -16,6 +16,7 @@ exports.inject = () => {
 
     Container.set('PassportService', require('./service/PassportService'))
     Container.set('UserService', require('./service/UserService'))
+    Container.set('FarmService', require('./service/FarmService'))
 }
 
 function getDatabaseOption() {

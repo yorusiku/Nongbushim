@@ -1,111 +1,88 @@
 extends ../layout.pug
 
-block content
+block sidebar
 	header.page-header
 		nav
 			a(href='#0')
 			a.brand-container(href="/")
-				img.logo(src='img/logo.png' alt='농부심 로고')
-				img.hide.icon(src='img/icon.png' alt='농부심 아이콘')
+				img.logo(src='/img/logo.png' alt='농부심 로고')
+				img.hide.icon(src='/img/icon.png' alt='농부심 아이콘')
 			.menu-container
 				.login-state
-					.app-padding
-						div #{test}님 안녕하세요!
-						button.btn-dark-green.btn-small.mt-2.mb-2 로그아웃
+				.app-padding
+					if login
+					div #{user_name}님 안녕하세요!
+					button#btn_logout.btn-dark-green.btn-small.mt-2.mb-2 로그아웃
 				h3.menu-heading 일반
 				ul.main-menu 
 					li.expanded
 						i.fi-xnsuxl-user-solid
-						span.menu-title 내 정보
+						span#user_info.menu-title 내 정보
 					li.expanded
 						i.fi-xnsuxl-house-solid
 						span.menu-title 농장
 					ul.sub-menu
-						li.active 농장 정보
-						li SUB-MENU1
-						li SUB-MENU1
-					li
-						i.fa.fa-users
-						span.menu-title 스태프
-					ul.sub-menu
-						li SUB-MENU1
-						li SUB-MENU1
-						li SUB-MENU1
-				h3.menu-heading 관리
-				ul.main-menu 
-					li
-						i.fa.fa-seedling
-						span.menu-title 농작물
-					li
-						i.fi-xnsuxl-tractor-solid
-						span.menu-title 수확
+						li#farm_info.active 
+							a 농장 정보
+						li#farm_creation.active 
+							a 농장 생성
+				//- 	li
+				//- 		i.fa.fa-users
+				//- 		span.menu-title 스태프
+				//- 	ul.sub-menu
+				//- 		li SUB-MENU1
+				//- 		li SUB-MENU1
+				//- 		li SUB-MENU1
+				//- h3.menu-heading 관리
+				//- ul.main-menu 
+				//- li
+				//- 	i.fa.fa-seedling
+				//- 	span.menu-title 농작물
+				//- li
+				//- 	i.fi-xnsuxl-tractor-solid
+				//- 	span.menu-title 수확
 				.mt-6
 			// more list items here
 			button.btn-collapse(aria-expanded='true' aria-label='collapse menu')
 				i.fa.fa-chevron-left
 			button.btn-drawer(aria-expanded='true' aria-label='collapse menu')
 				i.fa.fa-bars
+	script(src='/js/babel/logout.js')
+	script(src='/js/babel/farm_index.js')
+
+block content
 	.page-content
 		header
 			.page-navigator
 				.bread-crumb
 					| MENU1 / SUB-MENU 1
 				h3 DashBoard
-			div
-				button.btn-primary.mr-2 로그인
-				button.btn-h-primary 회원가입
+				
+			if !login
+				div
+					button.btn-primary.mr-2 로그인
+					button.btn-h-primary 회원가입
 		section.container
 			// 텍스트
-			h2.guide-title 제목
-			.guide-desc.mt-2.mb-4 
-				| ㅇ나ㅓㅇㄴ미ㅏ어ㅣ언미ㅏ언아너미언ㅁ아넘이나ㅓㅁ안ㅁ
-				br
-				| ㅇㄴ머이마넝나미ㅓㅇ미나ㅓㅇ니ㅏ어ㅣㄴ머아ㅣ너이
-			// 폼
-			.form-control
-				.title 
-					.red *
-					| 이름
-				.guide 이름을 적을때는 잘 적어주세요.
-				input.app-input(type='text' value='dddd')
-			.form-control.inline
-				.title 이름
-				input.app-input(type='text' value='dsdsd')
-			// Checkbox
-			div.form-v-center
-				input#checkbox1.styled-checkbox(type='checkbox')
-				label(for="checkbox1")
-				| A Checkbox
-			// Radio Button
-			input#radio1(type='radio' name='radio-group' checked)
-			label(for='radio1') A Radio 1
-			input#radio2(type='radio' name='radio-group')
-			label(for='radio2') A Radio 2
+			h2.guide-title 농장 정보
 			// 표 
 			table
 				thead
 					tr
-						td ddddd
-						td dsdsd
-						td dsdsd
+						td id
+						td 직업
+						td 회사
+						td 주소
+						td 이름
+						td 
 				tbody
+				for farm in farms
 					tr
-						td ddddd
-						td dsdsd
-						td dsdsd
-					tr
-						td ddddd
-						td dsdsd
-						td dsdsd
-					tr
-						td ddddd
-						td dsdsd
-						td dsdsd
-
-
-			
-
-
-
-
-
+						td #{farm.id}
+						td #{farm.job}
+						td #{farm.company}
+						td #{farm.address}
+						td #{farm.name}
+						td 
+							a(href='/farms/modify/'+farm.id) 상세보기 
+	script(src='/js/babel/farm_dashboard.js')

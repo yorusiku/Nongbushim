@@ -57,6 +57,14 @@ module.exports = class UserService {
             )
         }
 
+        // 유효성 검사
+        if (!Validator.range(this.user.getName(), 2, 10)) {
+            throw Jelib.error(
+                ErrorCodes.INVALID_FILED,
+                "성함은 2~10자로 입력 해 주세요."
+            )
+        }
+        
         let duplicateUser = new User({ username: this.user.getUsername() })
         await duplicateUser.get()
         if (!duplicateUser.isEmpty()) {

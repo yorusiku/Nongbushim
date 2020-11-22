@@ -1,4 +1,4 @@
-extends ../../layout.pug
+extends ../index.pug
 
 block content
     .page-content
@@ -47,6 +47,16 @@ block content
                     .form-control.inline.mt-2
                         .title 사이트
                         input#input_web.app-input.full-width(type='text' placeholder='사이트 URL')
+                    .form-control.inline.mt-2
+                        .title 분야
+                        input#farmer(type='radio' name='input_sector' value="농업" checked)
+                        label(for='farmer') 농업
+                        input#fishery(type='radio' name='input_sector' value="어업")
+                        label(for='fishery') 어업
+                        input#livestock(type='radio' name='input_sector' value="축산업")
+                        label(for='livestock') 축산업
+                        input#etc(type='radio' name='input_sector' value="기타")
+                        label(for='etc') 기타
             h3.guide-title.mt-4 사진정보
             .form-control.mt-2
                 .title 농장 사진
@@ -91,12 +101,3 @@ block content
     script(src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js")
     script(src='/js/babel/farm_map.js')
     script(src='/js/babel/farm_create.js')
-
-
-
-			
-
-
-
-
-

@@ -15,6 +15,7 @@ const TABLE = 'farm_user_states'
  * @param state 승인상태
  */
 exports.registerUser = async (userState) => {
+    console.log(userState)
     userState.state = userState.state || 0
     await pool.query(`
         INSERT INTO ${TABLE} SET ? ON DUPLICATE KEY UPDATE state=VALUES(state)

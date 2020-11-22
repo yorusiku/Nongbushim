@@ -23,15 +23,16 @@ module.exports = class FarmService {
     }
 
     // 관련된 농장 목록을 불러온다.
-    async getFarmList(uid, page) {
-        page = page * 1
-        page = isNaN(page) ? 1 : page
-        let pagingClause = `LIMIT ${(page - 1) * PAGE_SIZE}, ${PAGE_SIZE}`
-        let [farms] = await pool.query(`
-            SELECT f.id, f.name, f.address, f.state, fu.job, fu.company, fu.state 
-            FROM farms f LEFT JOIN farm_user_states fu ON fu.fid=f.id 
-            WHERE fu.uid=? ${pagingClause}
-        `, uid)
+    async getFarmList(uid) {
+        // page = page * 1
+        // page = isNaN(page) ? 1 : page
+        // let pagingClause = `LIMIT ${(page - 1) * PAGE_SIZE}, ${PAGE_SIZE}`
+        let query = `
+        SELECT f.id, f.name, f.address, fu.job, fu.company, fu.state 
+        FROM farms f LEFT JOIN farm_user_states fu ON fu.fid=f.id 
+        WHERE fu.uid=?`
+        //  ${pagingClause}`
+        let [farms] = await pool.query(query, uid)
         return farms
     }
 
@@ -59,7 +60,9 @@ module.exports = class FarmService {
                 fid: this.farm.getId(),
                 uid: uid,
                 job: Constants.JOBS[0], // 소유자
-                state: Constants.FARM_USER_STATE.GRANTED
+                state: Constants.FARM_USER_STATE.GRANTED,
+                createdAt: new Date(),
+                modifiedAt: new Date()
             })
         } catch (err) {
             await this.farm.delete()
@@ -72,8 +75,6 @@ module.exports = class FarmService {
         // 유효성 검사
         this.farm = new Farm(farmProfile)
         let state = await this.getState(uid)
-        console.log(state)
-        console.log(farmProfile)
         if (state.state != Constants.FARM_USER_STATE.GRANTED || state.job != Constants.JOBS[0]) {
             throw Jelib.error(
                 ErrorCodes.PERMISSION_DENIED,
@@ -121,7 +122,9 @@ module.exports = class FarmService {
             fid: this.farm.getId(),
             uid: uid,
             job: job,
-            company: company
+            company: company,
+            createdAt: new Date(),
+            modifiedAt: new Date()
         })
     }
 

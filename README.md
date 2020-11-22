@@ -2,6 +2,10 @@
 npm run build
 (babel 폴더내의 js가 public/js/babel 내로 들어가게됩니다.)
 
+# pm2를 이용할 시에 명령어 
+npm install -g pm2
+pm2 start app.js
+
 # sass 컴파일 방법
 node-sass --watch sass/nbs_style.scss --output public/css --output-style compressed
 

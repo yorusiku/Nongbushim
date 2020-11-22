@@ -194,6 +194,8 @@ function parseFarm() {
     farm.ownerName = $('#input_owner_name').val();
     farm.corpNumber = $('#input_corp_number').val();
     farm.web = $('#input_web').val();
+    farm.sector = $('input[name="input_sector"]:checked').val();
+    console.log(farm)
     return farm;
 }
 

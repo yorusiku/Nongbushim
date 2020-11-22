@@ -1,6 +1,7 @@
 let __farm__ = {};
 $(document).ready(() => {
     __farm__ = JSON.parse($('#farm_data').text());
+    console.log(__farm__)
     centerMap(__farm__.address);
     drawArea();
     setImages();
@@ -48,6 +49,7 @@ $('#btn_modify').click(() => {
 function requestModify() {
     $('#btn_modify').attr('disabled', true);
     Object.assign(__farm__, parseFarm());
+    console.log(__farm__);
     if (isValid(__farm__)) {
         let formData = new FormData();
         formData.append('imageImg1', getFile('input_file_img1'));
@@ -56,7 +58,6 @@ function requestModify() {
         formData.append('imageLogo', getFile('input_file_logo'));
         formData.append('imageOwner', getFile('input_file_owner'));
         formData.append('farm', JSON.stringify(__farm__));
-
         $.ajax({
             url: '/api/farms/' + __farm__.id,
             type: 'PUT',
@@ -68,6 +69,8 @@ function requestModify() {
                 $('#btn_create').attr('disabled', false);
                 if (result.code == 200) {
                     alert('농장이 성공적으로 수정되었습니다.');
+                    // location.href = '/';
+                    $('#btn_create').attr('disabled', false);
                 } else {
                     if (result.code == -1003) {
                         location.href = '/accounts/login';

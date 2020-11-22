@@ -26,6 +26,7 @@ function requestCreate() {
                 $('#btn_create').attr('disabled', false);
                 if (result.code == 200) {
                     alert('농장이 성공적으로 생성되었습니다.');
+                    location.href = '/'
                 } else {
                     if (result.code == -1003) {
                         location.href = '/accounts/login';
@@ -41,6 +42,7 @@ function requestCreate() {
 }
 
 $('#btn_create').click(() => {
+    console.log("!!")
     requestCreate();
 });
 

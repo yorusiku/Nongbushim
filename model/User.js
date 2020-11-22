@@ -42,14 +42,11 @@ module.exports = class User {
                 break;
             }
         }
-        console.log(fieldName)
-        console.log(value)
         let [[ user ]] = await pool.query(`
             SELECT * FROM users WHERE 
             ${fieldName}=?
             LIMIT 1
         `, value)
-        console.log(user)
         if (user) {
             Object.assign(this, user)
         } else {
@@ -73,8 +70,8 @@ module.exports = class User {
         let hasPassword = password && this.password
         if (!this.isEmpty() && hasPassword && bcrypt.compareSync(password, this.password)) {
             return this.id
-        } else {
             return null
+        } else {
         }
     }
 
@@ -90,7 +87,7 @@ module.exports = class User {
         this.createdAt = new Date()
         this.modifiedAt = new Date()
         this.hashPassword()
-        console.log(this.password)
+        console.log(this)
         await pool.query(`
             INSERT INTO users SET ?
         `, this)
@@ -108,6 +105,8 @@ module.exports = class User {
     getPassword() { return this.password }
 
     getName() { return this.name }
+
+    getNickname() { return this.nickname }
 
     getStrategy() { return this.strategy }
 

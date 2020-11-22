@@ -91,7 +91,53 @@ block content
 												td.txt-oflo Elite admin
 												td EXTENDED
 												td.txt-oflo April 19, 2019
-												td $2012
+												td $2012section.container
+				// 텍스트
+				h2.guide-title 제목
+				.guide-desc.mt-2.mb-4 
+					| ㅇ나ㅓㅇㄴ미ㅏ어ㅣ언미ㅏ언아너미언ㅁ아넘이나ㅓㅁ안ㅁ
+					br
+					| ㅇㄴ머이마넝나미ㅓㅇ미나ㅓㅇ니ㅏ어ㅣㄴ머아ㅣ너이
+				// 폼
+				.form-control
+					.title 
+						.red *
+						| 이름
+					.guide 이름을 적을때는 잘 적어주세요.
+					input.app-input(type='text' value='')
+				.form-control.inline
+					.title 이름
+					input.app-input(type='text' value='')
+				// Checkbox
+				div.form-v-center
+					input#checkbox1.styled-checkbox(type='checkbox')
+					label(for="checkbox1")
+					| A Checkbox
+				// Radio Button
+				input#radio1(type='radio' name='radio-group' checked)
+				label(for='radio1') A Radio 1
+				input#radio2(type='radio' name='radio-group')
+				label(for='radio2') A Radio 2
+				// 표 
+				table
+					thead
+						tr
+							td ddddd
+							td dsdsd
+							td dsdsd
+					tbody
+						tr
+							td ddddd
+							td dsdsd
+							td dsdsd
+						tr
+							td ddddd
+							td dsdsd
+							td dsdsd
+						tr
+							td ddddd
+							td dsdsd
+							td dsdsd
 	script(src="/js/dashboard/app-style-switcher.js")
 	script(src="/js/dashboard/waves.js")
 	script(src="/js/dashboard/sidebarmenu.js")

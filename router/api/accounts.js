@@ -26,15 +26,31 @@ router.post(`/sign_in`, async (req, res) => {
     }
 })
 
+// 로그아웃
+router.post(`/sign_out`, async (req, res) => { 
+    let uid = req.body.uid
+    try {
+        res.cookie('uid', uid, {
+            signed: false,
+            maxAge: 0
+        })
+        Jelib.responseSuccess(res, true)
+    } catch (err) {
+        Jelib.responseFail(res, err)
+    }
+})
+    
 // 회원가입
 router.post(`/sign_up`, async (req, res) => {
     let userProfile = {
         username: req.body.username,
+        nickname: req.body.nickname,
         password: req.body.password,
         name: req.body.name,
         strategy: req.body.strategy || Constants.STRATEGY.EMAIL,
         socialId: req.body.socialId
     }
+    console.log(req.body)
     try {
         let userService = new UserService()
         await userService.signUp(userProfile)

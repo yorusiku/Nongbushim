@@ -19,6 +19,22 @@ router.post(`/`, fileUpload(), async (req, res) => {
     }
 })
 
+
+// 농장 리스트
+router.get(`/`, async (req, res) => {
+    let uid = Jelib.getUid(req, res)
+    let farmService = new FarmService()
+    console.log(uid)
+    try {
+        let farms = await farmService.getFarmList(uid)
+        console.log(farms)
+        Jelib.responseSuccess(res, farms)
+    } catch (err) {
+        Jelib.responseFail(res, err)
+    }
+})
+
+
 // 농장 정보 변경
 router.put(`/:fid`, fileUpload(), async (req, res) => {
     let uid = Jelib.getUid(req, res)
