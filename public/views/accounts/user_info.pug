@@ -1,10 +1,16 @@
-extends ../../layout.pug
+extends ../index.pug
 
 block content
-    .background
-        .card
-            h2.guide-title 회원가입
-            .guide-desc.mt-2.mb-4 농부심 ERP 회원가입을 진행하시려면 아래 폼을 작성 해 주세요.
+    .page-content
+        header
+            .page-navigator
+                .bread-crumb
+                    | 회원정보 
+                h3 회원정보 수정
+            div
+                button#btn_create.btn-primary 생성하기
+        section.container
+            .guide-desc.mt-2.mb-4 농부심 ERP 회원정보 수정이 가능합니다.
             //- 소셜 로그인이라도 이메일을 못받아왔다면 입력하게 함
             - var strategy = profile ? profile.strategy : 0
             - var socialId = profile ? profile.socialId : ''
@@ -14,7 +20,7 @@ block content
                     .title
                         .red * 
                         | 이메일
-                    input#input_username.full-width.app-input(type='email', placeholder='이메일' strategy=strategy social_id=socialId)
+                    input#input_username.full-width.app-input(type='email', placeholder='이메일' strategy=strategy social_id=socialId value=email)
             - else 
                 input#input_username.hide(type='email', value=profile.username, strategy=strategy social_id=socialId)
             - if (!isSocialLogin)
@@ -34,12 +40,12 @@ block content
                     .red * 
                     | 성함
                 .guide 실제 성함을 입력 해 주세요.
-                input#input_name.full-width.app-input(type='text', placeholder='이름')
+                input#input_name.full-width.app-input(type='text', placeholder='이름' value=name)
             .form-control.mt-4
                 .title
                     .red * 
                     | 닉네임
                 .guide 게시판에 보이는 닉네임 입니다.
-                input#input_nickname.full-width.app-input(type='text', placeholder='닉네임')
-            button#btn_sign_up.mt-4.btn-social-login(type='button') 회원가입
-    script(src='/js/babel/sign_up.js')
+                input#input_nickname.full-width.app-input(type='text', placeholder='닉네임' value=nickname)
+            button#btn_update.mt-4.btn-social-login(type='button') 회원정보 수정
+    script(src='/js/babel/user_info.js')

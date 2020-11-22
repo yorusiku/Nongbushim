@@ -69,8 +69,7 @@ function requestModify() {
                 $('#btn_create').attr('disabled', false);
                 if (result.code == 200) {
                     alert('농장이 성공적으로 수정되었습니다.');
-                    // location.href = '/';
-                    $('#btn_create').attr('disabled', false);
+                    location.href = '/';
                 } else {
                     if (result.code == -1003) {
                         location.href = '/accounts/login';

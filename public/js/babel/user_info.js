@@ -4,8 +4,8 @@ $(document).ready(() => {
     // __user__.socialId = $('#input_username').attr('social_id')
 });
 
-$('#btn_sign_up').click(() => {
-    signUp();
+$('#btn_update').click(() => {
+    update();
 });
 
 function parseUser() {
@@ -45,21 +45,16 @@ function validUser() {
     return true;
 }
 
-function signUp() {
+function update() {
     parseUser();
     if (validUser()) {
         $.ajax({
-            url: '/api/accounts/sign_up',
+            url: '/api/accounts/user_info',
             type: 'POST',
             data: __user__,
             success: function (result) {
                 if (result.code == 200) {
-                    if (alert('회원가입이 완료되었습니다.')) {
-                        // location.href = '/accounts/login';
-                    } else {
-                        alert("회원가입에 실패하였습니다.")
-                        // location.href = '/accounts/login';
-                    }
+                    // location.href = '/accounts/login';
                 } else {
                     alert(result.message);
                 }

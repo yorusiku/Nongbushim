@@ -1,6 +1,6 @@
 
-$('#user_modify').click(() => {
-    location.href = '/user';
+$('#user_info').click(() => {
+    location.href = '/accounts/user_info';
 });
 
 $('#farm_info').click(() => {

@@ -59,6 +59,26 @@ router.post(`/sign_up`, async (req, res) => {
         Jelib.responseFail(res, err)
     }
 })
+// 회원정보 수정
+router.post(`/user_info`, async (req, res) => {
+    let uid = req.signedCookies.uid || 0
+    let userService = new UserService(uid)
+    let userProfile = {
+        username: req.body.username,
+        nickname: req.body.nickname,
+        password: req.body.password,
+        name: req.body.name,
+        strategy: req.body.strategy || Constants.STRATEGY.EMAIL,
+        socialId: req.body.socialId
+    }
+    console.log(req.body)
+    try {
+        await userService.update(userProfile)
+        Jelib.responseSuccess(res, true)
+    } catch (err) {
+        Jelib.responseFail(res, err)
+    }
+})
 
 // 이메일로 인증코드 전송
 router.post(`/verification_code`, async (req, res) => {

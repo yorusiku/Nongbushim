@@ -77,6 +77,39 @@ module.exports = class UserService {
         await this.user.insert()
     }
 
+    async update(userObject) {
+        this.user = new User(userObject)
+        await this.user.get()
+
+        // 유효성 검사
+        if (!Validator.range(this.user.getName(), 2, 10)) {
+            throw Jelib.error(
+                ErrorCodes.INVALID_FILED,
+                "성함은 2~10자로 입력 해 주세요."
+            )
+        }
+
+        // 유효성 검사
+        if (!Validator.range(this.user.getName(), 2, 10)) {
+            throw Jelib.error(
+                ErrorCodes.INVALID_FILED,
+                "성함은 2~10자로 입력 해 주세요."
+            )
+        }
+        
+        let duplicateUser = new User({ username: this.user.getUsername() })
+        await duplicateUser.get()
+        
+        if (this.user.email != duplicateUser.email && !duplicateUser.isEmpty()) {
+            throw Jelib.error(
+                ErrorCodes.DUPLICATE,
+                "이미 사용중인 이메일 주소입니다."
+            )
+        }
+        
+        await this.user.update(userObject)
+    }
+
     async resetPassword(username, password) {
         this.user = new User({ username: username })
         await this.user.resetPassword(password)

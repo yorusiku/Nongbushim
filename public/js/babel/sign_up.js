@@ -54,12 +54,8 @@ function signUp() {
             data: __user__,
             success: function (result) {
                 if (result.code == 200) {
-                    if (alert('회원가입이 완료되었습니다.')) {
-                        // location.href = '/accounts/login';
-                    } else {
-                        alert("회원가입에 실패하였습니다.")
-                        // location.href = '/accounts/login';
-                    }
+                    alert('회원가입이 완료되었습니다.')
+                    location.href = '/accounts/login';
                 } else {
                     alert(result.message);
                 }

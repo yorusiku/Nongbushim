@@ -70,7 +70,6 @@ module.exports = class User {
         let hasPassword = password && this.password
         if (!this.isEmpty() && hasPassword && bcrypt.compareSync(password, this.password)) {
             return this.id
-            return null
         } else {
         }
     }
@@ -92,6 +91,16 @@ module.exports = class User {
             INSERT INTO users SET ?
         `, this)
         return this.id
+    }
+
+    
+    async update(userObject) {
+        Object.assign(this, userObject)
+        this.modifiedAt =  new Date();
+        this.hashPassword()
+        await pool.query(`
+            UPDATE users SET ? WHERE id=? LIMIT 1
+        `, [this, this.id])
     }
 
     isEmpty() {
