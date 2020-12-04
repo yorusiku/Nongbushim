@@ -7,15 +7,13 @@ block content
                 .bread-crumb
                     | 회원정보 
                 h3 회원정보 수정
-            div
-                button#btn_create.btn-primary 생성하기
         section.container
             .guide-desc.mt-2.mb-4 농부심 ERP 회원정보 수정이 가능합니다.
             //- 소셜 로그인이라도 이메일을 못받아왔다면 입력하게 함
-            - var strategy = profile ? profile.strategy : 0
-            - var socialId = profile ? profile.socialId : ''
+            - var strategy = strategy!=null ? strategy : 0
+            - var socialId = socialId!=null ? socialId : 0
             - var isSocialLogin = strategy != 0
-            - if (!isSocialLogin || !validateEmail(profile.username)) 
+            - if (!isSocialLogin || !validateEmail(username)) 
                 .form-control
                     .title
                         .red * 
@@ -48,4 +46,5 @@ block content
                 .guide 게시판에 보이는 닉네임 입니다.
                 input#input_nickname.full-width.app-input(type='text', placeholder='닉네임' value=nickname)
             button#btn_update.mt-4.btn-social-login(type='button') 회원정보 수정
+            button#btn_withdrawal.mt-4.btn-social-login() 회원탈퇴
     script(src='/js/babel/user_info.js')

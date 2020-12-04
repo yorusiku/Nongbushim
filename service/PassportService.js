@@ -24,7 +24,7 @@ passport.use('kakao', new KakaoStrategy({
             username: profile._json.kaccount_email,
             strategy: Constants.STRATEGY.KAKAO,
             socialId: profile._json.id
-        })
+        })//1532324708
         await user.get()
         return done(null, user)
     } else {

@@ -22,7 +22,7 @@ module.exports = class Farm {
     async get() {
         if (this.id) {
             let [[ farm ]] = await pool.query(`
-                SELECT * FROM farms WHERE id=? LIMIT 1
+                SELECT * FROM farms WHERE id=? AND deleted=false LIMIT 1
             `, this.id)
             if (farm) {
                 farm.areaPaths = Jelib.escapeJSON(farm.areaPaths)
@@ -48,7 +48,7 @@ module.exports = class Farm {
         // TODO: 농장 삭제
         if (this.id) {
             await pool.query(`
-                DELETE FROM farms WHERE id=? LIMIT 1
+                UPDATE farms SET deleted=true WHERE id=?
             `, this.id)
         }
     }

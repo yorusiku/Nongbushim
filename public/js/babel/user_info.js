@@ -1,11 +1,11 @@
 let __user__ = {};
 $(document).ready(() => {
     __user__.strategy = $('#input_username').attr('strategy') || 0;
-    // __user__.socialId = $('#input_username').attr('social_id')
+    __user__.socialId = $('#input_username').attr('social_id')
 });
 
-$('#btn_update').click(() => {
-    update();
+$('#btn_withdrawal').click(() => {
+    location.href = "/accounts/leave"
 });
 
 function parseUser() {
@@ -13,7 +13,7 @@ function parseUser() {
     __user__.nickname = $('#input_nickname').val();
     __user__.password = $('#input_password').val();
     __user__.name = $('#input_name').val();
-}
+}   
 
 function validUser() {
     if (!validateEmail(__user__.username)) {
@@ -54,7 +54,7 @@ function update() {
             data: __user__,
             success: function (result) {
                 if (result.code == 200) {
-                    // location.href = '/accounts/login';
+                    location.href = '/';
                 } else {
                     alert(result.message);
                 }

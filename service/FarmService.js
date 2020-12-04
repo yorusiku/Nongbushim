@@ -30,7 +30,7 @@ module.exports = class FarmService {
         let query = `
         SELECT f.id, f.name, f.address, fu.job, fu.company, fu.state 
         FROM farms f LEFT JOIN farm_user_states fu ON fu.fid=f.id 
-        WHERE fu.uid=?`
+        WHERE fu.uid=? AND deleted=false`
         //  ${pagingClause}`
         let [farms] = await pool.query(query, uid)
         return farms
@@ -96,10 +96,11 @@ module.exports = class FarmService {
 
     async delete(uid) {
         // TODO: 수확등 모든 데이터 삭제할 것인지
-        let userState = FarmUserState.hasPermission(
+        let userState = await FarmUserState.hasPermission(
             this.farm.getId(), uid
         )
-        if (Constants.JOB.indexOf(userState.job) != 0) {
+        console.log(userState)
+        if (Constants.JOBS.indexOf(userState.job) != 0) {
             throw Jelib.error(
                 ErrorCodes.PERMISSION_DENIED,
                 "농장의 소유자만 농장을 삭제할 수 있습니다."

@@ -42,7 +42,6 @@ function requestCreate() {
 }
 
 $('#btn_create').click(() => {
-    console.log("!!")
     requestCreate();
 });
 

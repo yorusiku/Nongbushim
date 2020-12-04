@@ -24,20 +24,22 @@ router.get(`/sign_up`, (req, res) => {
 })
 
 router.get(`/user_info`, async (req, res) => {
-    // 소셜 로그인을 통해 받아온 profile 정보 
-    let profile = req.signedCookies.profile
-    res.clearCookie('profile')
-    
     let uid = Jelib.getUid(req, res)
     let userService = new UserService(uid)
     await userService.init()
+    
+    if(userService.user == null) {
+        return res.redirect('/accounts/login')
+    }
 
     return res.render('accounts/user_info', {
         uid: userService.user.id,
         email: userService.user.username,
+        user_name: userService.user.name,
         nickname: userService.user.nickname,
         name: userService.user.name,
-        profile: profile,
+        strategy: userService.user.strategy,
+        socialId: userService.user.socialId,
         validateEmail: function validateEmail(email) {
             const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);

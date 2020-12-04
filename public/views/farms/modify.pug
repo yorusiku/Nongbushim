@@ -61,6 +61,9 @@ block content
                             label(for='livestock') 축산업
                             input#etc(type='radio' name='input_sector' value="기타" checked=farm.sector=="기타")
                             label(for='etc') 기타
+                        .form-control.inline.mt-2
+                            .title 세부분야
+                            input#input_sub_sector.app-input.full-width(type='text' placeholder='포도' value=farm.subSector disabled=!hasPermission)
                 h3.guide-title.mt-4 사진정보
                 .form-control.mt-2
                     .title 농장 사진

@@ -1,6 +1,10 @@
 let __farm__ = {};
 $(document).ready(() => {
     __farm__ = JSON.parse($('#farm_data').text());
+    if(__farm__.id == 0) {
+        alert("농장 데이터가 존재 하지 않습니다");
+        location.href = "/";
+    }
     console.log(__farm__)
     centerMap(__farm__.address);
     drawArea();
@@ -82,4 +86,35 @@ function requestModify() {
             }
         });
     }
+}
+
+
+$('#btn_delete').click(() => {
+    requestDelete();
+});
+function requestDelete() {
+    $('#btn_delete').attr('disabled', true);
+    Object.assign(__farm__, parseFarm());
+    console.log(__farm__);
+    $.ajax({
+        url: '/api/farms/' + __farm__.id,
+        type: 'DELETE',
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            $('#btn_create').attr('disabled', false);
+            if (result.btn_delete == 200) {
+                alert('농장이 성공적으로 수정되었습니다.');
+                location.href = '/';
+            } else {
+                if (result.code == -1003) {
+                    location.href = '/accounts/login';
+                }
+                alert(result.message);
+            }
+        },
+        failure: function (result) {
+            $('#btn_delete').attr('disabled', false);
+        }
+    });
 }

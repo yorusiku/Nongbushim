@@ -32,7 +32,7 @@ router.post(`/sign_out`, async (req, res) => {
     try {
         res.cookie('uid', uid, {
             signed: false,
-            maxAge: 0
+            maxAge: 1
         })
         Jelib.responseSuccess(res, true)
     } catch (err) {
@@ -50,7 +50,7 @@ router.post(`/sign_up`, async (req, res) => {
         strategy: req.body.strategy || Constants.STRATEGY.EMAIL,
         socialId: req.body.socialId
     }
-    console.log(req.body)
+    
     try {
         let userService = new UserService()
         await userService.signUp(userProfile)
@@ -63,6 +63,7 @@ router.post(`/sign_up`, async (req, res) => {
 router.post(`/user_info`, async (req, res) => {
     let uid = req.signedCookies.uid || 0
     let userService = new UserService(uid)
+    
     let userProfile = {
         username: req.body.username,
         nickname: req.body.nickname,
@@ -71,7 +72,7 @@ router.post(`/user_info`, async (req, res) => {
         strategy: req.body.strategy || Constants.STRATEGY.EMAIL,
         socialId: req.body.socialId
     }
-    console.log(req.body)
+     console.log(req.body)
     try {
         await userService.update(userProfile)
         Jelib.responseSuccess(res, true)

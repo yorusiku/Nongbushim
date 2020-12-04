@@ -1,7 +1,7 @@
 let __user__ = {};
 $(document).ready(() => {
     __user__.strategy = $('#input_username').attr('strategy') || 0;
-    // __user__.socialId = $('#input_username').attr('social_id')
+    __user__.socialId = $('#input_username').attr('social_id')
 });
 
 $('#btn_sign_up').click(() => {
