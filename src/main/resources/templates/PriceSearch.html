@@ -190,18 +190,23 @@
       <!-- 그래프 -->
       <ul th:if="${form?.text} != null" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">월별</a>
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+             aria-selected="true">월별</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">일별</a>
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+             aria-selected="false">일별</a>
         </li>
 
         <!-- 다운로드 -->
         <div class="btn-toolbar" style="display: initial;position: absolute;right: 5%;">
-          <button id="downloadExcelButton" type="button" class="btn btn-sm btn-outline-secondary"
-                  style="cursor: default;display: flex;align-items: center;justify-content: center;">
-            다운로드<img class="pl-2" th:src="@{WebContent/images/data-transfer-download.svg}"/>
-          </button>
+          <form action="#" th:action="@{/pricesearch/excel}" method="post" id="excelDownload" th:object="${excelForm}">
+            <input type="hidden" name="text" th:value="${form.text}">
+            <button id="downloadExcelButton" type="submit" class="btn btn-sm btn-outline-secondary"
+                    style="cursor: default;display: flex;align-items: center;justify-content: center;">
+              다운로드<img class="pl-2" th:src="@{WebContent/images/data-transfer-download.svg}"/>
+            </button>
+          </form>
         </div>
 
       </ul>
@@ -409,9 +414,6 @@
       createMonthlyChart();
       createDailyChart();
 
-      $("#downloadExcelButton").click(function () {
-        window.location = 'excel';
-      });
     </script>
 
     <!-- Scripts -->
