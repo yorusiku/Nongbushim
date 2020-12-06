@@ -1,9 +1,11 @@
 package com.nongbushim.Controller;
 
-import com.nongbushim.Dto.*;
+import com.nongbushim.Dto.FormDto;
 import com.nongbushim.Dto.KamisResponse.Daily.DailyItemDto;
+import com.nongbushim.Dto.WholesaleChartInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleDailyInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
+import com.nongbushim.Dto.WholesaleInfo.WholesaleMonthlyInfoDto;
 import com.nongbushim.Service.Chart.ChartService;
 import com.nongbushim.Service.Chart.DailyChartServiceImpl;
 import com.nongbushim.Service.Chart.MonthlyChartServiceImpl;
@@ -12,6 +14,8 @@ import com.nongbushim.Service.Search.DailySearchServiceImpl;
 import com.nongbushim.Service.Search.MonthlySearchServiceImpl;
 import com.nongbushim.Service.Search.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +27,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 
 @Controller
@@ -108,17 +114,55 @@ public class SearchController {
             return "PriceSearch";
         }
 
-        // save monthly&daily price information to the excel in memory
-        createExcel(monthlyChartInfoDto, wholesaleMonthlyInfoList, wholesaleDailyInfoList);
-        if (isInvalid(wholesaleDailyInfoList)){
+        if (isInvalid(wholesaleDailyInfoList)) {
             model.addAttribute("dailyNoSearchResult", NO_SEARCH_DAILY_RESULT);
             model.addAttribute("dailyChartInfo", dailyChartInfoDto);
             return "PriceSearch";
         }
         dailyChartInfoDto = dailyChartService.createChart(wholesaleDailyInfoList);
         model.addAttribute("dailyChartInfo", dailyChartInfoDto);
+        model.addAttribute("excelForm", new FormDto());
 
         return "PriceSearch";
+    }
+
+    @CrossOrigin
+    @PostMapping(value = "/pricesearch/excel", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ResponseBody
+    public ResponseEntity<Resource> downloadExcel(@ModelAttribute("excelForm") FormDto form) throws IOException {
+        String input = form.getText();
+        List<String> monthlyRequestParameters = monthlySearchService.createOpenAPIRequestParameters(input);
+        List<String> dailyRequestParameters = dailySearchService.createOpenAPIRequestParameters(input);
+
+        List<ResponseEntity<String>> resultMap;
+        // 월별
+        resultMap = getResponsesFromOpenAPI(monthlyRequestParameters, MONTHLY_URL);
+        List<WholesaleInfoDto> wholesaleMonthlyInfoList = monthlySearchService.getWholesalePrice(resultMap);
+
+        //일별
+        resultMap = getResponsesFromOpenAPI(dailyRequestParameters, DAILY_URL);
+        List<WholesaleInfoDto> wholesaleDailyInfoList = dailySearchService.getWholesalePrice(resultMap);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=prices.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.valueOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(createExcel(wholesaleMonthlyInfoList, wholesaleDailyInfoList));
+    }
+
+    private InputStreamResource createExcel(List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList) {
+        String title = createTitle(wholesaleMonthlyInfoList);
+        return new InputStreamResource(excelService.createExcel(wholesaleMonthlyInfoList, wholesaleDailyInfoList, title));
+    }
+
+    private String createTitle(List<WholesaleInfoDto> wholesaleInfoList) {
+        return wholesaleInfoList.stream().filter(WholesaleMonthlyInfoDto.class::isInstance)
+                .map(WholesaleMonthlyInfoDto.class::cast)
+                .filter(dto -> dto.getPrice() != null)
+                .findFirst().get().getPrice().getCaption();
     }
 
     private boolean isInvalid(List<WholesaleInfoDto> wholesaleDailyInfoList) {
@@ -126,20 +170,15 @@ public class SearchController {
                 .filter(WholesaleDailyInfoDto.class::isInstance)
                 .map(WholesaleDailyInfoDto.class::cast)
                 .max(Comparator.comparing(dto -> {
-                    int lastIdx = dto.getDailyItemList().size()-1;
+                    int lastIdx = dto.getDailyItemList().size() - 1;
                     DailyItemDto lastItem = dto.getDailyItemList().get(lastIdx);
-                    LocalDate lastDate = LocalDate.parse(lastItem.getYyyy()+"/"+lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+                    LocalDate lastDate = LocalDate.parse(lastItem.getYyyy() + "/" + lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
                     return lastDate;
                 }))
                 .get();
-        DailyItemDto lastItem = target.getDailyItemList().get(target.getDailyItemList().size()-1);
-        LocalDate latestDate = LocalDate.parse(lastItem.getYyyy()+"/"+lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        DailyItemDto lastItem = target.getDailyItemList().get(target.getDailyItemList().size() - 1);
+        LocalDate latestDate = LocalDate.parse(lastItem.getYyyy() + "/" + lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         return latestDate.isBefore(LocalDate.now().minusDays(14));
-    }
-
-    private void createExcel(WholesaleChartInfoDto monthlyChartInfoDto, List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList) {
-        String title = monthlyChartInfoDto.getTitle();
-        excelService.createExcel(wholesaleMonthlyInfoList, wholesaleDailyInfoList, title);
     }
 
     private List<ResponseEntity<String>> getResponsesFromOpenAPI(List<String> requestParameters, String monthlyUrl) {
