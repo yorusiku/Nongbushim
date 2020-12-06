@@ -23,7 +23,6 @@ import java.util.List;
 @Service
 public class ExcelServiceImpl implements ExcelService {
 
-    private static ByteArrayInputStream excel;
     private static final String MONTHLY_SHEET = "월별";
     private static final String DAILY_SHEET = "일별";
     private static final String MONTH_AVG_HEADER = "월평균";
@@ -49,9 +48,9 @@ public class ExcelServiceImpl implements ExcelService {
             createDailySheet(wholesaleDailyInfoList, title, dailySheet);
 
             workbook.write(baos);
-            return excel = new ByteArrayInputStream(baos.toByteArray());
+            workbook.close();
+            return new ByteArrayInputStream(baos.toByteArray());
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
     }
@@ -191,12 +190,4 @@ public class ExcelServiceImpl implements ExcelService {
         return rowIdx;
     }
 
-    @Override
-    public void downloadExcel() {
-
-    }
-
-    public ByteArrayInputStream getExcel() {
-        return excel;
-    }
 }
