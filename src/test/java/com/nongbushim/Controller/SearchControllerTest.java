@@ -39,9 +39,20 @@ public class SearchControllerTest {
         String line;
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
-                mockMvc.perform(post("/pricesearch")
-                        .flashAttr("form", new FormDto(line)))
-                        .andExpect(status().isOk());
+            mockMvc.perform(post("/pricesearch")
+                    .flashAttr("form", new FormDto(line)))
+                    .andExpect(status().isOk());
+        }
+    }
+
+    @Test
+    public void whenDownloadExcelAllItem_shouldReturn200() throws Exception {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            mockMvc.perform(post("/pricesearch/excel")
+                    .flashAttr("excelForm", new FormDto(line)))
+                    .andExpect(status().isOk());
         }
     }
 
