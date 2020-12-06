@@ -169,14 +169,14 @@ public class SearchController {
                 .filter(WholesaleDailyInfoDto.class::isInstance)
                 .map(WholesaleDailyInfoDto.class::cast)
                 .max(Comparator.comparing(dto -> {
-                    int lastIdx = dto.getDailyItemList().size()-1;
+                    int lastIdx = dto.getDailyItemList().size() - 1;
                     DailyItemDto lastItem = dto.getDailyItemList().get(lastIdx);
-                    LocalDate lastDate = LocalDate.parse(lastItem.getYyyy()+"/"+lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+                    LocalDate lastDate = LocalDate.parse(lastItem.getYyyy() + "/" + lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
                     return lastDate;
                 }))
                 .get();
-        DailyItemDto lastItem = target.getDailyItemList().get(target.getDailyItemList().size()-1);
-        LocalDate latestDate = LocalDate.parse(lastItem.getYyyy()+"/"+lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        DailyItemDto lastItem = target.getDailyItemList().get(target.getDailyItemList().size() - 1);
+        LocalDate latestDate = LocalDate.parse(lastItem.getYyyy() + "/" + lastItem.getRegday(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         return latestDate.isBefore(LocalDate.now().minusDays(14));
     }
 
