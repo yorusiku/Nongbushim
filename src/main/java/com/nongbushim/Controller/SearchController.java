@@ -121,14 +121,15 @@ public class SearchController {
         }
         dailyChartInfoDto = dailyChartService.createChart(wholesaleDailyInfoList);
         model.addAttribute("dailyChartInfo", dailyChartInfoDto);
+        model.addAttribute("excelForm", new FormDto());
 
         return "PriceSearch";
     }
 
     @CrossOrigin
-    @PostMapping(value = "/pricesearch/excel")
+    @PostMapping(value = "/pricesearch/excel", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseBody
-    public ResponseEntity<Resource> downloadExcel(@RequestBody FormDto form) throws IOException {
+    public ResponseEntity<Resource> downloadExcel(@ModelAttribute("excelForm") FormDto form) throws IOException {
         String input = form.getText();
         List<String> monthlyRequestParameters = monthlySearchService.createOpenAPIRequestParameters(input);
         List<String> dailyRequestParameters = dailySearchService.createOpenAPIRequestParameters(input);
