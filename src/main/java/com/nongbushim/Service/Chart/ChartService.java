@@ -2,6 +2,7 @@ package com.nongbushim.Service.Chart;
 
 import com.nongbushim.Dto.WholesaleChartInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
+import com.nongbushim.Dto.WholesaleInfo.WholesaleMonthlyInfoDto;
 import com.nongbushim.Dto.WholesaleRegionInfoDto;
 
 import java.util.ArrayList;
@@ -61,4 +62,12 @@ public abstract class ChartService {
         dto.setBackgroundColor(rgba);
         dto.setBorderColor(rgba);
     }
+
+    public String createChartTitle(List<WholesaleInfoDto> wholesaleInfoList) {
+        return CHART_TITLE = wholesaleInfoList.stream().filter(WholesaleMonthlyInfoDto.class::isInstance)
+                .map(WholesaleMonthlyInfoDto.class::cast)
+                .filter(dto -> dto.getPrice() != null)
+                .findFirst().get().getPrice().getCaption();
+    }
+
 }

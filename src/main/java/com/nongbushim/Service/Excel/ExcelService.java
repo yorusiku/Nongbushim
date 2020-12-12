@@ -6,5 +6,5 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface ExcelService {
-    InputStream createExcel(List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList, String title);
+    InputStream createExcel(List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList);
 }
