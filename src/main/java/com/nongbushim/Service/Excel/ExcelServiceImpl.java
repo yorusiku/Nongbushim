@@ -6,9 +6,11 @@ import com.nongbushim.Dto.WholesaleInfo.WholesaleDailyInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleMonthlyInfoDto;
 import com.nongbushim.Helper.MonthlyHelper;
+import com.nongbushim.Service.Chart.ChartService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -23,6 +25,9 @@ import java.util.List;
 @Service
 public class ExcelServiceImpl implements ExcelService {
 
+    @Autowired
+    private ChartService monthlyChartService;
+
     private static final String MONTHLY_SHEET = "월별";
     private static final String DAILY_SHEET = "일별";
     private static final String MONTH_AVG_HEADER = "월평균";
@@ -33,7 +38,8 @@ public class ExcelServiceImpl implements ExcelService {
     private final LocalDate startDate = now.minusYears(1);
 
     @Override
-    public ByteArrayInputStream createExcel(List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList, String title) {
+    public ByteArrayInputStream createExcel(List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList) {
+        String title = monthlyChartService.createChartTitle(wholesaleMonthlyInfoList);
 
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {

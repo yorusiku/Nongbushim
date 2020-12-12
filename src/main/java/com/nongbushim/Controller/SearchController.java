@@ -5,7 +5,6 @@ import com.nongbushim.Dto.KamisResponse.Daily.DailyItemDto;
 import com.nongbushim.Dto.WholesaleChartInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleDailyInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
-import com.nongbushim.Dto.WholesaleInfo.WholesaleMonthlyInfoDto;
 import com.nongbushim.Helper.APIHelper;
 import com.nongbushim.Service.Chart.ChartService;
 import com.nongbushim.Service.Chart.DailyChartServiceImpl;
@@ -136,15 +135,7 @@ public class SearchController {
     }
 
     private InputStreamResource createExcel(List<WholesaleInfoDto> wholesaleMonthlyInfoList, List<WholesaleInfoDto> wholesaleDailyInfoList) {
-        String title = createTitle(wholesaleMonthlyInfoList);
-        return new InputStreamResource(excelService.createExcel(wholesaleMonthlyInfoList, wholesaleDailyInfoList, title));
-    }
-
-    private String createTitle(List<WholesaleInfoDto> wholesaleInfoList) {
-        return wholesaleInfoList.stream().filter(WholesaleMonthlyInfoDto.class::isInstance)
-                .map(WholesaleMonthlyInfoDto.class::cast)
-                .filter(dto -> dto.getPrice() != null)
-                .findFirst().get().getPrice().getCaption();
+        return new InputStreamResource(excelService.createExcel(wholesaleMonthlyInfoList, wholesaleDailyInfoList));
     }
 
     private boolean isInvalid(List<WholesaleInfoDto> wholesaleDailyInfoList) {
