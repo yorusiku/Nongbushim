@@ -67,13 +67,6 @@ public class MonthlyChartServiceImpl extends ChartService {
         return chartInfoDto;
     }
 
-    private String createChartTitle(List<WholesaleInfoDto> wholesaleInfoList) {
-        return CHART_TITLE = wholesaleInfoList.stream().filter(WholesaleMonthlyInfoDto.class::isInstance)
-                .map(WholesaleMonthlyInfoDto.class::cast)
-                .filter(dto -> dto.getPrice() != null)
-                .findFirst().get().getPrice().getCaption();
-    }
-
     private Map<Integer, List<String>> createMonthlyPricePerYearMap(List<MonthlyItemDto> item) {
         Map<Integer, List<String>> map = new LinkedHashMap<>();
         for (MonthlyItemDto dto : item) {

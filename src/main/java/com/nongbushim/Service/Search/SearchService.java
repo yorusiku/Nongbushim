@@ -29,17 +29,21 @@ public abstract class SearchService {
         String itemName = terms[0];
         String kind = terms[1];
         String grade = terms[lastIdx];
-        if (lastIdx > 2){
+        if (lastIdx > 2) {
             // input이 3단어보다 긴 경우
             StringBuilder sb = new StringBuilder(kind);
-            while (--lastIdx>1) {
+            while (--lastIdx > 1) {
                 sb.append(" ").append(terms[lastIdx]);
             }
             kind = sb.toString();
         }
-        ItemInfoDto itemInfoDto = new ItemInfoDto();
+        return createItemInfoDto(itemName, kind, grade);
+    }
+
+    private ItemInfoDto createItemInfoDto(String itemName, String kind, String grade) throws IOException {
         ItemCode itemCode = ItemCode.searchCode(itemName);
         ProductRankCode rank = ProductRankCode.searchRank(grade);
+        ItemInfoDto itemInfoDto = new ItemInfoDto();
         itemInfoDto.setItemCode(itemCode.getCode());
         itemInfoDto.setItemCategoryCode(itemCode.getItemCategoryCode().getCode());
         itemInfoDto.setGradeRank(rank.getGradeRank());
