@@ -6,6 +6,7 @@ import com.nongbushim.Dto.WholesaleChartInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleDailyInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleInfoDto;
 import com.nongbushim.Dto.WholesaleInfo.WholesaleMonthlyInfoDto;
+import com.nongbushim.Helper.APIHelper;
 import com.nongbushim.Service.Chart.ChartService;
 import com.nongbushim.Service.Chart.DailyChartServiceImpl;
 import com.nongbushim.Service.Chart.MonthlyChartServiceImpl;
@@ -16,39 +17,25 @@ import com.nongbushim.Service.Search.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
 @Controller
 public class SearchController {
-    private final static String MONTHLY_URL = "http://www.kamis.or.kr/service/price/xml.do?action=monthlySalesList";
-    private final static String DAILY_URL = "http://www.kamis.or.kr/service/price/xml.do?action=periodProductList";
-    private final static String FIXED_PARAMETERS = "p_cert_key=111&p_cert_id=222&p_returntype=json";
-    private final static HttpHeaders HTTP_HEADERS;
-    private final static HttpEntity<?> HTTP_ENTITY;
-    private final static String ACCESS_KEY = "c870db87-9503-48c8-aca3-dee7f28a42ba";
+
     private static final int THIS_YEAR = LocalDate.now().getYear();
     private static final String NO_SEARCH_MONTHLY_RESULT = THIS_YEAR + "년도에 해당하는 데이터가 없습니다";
     private static final String NO_SEARCH_DAILY_RESULT = "최근 2주일간 해당하는 데이터가 없습니다";
-
-    static {
-        HTTP_HEADERS = new HttpHeaders();
-        HTTP_HEADERS.add("key", ACCESS_KEY);
-        HTTP_ENTITY = new HttpEntity<>(HTTP_HEADERS);
-    }
 
     @Autowired
     private final SearchService dailySearchService;
@@ -91,7 +78,7 @@ public class SearchController {
         List<ResponseEntity<String>> resultMap;
         // 월별
         WholesaleChartInfoDto monthlyChartInfoDto = null;
-        resultMap = getResponsesFromOpenAPI(monthlyRequestParameters, MONTHLY_URL);
+        resultMap = APIHelper.getResponsesFromOpenAPI(monthlyRequestParameters, APIHelper.MONTHLY_URL);
 
         List<WholesaleInfoDto> wholesaleMonthlyInfoList = monthlySearchService.getWholesalePrice(resultMap);
 
@@ -105,20 +92,15 @@ public class SearchController {
 
         //일별
         WholesaleChartInfoDto dailyChartInfoDto = null;
-        resultMap = getResponsesFromOpenAPI(dailyRequestParameters, DAILY_URL);
+        resultMap = APIHelper.getResponsesFromOpenAPI(dailyRequestParameters, APIHelper.DAILY_URL);
 
         List<WholesaleInfoDto> wholesaleDailyInfoList = dailySearchService.getWholesalePrice(resultMap);
-        if (wholesaleDailyInfoList.isEmpty()) {
+        if (wholesaleDailyInfoList.isEmpty() || isInvalid(wholesaleDailyInfoList)) {
             model.addAttribute("dailyNoSearchResult", NO_SEARCH_DAILY_RESULT);
             model.addAttribute("dailyChartInfo", dailyChartInfoDto);
             return "PriceSearch";
         }
 
-        if (isInvalid(wholesaleDailyInfoList)) {
-            model.addAttribute("dailyNoSearchResult", NO_SEARCH_DAILY_RESULT);
-            model.addAttribute("dailyChartInfo", dailyChartInfoDto);
-            return "PriceSearch";
-        }
         dailyChartInfoDto = dailyChartService.createChart(wholesaleDailyInfoList);
         model.addAttribute("dailyChartInfo", dailyChartInfoDto);
         model.addAttribute("excelForm", new FormDto());
@@ -136,11 +118,11 @@ public class SearchController {
 
         List<ResponseEntity<String>> resultMap;
         // 월별
-        resultMap = getResponsesFromOpenAPI(monthlyRequestParameters, MONTHLY_URL);
+        resultMap = APIHelper.getResponsesFromOpenAPI(monthlyRequestParameters, APIHelper.MONTHLY_URL);
         List<WholesaleInfoDto> wholesaleMonthlyInfoList = monthlySearchService.getWholesalePrice(resultMap);
 
         //일별
-        resultMap = getResponsesFromOpenAPI(dailyRequestParameters, DAILY_URL);
+        resultMap = APIHelper.getResponsesFromOpenAPI(dailyRequestParameters, APIHelper.DAILY_URL);
         List<WholesaleInfoDto> wholesaleDailyInfoList = dailySearchService.getWholesalePrice(resultMap);
 
         HttpHeaders headers = new HttpHeaders();
@@ -181,14 +163,4 @@ public class SearchController {
         return latestDate.isBefore(LocalDate.now().minusDays(14));
     }
 
-    private List<ResponseEntity<String>> getResponsesFromOpenAPI(List<String> requestParameters, String monthlyUrl) {
-        UriComponents uri;
-        RestTemplate restTemplate = new RestTemplate();
-        List<ResponseEntity<String>> resultMap = new ArrayList<>();
-        for (String parameter : requestParameters) {
-            uri = UriComponentsBuilder.fromHttpUrl(monthlyUrl + parameter + FIXED_PARAMETERS).build();
-            resultMap.add(restTemplate.exchange(uri.toString(), HttpMethod.GET, HTTP_ENTITY, String.class));
-        }
-        return resultMap;
-    }
 }
